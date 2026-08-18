@@ -1,0 +1,265 @@
+:root {
+  --bg: #0A0A0A;
+  --fg: #F4F4F2;
+  --muted: #8A8A8A;
+  --rule: #2A2A2A;
+  --surface: #1A1A1A;
+  --gutter: clamp(1.5rem, 5vw, 4rem);
+  /* Shared by the episode rows and the footer: they must stay the same size. */
+  --type-row: clamp(0.95rem, 1.9vw, 1.45rem);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: var(--gutter);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Links and summaries carry no underline, so a visible focus ring is the only
+   keyboard affordance. Offset it so it never touches the text. */
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---- Header ---- */
+
+.logo {
+  display: block;
+  margin: 0;
+  width: clamp(250px, 34vw, 520px);
+  line-height: 0;
+}
+
+.logo svg { width: 100%; height: auto; display: block; fill: currentColor; }
+
+.platforms {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.75rem;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.platforms-label { color: var(--muted); letter-spacing: 0.12em; }
+
+.platforms a { display: inline-flex; align-items: center; gap: 0.5em; transition: opacity 0.2s ease; }
+.platforms a:hover { opacity: 0.55; }
+
+.platform-icon { width: 1em; height: 1em; }
+
+/* Measured in-browser: full names wrap to 2 lines below ~582px, so 40rem
+   (640px) gives margin. Icon-only stays on one line down to ~300px. The rule
+   is unscoped on purpose: the header nav and the per-episode listen links both
+   mark their label with .platform-name, so they drop to icons together.
+   Absolute positioning also takes the label out of the flex flow, so the
+   0.5em icon-to-name gap does not linger as empty space. */
+@media (max-width: 40rem) {
+  .platform-icon { width: 1.25em; height: 1.25em; }
+  .platform-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ---- Episodes ---- */
+
+.episodes {
+  margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.episode { border-bottom: 1px solid var(--rule); }
+
+.episode-summary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  font-size: var(--type-row);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease;
+}
+
+.episode-summary::-webkit-details-marker { display: none; }
+.episode-summary:hover { opacity: 0.6; }
+
+.episode-number { flex: none; color: var(--muted); }
+
+.episode-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* The open/close affordance from the mockup. */
+.episode-toggle {
+  flex: none;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+}
+
+.episode-toggle::before,
+.episode-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 1px;
+  background: currentColor;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.episode-toggle::after { transform: rotate(90deg); }
+.episode[open] .episode-toggle::after { transform: rotate(0deg); opacity: 0; }
+
+.episode-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding: 0.5rem 0 clamp(2.5rem, 5vw, 4rem);
+}
+
+.episode-art {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.episode-heading {
+  margin: 0;
+  font-size: clamp(1.4rem, 3.4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.episode-meta {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.episode-description {
+  margin-top: 1.5rem;
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  line-height: 1.6;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.episode-description p { margin: 0 0 0.85em; }
+.episode-description a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.episode-description a:hover { color: var(--fg); }
+
+/* Sits directly under the description, so it takes that column's type in
+   sentence case and reads as part of the prose rather than as a UI chip. */
+/* An episode with no URLs yet in links.json renders an empty list: drop the label too. */
+.episode-body:has(.episode-links:empty) .episode-listen-label { display: none; }
+
+.episode-listen-label {
+  margin-top: 1.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.episode-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+  margin-top: 0.85rem;
+  padding: 0;
+  list-style: none;
+}
+
+.episode-listen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--rule);
+  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.episode-listen:hover { opacity: 0.55; border-color: var(--fg); }
+
+@media (max-width: 40rem) {
+  .episode-panel { grid-template-columns: 1fr; }
+}
+
+/* ---- Footer ---- */
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: clamp(3rem, 8vw, 6rem);
+  color: var(--fg);
+  font-size: var(--type-row);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
