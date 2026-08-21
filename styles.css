@@ -20,9 +20,13 @@ body {
   min-height: 100vh;
   min-height: 100svh;
   padding: var(--gutter);
+  /* Bottom gutter is measured against viewport height, not width, and comes out
+     smaller than the sides: it is what pins the footer the same distance off the
+     bottom edge on every page, so it must not vary between them. */
+  padding-bottom: clamp(1.25rem, 5vh, var(--gutter));
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Liberation Sans', Arial, Helvetica, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
@@ -54,6 +58,14 @@ a { color: inherit; text-decoration: none; }
   line-height: 0;
 }
 
+/* will-change keeps the link on its own layer at rest, so hovering (which
+   forces a translucent layer for the opacity transition) doesn't switch the
+   SVG text's anti-aliasing mode mid-hover. Safari re-hints glyphs when that
+   switch happens, which reads as the wordmark jumping a fraction of a pixel;
+   most visible on the credits page, where the logo renders smaller. */
+.logo a { display: block; transition: opacity 0.2s ease; will-change: opacity; }
+.logo a:hover { opacity: 0.65; }
+
 .logo svg { width: 100%; height: auto; display: block; fill: currentColor; }
 
 .platforms {
@@ -71,7 +83,7 @@ a { color: inherit; text-decoration: none; }
 .platforms-label { color: var(--muted); letter-spacing: 0.12em; }
 
 .platforms a { display: inline-flex; align-items: center; gap: 0.5em; transition: opacity 0.2s ease; }
-.platforms a:hover { opacity: 0.55; }
+.platforms a:hover { opacity: 0.65; }
 
 .platform-icon { width: 1em; height: 1em; }
 
@@ -235,10 +247,91 @@ a { color: inherit; text-decoration: none; }
   transition: opacity 0.2s ease, border-color 0.2s ease;
 }
 
-.episode-listen:hover { opacity: 0.55; border-color: var(--fg); }
+.episode-listen:hover { opacity: 0.65; border-color: var(--fg); }
 
 @media (max-width: 40rem) {
   .episode-panel { grid-template-columns: 1fr; }
+}
+
+/* ---- Credits ---- */
+
+/* Six people, three across and two rows down. The page is allowed to scroll, so
+   nothing here is budgeted against viewport height: the portraits are sized by
+   width and the spacing is set for how it reads, not for what fits. */
+.credits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* The gap between rows matches the band below the wordmark, so the page reads
+     as evenly spaced bands of faces rather than two clusters. */
+  gap: clamp(4rem, 11vw, 9rem) clamp(1.5rem, 4vw, 3.5rem);
+  margin: clamp(4rem, 11vw, 9rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.credit { text-align: center; }
+
+/* The source files are square. They are cropped to a circle here, which is the
+   only decoration on this page, so it stays the same shape at every size. */
+.credit-portrait {
+  width: min(100%, clamp(150px, 24vw, 360px));
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.credit-name {
+  margin: 1rem 0 0;
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+/* The role and the country below it are the same line of type, twice. Line-height
+   is kept tight so the leading it adds above/below each line doesn't stack on
+   top of the margin and make this gap read as bigger than the one above it. */
+.credit-role,
+.credit-location {
+  margin: 0.5rem 0 0;
+  font-size: clamp(0.9rem, 1.4vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.credit-role { color: var(--fg); }
+.credit-location { color: var(--muted); }
+
+/* One per row below the point where three columns start crowding the names. */
+@media (max-width: 46rem) {
+  .credits {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.5rem, 9vw, 4rem);
+  }
+
+  .credit-portrait { width: clamp(180px, 55vw, 280px); }
+  .credit-role,
+  .credit-location { font-size: 1rem; }
+}
+
+/* ---- About ---- */
+
+/* One line of type and nothing else, so the page centres it in whatever height
+   is left between the header and the footer. */
+.page-about main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-tagline {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
 }
 
 /* ---- Footer ---- */
@@ -253,8 +346,10 @@ footer {
   font-size: var(--type-row);
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--bg);
 }
+
+footer a { transition: opacity 0.2s ease; }
+footer a:hover { opacity: 0.65; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
