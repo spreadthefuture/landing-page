@@ -13,8 +13,8 @@ at deploy time.
 ```
 .
 ├── index.html              # home: episode list and accordion
-├── credits.html            # the people behind the podcast
-├── about.html              # about page
+├── credits/index.html      # the people behind the podcast, served at /credits/
+├── about/index.html        # about page, served at /about/
 ├── CNAME                   # custom domain for GitHub Pages, do not delete
 ├── styles.css              # all styling, for every page
 ├── script.js               # one scroll clamp for the episode accordion

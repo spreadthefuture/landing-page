@@ -4,17 +4,17 @@
     {
       "key": "spotify",
       "name": "Spotify",
-      "icon": "assets/platforms/spotify.svg"
+      "icon": "/assets/platforms/spotify.svg"
     },
     {
       "key": "apple",
       "name": "Apple Podcasts",
-      "icon": "assets/platforms/apple-podcasts.svg"
+      "icon": "/assets/platforms/apple-podcasts.svg"
     },
     {
       "key": "deezer",
       "name": "Deezer",
-      "icon": "assets/platforms/deezer.svg"
+      "icon": "/assets/platforms/deezer.svg"
     }
   ],
   "episodes": {
