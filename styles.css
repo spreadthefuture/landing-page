@@ -286,14 +286,31 @@ a { color: inherit; text-decoration: none; }
 
 /* Six people, three across and two rows down. The page is allowed to scroll, so
    nothing here is budgeted against viewport height: the portraits are sized by
-   width and the spacing is set for how it reads, not for what fits. */
+   width and the spacing is set for how it reads, not for what fits.
+
+   One spacing band for the whole page: wordmark to line, line to portraits, and
+   row to row are all this value, so the page reads as evenly spaced bands. */
+.page-credits { --band: clamp(5rem, 13vw, 12rem); }
+
+/* The page's one line of type. Sized between the credit names below it and the
+   about page's tagline, so it leads the grid without competing with the
+   wordmark. */
+.credits-intro {
+  margin: var(--band) 0 0;
+  font-size: clamp(1.6rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
 .credits {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* The gap between rows matches the band below the wordmark, so the page reads
-     as evenly spaced bands of faces rather than two clusters. */
-  gap: clamp(4rem, 11vw, 9rem) clamp(1.5rem, 4vw, 3.5rem);
-  margin: clamp(4rem, 11vw, 9rem) 0 0;
+  /* Row gap is its own value, a step tighter than the band: the bands above the
+     grid separate different things, while row to row is the same thing twice. */
+  gap: clamp(3.5rem, 9vw, 8rem) clamp(3rem, 8vw, 9rem);
+  margin: var(--band) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -333,9 +350,14 @@ a { color: inherit; text-decoration: none; }
 
 /* One per row below the point where three columns start crowding the names. */
 @media (max-width: 46rem) {
+  .page-credits { --band: clamp(5rem, 17vw, 8rem); }
+
+  /* One column here, so the column gap is inert and the row gap carries the
+     whole grid. Given more room than on desktop, where the two rows sit side by
+     side and read as one block anyway. */
   .credits {
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(2.5rem, 9vw, 4rem);
+    row-gap: clamp(4.5rem, 13vw, 8rem);
   }
 
   .credit-portrait { width: clamp(180px, 55vw, 280px); }
@@ -362,6 +384,10 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
+.about-tagline-muted {
+  color: var(--muted);
+}
+
 /* ---- Footer ---- */
 
 footer {
@@ -375,6 +401,10 @@ footer {
   font-weight: 700;
   text-transform: uppercase;
 }
+
+/* The credits page sets its own even spacing band, so its footer keeps step
+   with the row-to-row gap instead of the site-wide default above. */
+.page-credits footer { padding-top: var(--band); }
 
 footer a { transition: opacity 0.2s ease; }
 footer a:hover { opacity: 0.65; }
