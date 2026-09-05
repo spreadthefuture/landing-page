@@ -39,6 +39,8 @@
   </header>
 
   <main>
+    <p class="tagline">A podcast where we explore possible tomorrows.</p>
+
     <!-- One episode row. scripts/build.py fills this per episode at build time.
          Escaped placeholders: season, number, title, title_full, link, image,
          duration, published_display. Raw (already HTML): {{{description_html}}}
@@ -72,6 +74,8 @@
     <template id="episode-link-template">
       <li><a class="episode-listen" href="{{url}}" target="_blank" rel="noopener noreferrer"><img class="platform-icon" src="{{icon}}" alt="" width="16" height="16"><span class="platform-name">{{name}}</span></a></li>
     </template>
+
+    <p class="episodes-lead">Explore the latest below</p>
 
     <!-- episodes:start -->
     <ul class="episodes">

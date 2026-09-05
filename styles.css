@@ -37,6 +37,18 @@
   --rule: #2A2A2A;
   --surface: #1A1A1A;
   --gutter: clamp(1.5rem, 5vw, 4rem);
+  /* How far the episode rows and their rules run past the page's text column, so
+     the cover wash does not stop dead on the first and last character of a line.
+     Capped at the gutter, so a row can reach the viewport edge but never past it. */
+  --row-bleed: min(2rem, var(--gutter));
+  /* Three sizes of vertical silence, used for every gap in the page's main
+     stack so the rhythm is a set of ratios rather than six unrelated numbers.
+     s pins a label to the thing it labels, m is the gap inside a block, xl is
+     the break between blocks. Anything that needs a fourth size is a sign the
+     stack itself is wrong. */
+  --space-s: clamp(1rem, 2vw, 1.5rem);
+  --space-m: clamp(2rem, 5vw, 3.5rem);
+  --space-xl: clamp(8rem, 22vw, 17rem);
   /* Shared by the episode rows and the footer: they must stay the same size. */
   --type-row: clamp(0.95rem, 1.9vw, 1.45rem);
   color-scheme: dark;
@@ -105,7 +117,7 @@ a { color: inherit; text-decoration: none; }
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem 1.75rem;
-  margin-top: clamp(2rem, 5vw, 3.5rem);
+  margin-top: var(--space-m);
   font-size: 0.8125rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -136,10 +148,65 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+/* ---- Tagline ---- */
+
+/* The line that opens the home page, between the header and the episode list.
+   Uppercase like the episode rows, set nearly as large as the wordmark and on the
+   page's left edge under it. The vw step is measured so the sentence holds one
+   line across desktop widths; the rem floor lets it wrap on a phone rather than
+   shrinking the type. Set in sentence case in the markup and capitalised here, so
+   screen readers do not spell it out. */
+.tagline {
+  /* Asymmetric on purpose, and heavily so. The space above is the same as the one
+     above the platform links, which ties the wordmark, the links and this sentence
+     into a single masthead; the space below is the largest on the page, the break
+     between that masthead and the episode list. An earlier pass had these at
+     roughly 1:1.75 and the sentence read as floating between two voids rather than
+     belonging to either. */
+  margin: var(--space-m) 0 var(--space-xl);
+  font-size: clamp(1.35rem, 3vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* Below the point where the sentence can no longer hold one line, it is sized off
+   the viewport instead, so its two or three lines fill the column edge to edge
+   the way the wordmark above them does. text-wrap returns to normal here on
+   purpose: balancing would even out the lines by making them all short, which is
+   the opposite of filling the width. */
+@media (max-width: 40rem) {
+  .tagline {
+    font-size: 8.5vw;
+    text-wrap: normal;
+  }
+}
+
 /* ---- Episodes ---- */
 
+/* Lead-in above the episode list. Set like the header's "Available on" label,
+   uppercase and tracked in gray, so it reads as a quiet signpost rather than a
+   second headline competing with the tagline. Sentence case in the markup and
+   capitalised here, so screen readers do not spell it out. Its own bottom margin
+   sets the gap to the first rule; .episodes' top margin is zeroed after it so the
+   two do not stack. */
+.episodes-lead {
+  margin: 0 0 var(--space-s);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.episodes-lead + .episodes { margin-top: 0; }
+
+/* Pulled out past the text column by --row-bleed on each side, so the rules end
+   level with the cover wash. The summary and the panel pay it back as padding, so
+   their contents stay on the page's own left edge. */
 .episodes {
-  margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+  margin: var(--space-m) calc(-1 * var(--row-bleed)) 0;
   padding: 0;
   list-style: none;
   border-top: 1px solid var(--rule);
@@ -151,7 +218,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
+  padding: clamp(1.1rem, 2.2vw, 1.6rem) var(--row-bleed);
   cursor: pointer;
   list-style: none;
   font-weight: 700;
@@ -163,6 +230,92 @@ a { color: inherit; text-decoration: none; }
 
 .episode-summary::-webkit-details-marker { display: none; }
 .episode-summary:hover { opacity: 0.8; }
+
+/* Hovering a row washes its cover art across the line: the real artwork, blurred
+   into a smear, so the color follows each episode instead of a fixed accent.
+   script.js hands the row its --cover-image once that cover has decoded and
+   inserts the .episode-wash layer, so a slow or broken image simply never lights
+   up. Pointer devices only. An open row is skipped: its panel is already showing
+   the artwork.
+
+   The blur is graded rather than flat. Three copies of the cover sit on top of
+   each other at 6px, 20px and 40px, and the two heavy ones are masked behind a
+   gradient so they only arrive towards the right of the row. The radius
+   therefore climbs across the line instead of being one uniform Gaussian, which
+   is what reads as a lens rather than a filter. A single blur radius is the look
+   every other site has; the ramp is the whole point of doing it this way.
+
+   On top of all three sits a tile of fine noise in overlay. A 40px blur over
+   near black bands into visible steps on any gradient in the artwork; the grain
+   dithers those steps away and gives the smear some tooth.
+
+   It fills the whole row rectangle, edge to edge between the two rules. The row
+   is itself wider than the page's text column by --row-bleed, so the smear runs
+   past the first and last character of the line rather than stopping on them.
+   That is what the negative inset plus the clip on the row is for: a blur fades
+   out at its own edges, so the smear is bled well past the row and then cut back
+   to it, leaving flat color at the boundary instead of a soft oval. */
+@media (hover: hover) and (pointer: fine) {
+  .episode-summary { position: relative; isolation: isolate; overflow: clip; }
+
+  .episode-wash {
+    position: absolute;
+    inset: -3rem -5rem;
+    z-index: -1;
+    background-image: var(--cover-image, none);
+    background-size: cover;
+    background-position: center;
+    filter: blur(6px) saturate(1.45);
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* The two heavier stops. Same image, same framing, so they line up exactly
+     and only the softness differs where the mask lets them through. */
+  .episode-wash::before,
+  .episode-wash::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .episode-wash::before {
+    filter: blur(20px) saturate(1.5);
+    mask-image: linear-gradient(90deg, transparent 10%, #000 75%);
+  }
+
+  .episode-wash::after {
+    filter: blur(40px) saturate(1.6);
+    mask-image: linear-gradient(90deg, transparent 45%, #000 100%);
+  }
+
+  /* Grain. Painted after the wash in tree order, so it lands on top of all three
+     blur stops rather than being blurred along with them. Mid gray in overlay is
+     a no op, so only the noise deviations touch the pixels underneath. */
+  .episode-summary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .episode:not([open]) .episode-summary:hover .episode-wash { opacity: 0.42; transform: scale(1); }
+  .episode:not([open]) .episode-summary:hover::after { opacity: 0.4; }
+
+  /* The dimming hover was the only feedback before the wash existed; keeping
+     both fights the color, so the wash replaces it where it runs. */
+  .episode:not([open]) .episode-summary:hover { opacity: 1; }
+}
 
 .episode-number { flex: none; color: var(--muted); }
 
@@ -199,7 +352,7 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   gap: clamp(1.5rem, 4vw, 3.5rem);
-  padding: 0.5rem 0 clamp(2.5rem, 5vw, 4rem);
+  padding: 0.5rem var(--row-bleed) clamp(2.5rem, 5vw, 4rem);
 }
 
 .episode-art {
