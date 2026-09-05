@@ -48,7 +48,7 @@
      stack itself is wrong. */
   --space-s: clamp(1rem, 2vw, 1.5rem);
   --space-m: clamp(2rem, 5vw, 3.5rem);
-  --space-xl: clamp(8rem, 22vw, 17rem);
+  --space-xl: clamp(4rem, 10vw, 8rem);
   /* Shared by the episode rows and the footer: they must stay the same size. */
   --type-row: clamp(0.95rem, 1.9vw, 1.45rem);
   color-scheme: dark;
@@ -94,6 +94,32 @@ body {
 a { color: inherit; text-decoration: none; }
 
 /* ---- Header ---- */
+
+header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.header-main { min-width: 0; }
+
+/* Sized like the about page's own section headings (§4.2 in PROJECT-CONTEXT), a step
+   up from the episode rows, since this nav is the same weight as a page heading
+   rather than a list item. */
+.site-nav {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  text-transform: uppercase;
+}
+
+.site-nav a { transition: opacity 0.2s ease; }
+.site-nav a:hover { opacity: 0.8; }
 
 .logo {
   display: block;
@@ -150,11 +176,10 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- Tagline ---- */
 
-/* The line that opens the home page, between the header and the episode list.
-   Uppercase like the episode rows, set nearly as large as the wordmark and on the
-   page's left edge under it. The vw step is measured so the sentence holds one
-   line across desktop widths; the rem floor lets it wrap on a phone rather than
-   shrinking the type. Set in sentence case in the markup and capitalised here, so
+/* The paragraph that opens the home page, between the header and the episode
+   list. Uppercase like the episode rows, set nearly as large as the wordmark and
+   on the page's left edge under it, wrapping naturally edge to edge like the
+   wordmark above it. Set in sentence case in the markup and capitalised here, so
    screen readers do not spell it out. */
 .tagline {
   /* Asymmetric on purpose, and heavily so. The space above is the same as the one
@@ -169,18 +194,13 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.15;
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  text-wrap: balance;
 }
 
-/* Below the point where the sentence can no longer hold one line, it is sized off
-   the viewport instead, so its two or three lines fill the column edge to edge
-   the way the wordmark above them does. text-wrap returns to normal here on
-   purpose: balancing would even out the lines by making them all short, which is
-   the opposite of filling the width. */
+/* Below this width the sentence is sized off the viewport instead of the clamp
+   above, so its lines keep filling edge to edge the way the wordmark does. */
 @media (max-width: 40rem) {
   .tagline {
     font-size: 8.5vw;
-    text-wrap: normal;
   }
 }
 
@@ -194,22 +214,69 @@ a { color: inherit; text-decoration: none; }
    two do not stack. */
 .episodes-lead {
   margin: 0 0 var(--space-s);
+  padding-bottom: var(--space-s);
+  /* Same rule as the ones between episode rows, so the two lists of lines read
+     as one family. */
+  border-bottom: 1px solid var(--rule);
   color: var(--muted);
   font-size: 0.8125rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.episodes-lead + .episodes { margin-top: 0; }
+.episodes-lead + .episodes-layout .episodes { margin-top: 0; }
+
+/* The persistent cover on the left and the episode list on the right. The panel
+   is a fixed width, the list takes what's left. */
+.episodes-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-m);
+  margin-top: var(--space-m);
+}
+
+/* Shows the latest episode's cover at rest, swaps to whichever row is hovered
+   or open. script.js crossfades between the two stacked layers below; this
+   panel never has an opinion of its own about which image that is. */
+.episode-art-panel {
+  flex: 0 0 clamp(240px, 40vw, 520px);
+  position: sticky;
+  top: var(--gutter);
+}
+
+.episode-art-frame {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+/* Two stacked copies of whatever cover is current. script.js loads the next
+   image into the hidden layer, then swaps which one is .is-active so the
+   opacity transition crossfades between real pixels instead of flashing
+   through an empty frame. */
+.episode-art-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.episode-art-layer.is-active { opacity: 1; }
 
 /* Pulled out past the text column by --row-bleed on each side, so the rules end
    level with the cover wash. The summary and the panel pay it back as padding, so
    their contents stay on the page's own left edge. */
 .episodes {
-  margin: var(--space-m) calc(-1 * var(--row-bleed)) 0;
+  flex: 1;
+  min-width: 0;
+  margin: 0 calc(-1 * var(--row-bleed));
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--rule);
 }
 
 .episode { border-bottom: 1px solid var(--rule); }
@@ -310,7 +377,7 @@ a { color: inherit; text-decoration: none; }
   }
 
   .episode:not([open]) .episode-summary:hover .episode-wash { opacity: 0.42; transform: scale(1); }
-  .episode:not([open]) .episode-summary:hover::after { opacity: 0.4; }
+  .episode:not([open]) .episode-summary:hover::after { opacity: 0.35; }
 
   /* The dimming hover was the only feedback before the wash existed; keeping
      both fights the color, so the wash replaces it where it runs. */
@@ -364,17 +431,8 @@ a { color: inherit; text-decoration: none; }
   background: var(--surface);
 }
 
-.episode-heading {
-  margin: 0;
-  font-size: clamp(1.4rem, 3.4vw, 2.6rem);
-  font-weight: 700;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-}
-
 .episode-meta {
-  margin-top: 1rem;
+  margin-top: 0;
   color: var(--muted);
   font-size: 0.8125rem;
   letter-spacing: 0.1em;
@@ -431,8 +489,35 @@ a { color: inherit; text-decoration: none; }
 
 .episode-listen:hover { opacity: 0.8; border-color: var(--fg); }
 
+/* The persistent art panel already shows an opened row's cover (stacked above
+   the list on mobile, beside it on desktop), so the same image repeated inside
+   the row itself would be a cover inside the cover. Dropped everywhere. */
+.episode-art { display: none; }
+.episode-panel { grid-template-columns: 1fr; }
+
+/* Below the point where the platform names already drop to icons, the top-right
+   nav and the persistent cover no longer have room to sit beside anything: the
+   nav moves under the masthead and the cover stacks above the list. It keeps
+   the same sticky behavior as the desktop panel, just full width, so it pins
+   under the header once scrolled to and only unsticks when you scroll back up
+   past its natural position. */
 @media (max-width: 40rem) {
-  .episode-panel { grid-template-columns: 1fr; }
+  header { flex-wrap: wrap; }
+
+  .site-nav {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: var(--space-s);
+  }
+
+  .episodes-layout { flex-direction: column; }
+
+  .episode-art-panel {
+    flex: 0 0 auto;
+    width: 100%;
+    z-index: 1;
+  }
 }
 
 /* ---- Credits ---- */

@@ -23,23 +23,30 @@
 </head>
 <body>
   <header>
-    <h1 class="logo">
-      <a href="/">
-        <span class="visually-hidden">Spread the Future, back to home</span>
-        <svg viewBox="0 0 3859 1355" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g transform="matrix(9.83856,0,0,9.83856,-644.861,-1350.52)"><text x="64.501px" y="182.994px" style="font-family:'Arial-BoldMT','Arial',sans-serif;font-weight:700;font-size:62.5px;">SPREAD</text><text x="64.501px" y="247.539px" style="font-family:'Arial-BoldMT','Arial',sans-serif;font-weight:700;font-size:62.5px;">THE FUTURE</text></g><rect x="2.95" y="1280.07" width="2518.18" height="74.096"/></svg>
-      </a>
-    </h1>
+    <div class="header-main">
+      <h1 class="logo">
+        <a href="/">
+          <span class="visually-hidden">Spread the Future, back to home</span>
+          <svg viewBox="0 0 3859 1355" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g transform="matrix(9.83856,0,0,9.83856,-644.861,-1350.52)"><text x="64.501px" y="182.994px" style="font-family:'Arial-BoldMT','Arial',sans-serif;font-weight:700;font-size:62.5px;">SPREAD</text><text x="64.501px" y="247.539px" style="font-family:'Arial-BoldMT','Arial',sans-serif;font-weight:700;font-size:62.5px;">THE FUTURE</text></g><rect x="2.95" y="1280.07" width="2518.18" height="74.096"/></svg>
+        </a>
+      </h1>
 
-    <nav class="platforms">
-      <span class="platforms-label">Available on</span>
-      <a href="https://open.spotify.com/show/0YZIGNBGAS4zwkeFbmh4ZY" target="_blank" rel="noopener noreferrer"><img class="platform-icon" src="/assets/platforms/spotify.svg" alt="" width="16" height="16"><span class="platform-name">Spotify</span></a>
-      <a href="https://podcasts.apple.com/fr/podcast/spread-the-future/id1551075626" target="_blank" rel="noopener noreferrer"><img class="platform-icon" src="/assets/platforms/apple-podcasts.svg" alt="" width="16" height="16"><span class="platform-name">Apple Podcasts</span></a>
-      <a href="https://www.deezer.com/fr/show/2252082" target="_blank" rel="noopener noreferrer"><img class="platform-icon" src="/assets/platforms/deezer.svg" alt="" width="16" height="16"><span class="platform-name">Deezer</span></a>
+      <nav class="platforms">
+        <span class="platforms-label">Available on</span>
+        <a href="https://open.spotify.com/show/0YZIGNBGAS4zwkeFbmh4ZY" target="_blank" rel="noopener noreferrer"><img class="platform-icon" src="/assets/platforms/spotify.svg" alt="" width="16" height="16"><span class="platform-name">Spotify</span></a>
+        <a href="https://podcasts.apple.com/fr/podcast/spread-the-future/id1551075626" target="_blank" rel="noopener noreferrer"><img class="platform-icon" src="/assets/platforms/apple-podcasts.svg" alt="" width="16" height="16"><span class="platform-name">Apple Podcasts</span></a>
+        <a href="https://www.deezer.com/fr/show/2252082" target="_blank" rel="noopener noreferrer"><img class="platform-icon" src="/assets/platforms/deezer.svg" alt="" width="16" height="16"><span class="platform-name">Deezer</span></a>
+      </nav>
+    </div>
+
+    <nav class="site-nav">
+      <a href="/about/">About</a>
+      <a href="/credits/">Credits</a>
     </nav>
   </header>
 
   <main>
-    <p class="tagline">A podcast where we explore possible tomorrows.</p>
+    <p class="tagline">A podcast where we explore possible tomorrows. Episodes are written collectively, scored with original music and using covers from independent photographers. We believe in a future you can't predict: the unexpected, the improbable, and the one worth spreading.</p>
 
     <!-- One episode row. scripts/build.py fills this per episode at build time.
          Escaped placeholders: season, number, title, title_full, link, image,
@@ -58,7 +65,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="{{image}}" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">{{title}}</h2>
               <p class="episode-meta">{{published_display}} &middot; {{duration}}</p>
               <div class="episode-description">{{{description_html}}}</div>
               <p class="episode-listen-label">Listen on</p>
@@ -77,6 +83,14 @@
 
     <p class="episodes-lead">Explore the latest below</p>
 
+    <div class="episodes-layout">
+      <div class="episode-art-panel">
+        <div class="episode-art-frame">
+          <img class="episode-art-layer" alt="" aria-hidden="true">
+          <img class="episode-art-layer" alt="" aria-hidden="true">
+        </div>
+      </div>
+
     <!-- episodes:start -->
     <ul class="episodes">
       <li>
@@ -89,7 +103,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743939720864-8f2684bf60975.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Sofia on our Relations with Others</h2>
               <p class="episode-meta">28 June 2022 &middot; 8:30</p>
               <div class="episode-description"><p>“<em>From now on we can decide to let more space in our life for others</em>” <br>As quarantine separated us, it made us realize how important our relations with the others are. Wouldn’t it be the perfect time to better reconnect once this crisis is over? This is what we discussed with Sofia.</p><p>Sofia is an aspiring psychologist studying in Milan, Italy whose research focuses on personal wellbeing.</p><p>Original cover by <a href="https://leslieheintz.com/" target="_blank" rel="ugc noopener noreferrer">Leslie Heintz</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -112,7 +125,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743939796134-028de52a01e87.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Sofia sulle nostre Relazioni con gli Altri</h2>
               <p class="episode-meta">28 June 2022 &middot; 9:20</p>
               <div class="episode-description"><p>“<em>D&#39;ora in poi possiamo decidere di lasciare più spazio nella nostra vita per gli altri</em>” <br>La quarantena ci ha separato e ci ha fatto capire quanto siano importanti i nostri rapporti con gli altri. Ma non sarebbe il momento perfetto per riallacciare i rapporti una volta superata la crisi? Sofia ci racconta tutto.</p><p>Sofia è una aspirante psicologa che studia a Milano, le cui ricerce sono incentrate sul benessere personale.</p><p>Copertina originale di <a href="https://leslieheintz.com" target="_blank" rel="ugc noopener noreferrer">Leslie Heintz</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -135,7 +147,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743939960032-ecee0dcb3bcf5.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Fabio on our Relations with Objects</h2>
               <p class="episode-meta">6 April 2022 &middot; 6:22</p>
               <div class="episode-description"><p>“<em>Let’s stop this race for miracle materials, we already have alternatives</em>” <br>The purpose of objects is to solve issues. Yet, aren’t they bringing more issues than solutions nowadays? From sustainability to materialism and addictions. We asked Fabio about the future of our objects.</p><p>Fabio volunteers in an open-air museum in Amsterdam and studied object design in Toulouse, France.</p><p>Original cover by Megan Whitney<br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -158,7 +169,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940003316-4f50ba4ed24ca.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Fabio sur nos Relations aux Objets</h2>
               <p class="episode-meta">6 April 2022 &middot; 6:22</p>
               <div class="episode-description"><p>“<em>Un matériau miracle ? On a déjà les alternatives</em>” <br>Les objets ont pour but de résoudre des problèmes. Mais n’apportent-ils pas aujourd’hui davantage de problèmes que de solutions? Durabilité, addictions… Nous discutons avec Fabio du futur de nos objets.</p><p>Fabio est volontaire dans un musée d’un nouveau genre à Amsterdam et a étudié le design à Toulouse.</p><p>Couverture originale par Megan Whitney<br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -181,7 +191,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940053952-d89773ecfa8fe.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Alexia on our Daily Impact</h2>
               <p class="episode-meta">24 July 2021 &middot; 9:26</p>
               <div class="episode-description"><p>“<em>Well, I’m vegan but I really like meat. I like good things in life, you know</em>” <br>The human brain loves to isolate ideas. Can we really think anything outside of its context though? A virus’ existence impacts our world in many ways, what about me? We talk about our daily impact with Alexia.</p><p>Alexia lives in Nice, France and studies International Affairs and Environmental studies in Washington, D.C.</p><p>Original cover by Skylar Bartlett.</p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -204,7 +213,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940158469-6c98f3571303f.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Alexia sobre nuestro Impacto Diario</h2>
               <p class="episode-meta">24 July 2021 &middot; 9:10</p>
               <div class="episode-description"><p>“<em>Soy vegana pero me gusta la carne. Me gustan las cosas buenas de la vida</em>” <br>Al cerebro humano le encanta aislar las ideas. ¿Pero podemos realmente pensar algo fuera de su contexto? La existencia de un virus afecta a nuestro mundo de muchas maneras ¿y qué hay de mí? Hablamos de nuestro impacto con Alexia.</p><p>Alexia vive en Niza y estudia Asuntos Internacionales en relación con el Medioambiente en Washington, D.C.</p><p>Portada original de Skylar Bartlett.</p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -227,7 +235,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940197571-19d136eddacee.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Philippine on our Production Models</h2>
               <p class="episode-meta">12 May 2021 &middot; 4:46</p>
               <div class="episode-description"><p>“<em>My job in the factory was to pack turkey and chicken for 7 hours at -4°C</em>” <br>Mass production: is it without consequences? Do our production methods match with our ideals? Philippine talks to us about an essential production, the one of our food.</p><p>Philippine studies in Paris and has been working in a food factory in Le Mans, France during the lockdown.</p><p>Original cover by <a href="https://laurenmarek.com" target="_blank" rel="ugc noopener noreferrer">Lauren Marek</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -250,7 +257,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940243929-2fba3cf5c8c3b.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Philippine sur nos Modèles de Production</h2>
               <p class="episode-meta">12 May 2021 &middot; 5:27</p>
               <div class="episode-description"><p>“<em>My job in the factory was to pack turkey and chicken for 7 hours at -4°C</em>” <br>Produire en masse : est-ce sans conséquence ? Nos méthodes de production sont-elles à la hauteur de nos idéaux ? Nous discutons avec Philippine d’une production essentielle, celle de notre nourriture.</p><p>Philippine étudie à Paris et a choisi de travailler dans une usine alimentaire du Mans lors du confinement.</p><p>Couverture originale par <a href="https://laurenmarek.com/" target="_blank" rel="ugc noopener noreferrer">Lauren Marek</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -273,7 +279,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940487085-a0f79d67e605a.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Ronald on our Economy</h2>
               <p class="episode-meta">1 April 2021 &middot; 8:14</p>
               <div class="episode-description"><p>“<em>I don’t think consuming as much as before is the answer</em>”<br> Is non-stop consumption leading us to happiness in the end? Is capitalism compatible with sustainable development and social justice? We talk about the future of our economy with Ronald.</p><p>Ronald lives in San José, Costa Rica and has studied International Administration and business in Paris.</p><p>Original cover by <a href="https://instagram.com/jacobgperry" target="_blank" rel="ugc noopener noreferrer">Jacob Perry</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -296,7 +301,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940355054-f41196775816d.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Ronald sobre nuestra Economía</h2>
               <p class="episode-meta">1 April 2021 &middot; 10:00</p>
               <div class="episode-description"><p>“<em>No pienso que consumir tanto como antes es la respuesta</em>”<br> ¿El consumo incesante nos lleva a la felicidad al final? ¿Es el capitalismo compatible con el desarrollo sostenible y la justicia social? Esto es lo que hablamos con Ronald.</p><p>Ronald vive en San José, Costa Rica y ha estudiado Administración Internacional y business en París.</p><p>Portada original de <a href="https://instagram.com/jacobgperry/" target="_blank" rel="ugc noopener noreferrer">Jacob Perry</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -319,7 +323,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940402246-6d7598325bc2a.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Michael on our Resources</h2>
               <p class="episode-meta">30 March 2021 &middot; 6:20</p>
               <div class="episode-description"><p>“<em>The future of earth lies in the mindset we choose everyday</em>” <br>Nothing is lost, everything is transformed. Seems like we understood this well, transforming any ressource around us with ease. But what if the true difficulty resided in not getting lost at the end of the process?</p><p>Michael is an aspiring geologist from the island of Sicily and he conducts his research in Milan, Italy.</p><p>Original cover by <a href="https://vsco.co/isaakhunt/gallery/" target="_blank" rel="ugc noopener noreferrer">Isaak Hunt</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -342,7 +345,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940453456-3da08829d7dee.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Michael sulle nostre Risorse</h2>
               <p class="episode-meta">30 March 2021 &middot; 6:38</p>
               <div class="episode-description"><p>“<em>Il futuro della Terra sta nella mentalità che scegliamo ogni giorno</em>” <br>Nulla si perde, tutto si trasforma. Sembra che l&#39;abbiamo capito bene  trasformando con facilità qualsiasi risorsa che ci circonda. Ma se la  vera difficoltà risiedesse nel non perdersi alla fine del processo?</p><p>Michael è uno studente geologo che viene dalla Sicilia e che conduce le sue ricerche a Milano.</p><p>Copertina originale di <a href="https://vsco.co/isaakhunt/gallery" target="_blank" rel="ugc noopener noreferrer">Isaak Hunt</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -365,7 +367,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940530277-93dc03e20abeb.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Nina on our Rhythms of Life</h2>
               <p class="episode-meta">22 March 2021 &middot; 5:30</p>
               <div class="episode-description"><p>“<em>I think it has proven to me it&#39;s possible to have a different way of life</em>” <br>Commute, work, sleep, repeat… Wait. Is it still worth it? We discussed with Nina the countless ways of living as well as the possibility to embrace the one we really chose.</p><p>Nina has been working in a wwoofing community in Yelverton, UK after having studied Political sciences in Paris.</p><p>Original cover by <a href="https://www.instagram.com/spencerkrell/" target="_blank" rel="ugc noopener noreferrer">Spencer Krell</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -388,7 +389,6 @@
           <div class="episode-panel">
             <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940565138-96a175d8e2a32.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
             <div class="episode-body">
-              <h2 class="episode-heading">Nina sur nos Rythmes de Vie</h2>
               <p class="episode-meta">22 March 2021 &middot; 6:14</p>
               <div class="episode-description"><p>“<em>Savoir qu’il y a d’autres façons de vivre, expérimenter, ça ouvre des horizons</em>” <br>Métro, boulot, dodo… Attends. Est-ce que ça vaut toujours le coup ? Nous avons discuté avec Nina des innombrables façons de vivre sa vie ainsi que de la possibilité d’adopter celle que l’on a vraiment choisie.</p><p>Nina est bénévole dans une communauté wwoofing à Yelverton, en Angleterre, après avoir étudié les Sciences politiques à Paris.</p><p>Couverture originale par <a href="https://www.instagram.com/spencerkrell/" target="_blank" rel="ugc noopener noreferrer">Spencer Krell</a><br></p></div>
               <p class="episode-listen-label">Listen on</p>
@@ -403,12 +403,9 @@
       </li>
     </ul>
     <!-- episodes:end -->
+    </div>
   </main>
 
-  <footer>
-    <a href="/credits/">Credits</a>
-    <a href="/about/">About</a>
-  </footer>
   <script src="/script.js" defer></script>
 </body>
 </html>

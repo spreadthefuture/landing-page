@@ -79,3 +79,52 @@ if (episodes && finePointer.matches) {
   if (document.readyState === 'complete') warm();
   else window.addEventListener('load', warm, { once: true });
 }
+
+// The persistent cover to the left of the list: the latest episode's art at
+// rest, the hovered row's while the pointer is over it, the open row's
+// whenever one is expanded. Two stacked <img> layers so a change crossfades
+// instead of popping: the incoming cover loads into the hidden layer, then
+// swap which one carries .is-active and CSS transitions the opacity.
+const artPanel = document.querySelector('.episode-art-panel');
+
+if (episodes && artPanel) {
+  const layers = artPanel.querySelectorAll('.episode-art-layer');
+  let activeLayer = 0;
+  let currentSrc = null;
+  let openSrc = null;
+
+  const firstCover = episodes.querySelector('.episode-art');
+  const defaultSrc = firstCover ? firstCover.src : null;
+
+  const showArt = (src) => {
+    if (!src || src === currentSrc) return;
+    currentSrc = src;
+    const next = layers[1 - activeLayer];
+    next.src = src;
+    next.classList.add('is-active');
+    layers[activeLayer].classList.remove('is-active');
+    activeLayer = 1 - activeLayer;
+  };
+
+  showArt(defaultSrc);
+
+  for (const details of episodes.querySelectorAll('.episode')) {
+    const cover = details.querySelector('.episode-art');
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        openSrc = cover ? cover.src : null;
+        showArt(openSrc || defaultSrc);
+      } else if (cover && cover.src === openSrc) {
+        openSrc = null;
+      }
+    });
+  }
+
+  if (finePointer.matches) {
+    for (const summary of episodes.querySelectorAll('.episode-summary')) {
+      const cover = summary.closest('.episode').querySelector('.episode-art');
+      summary.addEventListener('mouseenter', () => showArt(cover.src));
+      summary.addEventListener('mouseleave', () => showArt(openSrc || defaultSrc));
+    }
+  }
+}
