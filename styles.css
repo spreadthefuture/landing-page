@@ -193,7 +193,6 @@ header {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: 0.01em;
-  text-transform: uppercase;
 }
 
 /* Below this width the sentence is sized off the viewport instead of the clamp
