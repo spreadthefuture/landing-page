@@ -49,7 +49,6 @@
   --space-s: clamp(1rem, 2vw, 1.5rem);
   --space-m: clamp(2rem, 5vw, 3.5rem);
   --space-xl: clamp(4rem, 10vw, 8rem);
-  /* Shared by the episode rows and the footer: they must stay the same size. */
   --type-row: clamp(0.95rem, 1.9vw, 1.45rem);
   color-scheme: dark;
 }
@@ -65,8 +64,8 @@ body {
   min-height: 100svh;
   padding: var(--gutter);
   /* Bottom gutter is measured against viewport height, not width, and comes out
-     smaller than the sides: it is what pins the footer the same distance off the
-     bottom edge on every page, so it must not vary between them. */
+     smaller than the sides: it keeps the page's last element the same distance
+     off the bottom edge on every page, so it must not vary between them. */
   padding-bottom: clamp(1.25rem, 5vh, var(--gutter));
   background: var(--bg);
   color: var(--fg);
@@ -95,18 +94,17 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- Header ---- */
 
-header {
+.header-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-m);
 }
 
-.header-main { min-width: 0; }
-
 /* Sized like the about page's own section headings (§4.2 in PROJECT-CONTEXT), a step
    up from the episode rows, since this nav is the same weight as a page heading
-   rather than a list item. */
+   rather than a list item. .header-top's align-items: flex-start keeps this
+   top-aligned with the wordmark. */
 .site-nav {
   display: flex;
   flex: none;
@@ -114,7 +112,8 @@ header {
   align-items: flex-end;
   gap: 0.5rem;
   font-weight: 700;
-  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
   text-transform: uppercase;
 }
 
@@ -468,25 +467,24 @@ header {
 .episode-links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.75rem 1.75rem;
   margin-top: 0.85rem;
   padding: 0;
   list-style: none;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .episode-listen {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--rule);
-  font-size: clamp(0.9rem, 1.1vw, 1rem);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
-.episode-listen:hover { opacity: 0.8; border-color: var(--fg); }
+.episode-listen:hover { opacity: 0.8; }
 
 /* The persistent art panel already shows an opened row's cover (stacked above
    the list on mobile, beside it on desktop), so the same image repeated inside
@@ -501,11 +499,12 @@ header {
    under the header once scrolled to and only unsticks when you scroll back up
    past its natural position. */
 @media (max-width: 40rem) {
-  header { flex-wrap: wrap; }
+  .header-top { flex-wrap: wrap; }
 
   .site-nav {
     flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
     gap: 1.5rem;
     margin-top: var(--space-s);
   }
@@ -667,26 +666,12 @@ header {
 
 .about-closing a:hover { opacity: 0.8; }
 
-/* ---- Footer ---- */
-
-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: auto;
-  padding-top: clamp(3rem, 8vw, 6rem);
-  color: var(--fg);
-  font-size: var(--type-row);
-  font-weight: 700;
-  text-transform: uppercase;
+.site-footer {
+  padding: 4rem var(--gutter) 2rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
 }
-
-/* The credits page sets its own even spacing band, so its footer keeps step
-   with the row-to-row gap instead of the site-wide default above. */
-.page-credits footer { padding-top: var(--band); }
-
-footer a { transition: opacity 0.2s ease; }
-footer a:hover { opacity: 0.8; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
