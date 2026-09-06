@@ -50,6 +50,18 @@ NUMBER_PREFIX = re.compile(r"^\s*(?:S(?P<season>\d+))?E(?P<number>\d+)\s*[:.\-]\
 DESCRIPTION_LINK = re.compile(r"<a\s+([^>]*?)\s*>", re.IGNORECASE)
 LINK_ATTR = re.compile(r'\s*(target|rel)\s*=\s*"[^"]*"', re.IGNORECASE)
 
+# Season 1 was recorded in English, French, Italian and Spanish, with every
+# language published as its own feed item under the same S#E# label. There is no
+# itunes:language per item, but each language uses a fixed connector phrase before
+# the episode subject ("on our Resources" / "sur nos Ressources" / "sulle nostre
+# Risorse" / "sobre nuestros Recursos"), so it doubles as a language marker. This
+# is a blocklist, not an English allowlist: season 2 titles that don't match any
+# of these phrases pass through untouched.
+NON_ENGLISH_MARKER = re.compile(
+    r"\b(sur nos?|sur cette|sulle nostre|sul nostro|sulla nostra|sobre nuestr[oa]s?)\b",
+    re.IGNORECASE,
+)
+
 
 def open_links_in_new_tab(description_html):
     """Force target="_blank" (and a safe rel) on every link in a description."""
@@ -133,7 +145,8 @@ def fetch(url=FEED_URL):
 def build_data(feed_bytes):
     channel = ET.fromstring(feed_bytes).find("channel")
     episodes = [parse_episode(item) for item in channel.findall("item")]
-    # Every language version is listed on its own, newest first.
+    # Every language version is listed on its own; keep only English.
+    episodes = [e for e in episodes if not NON_ENGLISH_MARKER.search(e["title_full"])]
     episodes.sort(key=lambda e: e["published"], reverse=True)
     return {
         "feed_url": FEED_URL,

@@ -67,4 +67,19 @@ if (episodes && artPanel) {
       summary.addEventListener('mouseleave', () => showArt(openSrc || defaultSrc));
     }
   }
+
+  // On narrow screens the panel becomes sticky flush to the viewport top (see
+  // styles.css). .is-pinned adds back a gutter of space above the cover once
+  // it is actually stuck, without affecting its unpinned, in-flow position: a
+  // sentinel sits right above the panel in the markup, and once scrolling
+  // carries it past the viewport top the panel must be pinned.
+  const artSentinel = document.querySelector('.episode-art-sentinel');
+
+  if (artSentinel) {
+    const pinObserver = new IntersectionObserver(
+      ([entry]) => artPanel.classList.toggle('is-pinned', !entry.isIntersecting),
+      { threshold: 0 }
+    );
+    pinObserver.observe(artSentinel);
+  }
 }

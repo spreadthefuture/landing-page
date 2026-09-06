@@ -1,7 +1,7 @@
 {
   "feed_url": "https://anchor.fm/s/469ddf8c/podcast/rss",
   "title": "SPREAD THE FUTURE",
-  "episode_count": 14,
+  "episode_count": 7,
   "episodes": [
     {
       "guid": "00ac3941-e736-4355-8961-4dafa4f41408",
@@ -22,24 +22,6 @@
       "audio_bytes": 8249571
     },
     {
-      "guid": "029aaf34-0c1a-4b87-a854-ba3706fc16ba",
-      "number": 7,
-      "season": 1,
-      "label": "S1E7",
-      "title": "Sofia sulle nostre Relazioni con gli Altri",
-      "title_full": "S1E7: Sofia sulle nostre Relazioni con gli Altri",
-      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E7-Sofia-sulle-nostre-Relazioni-con-gli-Altri-e1k0aar",
-      "description_html": "<p>“<em>D&#39;ora in poi possiamo decidere di lasciare più spazio nella nostra vita per gli altri</em>” <br>La quarantena ci ha separato e ci ha fatto capire quanto siano importanti i nostri rapporti con gli altri. Ma non sarebbe il momento perfetto per riallacciare i rapporti una volta superata la crisi? Sofia ci racconta tutto.</p><p>Sofia è una aspirante psicologa che studia a Milano, le cui ricerce sono incentrate sul benessere personale.</p><p>Copertina originale di <a href=\"https://leslieheintz.com\" target=\"_blank\" rel=\"ugc noopener noreferrer\">Leslie Heintz</a><br></p>",
-      "published": "2022-06-28T06:58:47+00:00",
-      "published_display": "28 June 2022",
-      "duration": "9:20",
-      "duration_seconds": 560,
-      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743939796134-028de52a01e87.jpg",
-      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/53536539/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2022-5-15%2F271847792-44100-2-ab4d8500ee6c2.m4a",
-      "audio_type": "audio/x-m4a",
-      "audio_bytes": 9058455
-    },
-    {
       "guid": "18c191ca-8124-43a5-a993-5f6066e0ef7b",
       "number": 6,
       "season": 1,
@@ -47,7 +29,7 @@
       "title": "Fabio on our Relations with Objects",
       "title_full": "S1E6: Fabio on our Relations with Objects",
       "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E6-Fabio-on-our-Relations-with-Objects-e1gobsd",
-      "description_html": "<p>“<em>Let’s stop this race for miracle materials, we already have alternatives</em>” <br>The purpose of objects is to solve issues. Yet, aren’t they bringing more issues than solutions nowadays? From sustainability to materialism and addictions. We asked Fabio about the future of our objects.</p><p>Fabio volunteers in an open-air museum in Amsterdam and studied object design in Toulouse, France.</p><p>Original cover by Megan Whitney<br></p>",
+      "description_html": "<p>“<em>Let’s stop this race for miracle materials, we already have alternatives</em>” <br>The purpose of objects is to solve issues. Yet, aren’t they bringing more issues than solutions nowadays? From sustainability to materialism and addictions. We asked Fabio about the future of our objects.</p><p>Fabio volunteers in an open-air museum in Amsterdam and studied object design in Toulouse, France.</p><p>Original cover by Megan Whitney.</p>",
       "published": "2022-04-06T18:00:00+00:00",
       "published_display": "6 April 2022",
       "duration": "6:22",
@@ -56,24 +38,6 @@
       "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/50130253/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2022-3-6%2F258229649-44100-2-81e79361daeeb.m4a",
       "audio_type": "audio/x-m4a",
       "audio_bytes": 6179689
-    },
-    {
-      "guid": "e6a34adb-16d7-47b0-8d88-c19757b11b41",
-      "number": 6,
-      "season": 1,
-      "label": "S1E6",
-      "title": "Fabio sur nos Relations aux Objets",
-      "title_full": "S1E6: Fabio sur nos Relations aux Objets",
-      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E6-Fabio-sur-nos-Relations-aux-Objets-e1gobht",
-      "description_html": "<p>“<em>Un matériau miracle ? On a déjà les alternatives</em>” <br>Les objets ont pour but de résoudre des problèmes. Mais n’apportent-ils pas aujourd’hui davantage de problèmes que de solutions? Durabilité, addictions… Nous discutons avec Fabio du futur de nos objets.</p><p>Fabio est volontaire dans un musée d’un nouveau genre à Amsterdam et a étudié le design à Toulouse.</p><p>Couverture originale par Megan Whitney<br></p>",
-      "published": "2022-04-06T17:00:00+00:00",
-      "published_display": "6 April 2022",
-      "duration": "6:22",
-      "duration_seconds": 382,
-      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940003316-4f50ba4ed24ca.jpg",
-      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/50129917/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2022-3-6%2F258229918-44100-2-7700b30495af1.m4a",
-      "audio_type": "audio/x-m4a",
-      "audio_bytes": 6179701
     },
     {
       "guid": "184bd2fa-b9b2-4191-acad-51fdbc2dda23",
@@ -94,24 +58,6 @@
       "audio_bytes": 9155327
     },
     {
-      "guid": "34ef469e-9df5-463e-844f-b1f5551aea50",
-      "number": 5,
-      "season": 1,
-      "label": "S1E5",
-      "title": "Alexia sobre nuestro Impacto Diario",
-      "title_full": "S1E5: Alexia sobre nuestro Impacto Diario",
-      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E5-Alexia-sobre-nuestro-Impacto-Diario-e13t66d",
-      "description_html": "<p>“<em>Soy vegana pero me gusta la carne. Me gustan las cosas buenas de la vida</em>” <br>Al cerebro humano le encanta aislar las ideas. ¿Pero podemos realmente pensar algo fuera de su contexto? La existencia de un virus afecta a nuestro mundo de muchas maneras ¿y qué hay de mí? Hablamos de nuestro impacto con Alexia.</p><p>Alexia vive en Niza y estudia Asuntos Internacionales en relación con el Medioambiente en Washington, D.C.</p><p>Portada original de Skylar Bartlett.</p>",
-      "published": "2021-07-24T06:00:00+00:00",
-      "published_display": "24 July 2021",
-      "duration": "9:10",
-      "duration_seconds": 550,
-      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940158469-6c98f3571303f.jpg",
-      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/36656781/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-6-4%2F202722428-44100-2-7c372dba4b994.m4a",
-      "audio_type": "audio/x-m4a",
-      "audio_bytes": 8896583
-    },
-    {
       "guid": "669e3aee-b558-448f-baee-33bfec716d74",
       "number": 4,
       "season": 1,
@@ -128,24 +74,6 @@
       "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/33205979/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-4-10%2F184709188-44100-2-0440331e39a71.m4a",
       "audio_type": "audio/x-m4a",
       "audio_bytes": 4626900
-    },
-    {
-      "guid": "8ebc9d70-77b9-4d2f-8ab3-781a81ad4ad2",
-      "number": 4,
-      "season": 1,
-      "label": "S1E4",
-      "title": "Philippine sur nos Modèles de Production",
-      "title_full": "S1E4: Philippine sur nos Modèles de Production",
-      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E4-Philippine-sur-nos-Modles-de-Production-e10jrrt",
-      "description_html": "<p>“<em>My job in the factory was to pack turkey and chicken for 7 hours at -4°C</em>” <br>Produire en masse : est-ce sans conséquence ? Nos méthodes de production sont-elles à la hauteur de nos idéaux ? Nous discutons avec Philippine d’une production essentielle, celle de notre nourriture.</p><p>Philippine étudie à Paris et a choisi de travailler dans une usine alimentaire du Mans lors du confinement.</p><p>Couverture originale par <a href=\"https://laurenmarek.com/\" target=\"_blank\" rel=\"ugc noopener noreferrer\">Lauren Marek</a><br></p>",
-      "published": "2021-05-12T05:00:00+00:00",
-      "published_display": "12 May 2021",
-      "duration": "5:27",
-      "duration_seconds": 327,
-      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940243929-2fba3cf5c8c3b.jpg",
-      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/33205565/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-4-10%2F184707732-44100-2-7f3a2b4e406cd.m4a",
-      "audio_type": "audio/x-m4a",
-      "audio_bytes": 5290067
     },
     {
       "guid": "b771fa37-700d-466d-9fbc-e8caea5c7043",
@@ -166,24 +94,6 @@
       "audio_bytes": 7990838
     },
     {
-      "guid": "65e114ee-1e24-45af-9822-805454a888c3",
-      "number": 3,
-      "season": 1,
-      "label": "S1E3",
-      "title": "Ronald sobre nuestra Economía",
-      "title_full": "S1E3: Ronald sobre nuestra Economía",
-      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E3-Ronald-sobre-nuestra-Economa-eu1v37",
-      "description_html": "<p>“<em>No pienso que consumir tanto como antes es la respuesta</em>”<br> ¿El consumo incesante nos lleva a la felicidad al final? ¿Es el capitalismo compatible con el desarrollo sostenible y la justicia social? Esto es lo que hablamos con Ronald.</p><p>Ronald vive en San José, Costa Rica y ha estudiado Administración Internacional y business en París.</p><p>Portada original de <a href=\"https://instagram.com/jacobgperry/\" target=\"_blank\" rel=\"ugc noopener noreferrer\">Jacob Perry</a><br></p>",
-      "published": "2021-04-01T21:14:57+00:00",
-      "published_display": "1 April 2021",
-      "duration": "10:00",
-      "duration_seconds": 600,
-      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940355054-f41196775816d.jpg",
-      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/30521895/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-3-1%2F171465324-44100-2-ba8a1d85f5f38.m4a",
-      "audio_type": "audio/x-m4a",
-      "audio_bytes": 9705128
-    },
-    {
       "guid": "59bc1a56-96d5-49d2-9f65-a20c6ecffe8e",
       "number": 2,
       "season": 1,
@@ -202,24 +112,6 @@
       "audio_bytes": 6147382
     },
     {
-      "guid": "b95670be-a7dc-4a64-be44-79e2c5d0e1c4",
-      "number": 2,
-      "season": 1,
-      "label": "S1E2",
-      "title": "Michael sulle nostre Risorse",
-      "title_full": "S1E2: Michael sulle nostre Risorse",
-      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E2-Michael-sulle-nostre-Risorse-etsc0r",
-      "description_html": "<p>“<em>Il futuro della Terra sta nella mentalità che scegliamo ogni giorno</em>” <br>Nulla si perde, tutto si trasforma. Sembra che l&#39;abbiamo capito bene  trasformando con facilità qualsiasi risorsa che ci circonda. Ma se la  vera difficoltà risiedesse nel non perdersi alla fine del processo?</p><p>Michael è uno studente geologo che viene dalla Sicilia e che conduce le sue ricerche a Milano.</p><p>Copertina originale di <a href=\"https://vsco.co/isaakhunt/gallery\" target=\"_blank\" rel=\"ugc noopener noreferrer\">Isaak Hunt</a><br></p>",
-      "published": "2021-03-30T14:00:00+00:00",
-      "published_display": "30 March 2021",
-      "duration": "6:38",
-      "duration_seconds": 398,
-      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940453456-3da08829d7dee.jpg",
-      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/30338523/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-2-30%2F170628912-44100-2-dff621567201e.m4a",
-      "audio_type": "audio/x-m4a",
-      "audio_bytes": 6438425
-    },
-    {
       "guid": "253407a4-337f-4d65-9c40-4047ff90ab13",
       "number": 1,
       "season": 1,
@@ -236,24 +128,6 @@
       "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/29701898/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-2-22%2F167967032-44100-2-8341d806b0d78.m4a",
       "audio_type": "audio/x-m4a",
       "audio_bytes": 5338537
-    },
-    {
-      "guid": "33612504-4dc8-4487-904b-a70d8f74de1f",
-      "number": 1,
-      "season": 1,
-      "label": "S1E1",
-      "title": "Nina sur nos Rythmes de Vie",
-      "title_full": "S1E1: Nina sur nos Rythmes de Vie",
-      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S1E1-Nina-sur-nos-Rythmes-de-Vie-et902b",
-      "description_html": "<p>“<em>Savoir qu’il y a d’autres façons de vivre, expérimenter, ça ouvre des horizons</em>” <br>Métro, boulot, dodo… Attends. Est-ce que ça vaut toujours le coup ? Nous avons discuté avec Nina des innombrables façons de vivre sa vie ainsi que de la possibilité d’adopter celle que l’on a vraiment choisie.</p><p>Nina est bénévole dans une communauté wwoofing à Yelverton, en Angleterre, après avoir étudié les Sciences politiques à Paris.</p><p>Couverture originale par <a href=\"https://www.instagram.com/spencerkrell/\" target=\"_blank\" rel=\"ugc noopener noreferrer\">Spencer Krell</a><br></p>",
-      "published": "2021-03-22T22:00:00+00:00",
-      "published_display": "22 March 2021",
-      "duration": "6:14",
-      "duration_seconds": 374,
-      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1743940565138-96a175d8e2a32.jpg",
-      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/29703691/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2021-2-22%2F167975563-44100-2-2b82d42e827e3.m4a",
-      "audio_type": "audio/x-m4a",
-      "audio_bytes": 6050158
     }
   ]
 }

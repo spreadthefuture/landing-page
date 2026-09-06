@@ -227,10 +227,22 @@ a { color: inherit; text-decoration: none; }
 /* The persistent cover on the left and the episode list on the right. The panel
    is a fixed width, the list takes what's left. */
 .episodes-layout {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--space-m);
   margin-top: var(--space-m);
+}
+
+/* Marks where the cover's unpinned position starts, purely so script.js has
+   something to watch (see the mobile .is-pinned rule below): an
+   absolutely-positioned, zero-size marker takes no part in the flex layout or
+   its gap, so it can't shift the cover or the list either side of it. */
+.episode-art-sentinel {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 1px;
 }
 
 /* Shows the latest episode's cover at rest, swaps to whichever row is hovered
@@ -426,14 +438,27 @@ a { color: inherit; text-decoration: none; }
      top: var(--gutter). Sticking at an offset left that gap uncovered, so once
      the list had scrolled far enough the row underneath showed through it
      rather than staying hidden behind the cover; flush leaves nothing for it to
-     show through, and keeps the gap above the cover at the same size as the
-     rest of the page's spacing instead of adding the gutter on top of it. Width
-     matches the rows above: same inset as the rest of the page. */
+     show through. Width matches the rows above: same inset as the rest of the
+     page.
+
+     The gutter of breathing room above the cover is restored once it is
+     actually pinned, via .is-pinned (toggled in script.js by an
+     IntersectionObserver watching the sentinel above this panel): padding-top
+     plus a solid background so the gap is baked into the panel's own opaque
+     box, travelling with it and hiding whatever scrolls underneath, rather
+     than being a gap the list can show through. Scoped to .is-pinned so the
+     unpinned, in-flow cover keeps its normal spacing instead of gaining an
+     extra gutter it doesn't need. */
   .episode-art-panel {
     flex: 0 0 auto;
     width: 100%;
     top: 0;
     z-index: 1;
+  }
+
+  .episode-art-panel.is-pinned {
+    padding-top: var(--gutter);
+    background: var(--bg);
   }
 }
 
