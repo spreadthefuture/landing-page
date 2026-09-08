@@ -153,7 +153,33 @@ a { color: inherit; text-decoration: none; }
 .platforms a { display: inline-flex; align-items: center; gap: 0.5em; transition: opacity 0.2s ease; }
 .platforms a:hover { opacity: 0.8; }
 
-.platform-icon { width: 1em; height: 1em; }
+/* A masked shape (not an <img>) so its color can follow currentColor at rest and
+   shift to the platform's brand color on hover, without swapping source files. */
+.platform-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  transition: background-color 0.2s ease;
+}
+
+.platform-icon--spotify { -webkit-mask-image: url(/assets/platforms/spotify.svg); mask-image: url(/assets/platforms/spotify.svg); }
+.platform-icon--apple { -webkit-mask-image: url(/assets/platforms/apple-podcasts.svg); mask-image: url(/assets/platforms/apple-podcasts.svg); }
+.platform-icon--deezer { -webkit-mask-image: url(/assets/platforms/deezer.svg); mask-image: url(/assets/platforms/deezer.svg); }
+
+/* Spotify green, Apple Podcasts purple, Deezer purple. */
+.platforms a:hover .platform-icon--spotify,
+.episode-listen:hover .platform-icon--spotify { background-color: #1ED760; }
+.platforms a:hover .platform-icon--apple,
+.episode-listen:hover .platform-icon--apple { background-color: #A945E3; }
+.platforms a:hover .platform-icon--deezer,
+.episode-listen:hover .platform-icon--deezer { background-color: #A238FF; }
 
 /* Measured in-browser: full names wrap to 2 lines below ~582px, so 40rem
    (640px) gives margin. Icon-only stays on one line down to ~300px. The rule
@@ -198,7 +224,7 @@ a { color: inherit; text-decoration: none; }
    above, so its lines keep filling edge to edge the way the wordmark does. */
 @media (max-width: 40rem) {
   .tagline {
-    font-size: 4.25vw;
+    font-size: 6vw;
   }
 }
 
@@ -249,7 +275,7 @@ a { color: inherit; text-decoration: none; }
    or open. script.js crossfades between the two stacked layers below; this
    panel never has an opinion of its own about which image that is. */
 .episode-art-panel {
-  flex: 0 0 clamp(240px, 40vw, 520px);
+  flex: 0 0 clamp(240px, 47vw, 620px);
   position: sticky;
   top: var(--gutter);
 }

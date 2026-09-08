@@ -177,7 +177,7 @@ def build_links(episode, links, template):
         print(f"  no links.json entry for {episode['title_full']} ({episode['guid']})")
         return ""
     rows = [
-        fill(template, {"url": url, "name": platform["name"], "icon": platform["icon"]})
+        fill(template, {"url": url, "name": platform["name"], "icon": platform["icon"], "key": platform["key"]})
         for platform in links["platforms"]
         for url in [(entry.get(platform["key"]) or "").strip()]
         if url
