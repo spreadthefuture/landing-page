@@ -116,6 +116,12 @@ a { color: inherit; text-decoration: none; }
 .site-nav a { transition: opacity 0.2s ease; }
 .site-nav a:hover { opacity: 0.8; }
 
+/* Only used below 40rem, where the nav row folds the "Available on" label in
+   beside About/Credits (see the mobile block near .header-top). Hidden here
+   so desktop keeps the label on its own line above the platform icons. */
+.site-nav-divider,
+.platforms-label--inline { display: none; }
+
 .logo {
   display: block;
   margin: 0;
@@ -435,13 +441,51 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 40rem) {
   .header-top { flex-wrap: wrap; }
 
+  /* Sized off the viewport width (rather than the desktop clamp) so
+     "About ⎮ Credits ⎮ Available on" keeps fitting one line as the screen
+     narrows, instead of wrapping. */
   .site-nav {
+    flex: 1 1 100%;
+    width: 100%;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: 1.5rem;
+    flex-wrap: nowrap;
+    gap: 1.75vw;
     margin-top: var(--space-s);
+    font-size: 4.6vw;
+    white-space: nowrap;
   }
+
+  /* The "Available on" label moves in beside About/Credits, kept at the same
+     size and weight as the nav links, just gray via .platforms-label. The
+     line-level .platforms-label stays hidden below so it isn't shown twice. */
+  .site-nav-divider,
+  .platforms-label--inline { display: inline; }
+
+  /* Overrides .platforms-label's 0.12em letter-spacing, tuned for that label's
+     small desktop size; at the nav's larger inline size it reads as gappy. */
+  .platforms-label--inline { letter-spacing: normal; }
+
+  /* Gray, not white: white read as a fourth heavy stroke fighting About/Credits
+     for attention, where gray sits back as a quiet separator, in keeping with
+     the "Available on" label it also sits next to. Bold weight and size are
+     inherited from .site-nav so it matches the surrounding text. */
+  .site-nav-divider {
+    align-self: stretch;
+    color: var(--muted);
+  }
+
+  .platforms > .platforms-label { display: none; }
+
+  /* Icon-only row, left-aligned under About/Credits like a normal line of
+     links rather than spread across the full width. */
+  .platforms {
+    justify-content: flex-start;
+    gap: 1.25rem;
+  }
+
+  .platforms .platform-icon { width: 1.75em; height: 1.75em; }
 
   /* align-items reset to stretch: flex-start (the desktop value) only sizes a
      column's cross axis to content, and the episode title's white-space: nowrap
