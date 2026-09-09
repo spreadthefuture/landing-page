@@ -36,6 +36,9 @@
   --muted: #8A8A8A;
   --rule: #2A2A2A;
   --surface: #1A1A1A;
+  /* Dimmer than --muted, and only the copyright line uses it: the footer should
+     sit a step further back than the page's other secondary text. */
+  --muted-dim: #5C5C5C;
   --gutter: clamp(1.5rem, 5vw, 4rem);
   /* Three sizes of vertical silence, used for every gap in the page's main
      stack so the rhythm is a set of ratios rather than six unrelated numbers.
@@ -45,7 +48,6 @@
   --space-s: clamp(1rem, 2vw, 1.5rem);
   --space-m: clamp(2rem, 5vw, 3.5rem);
   --space-xl: clamp(4rem, 10vw, 8rem);
-  --type-row: clamp(0.95rem, 1.9vw, 1.45rem);
   color-scheme: dark;
 }
 
@@ -77,6 +79,10 @@ body {
   outline-offset: 4px;
 }
 
+/* The same five declarations appear once more on .platform-name below 40rem.
+   They cannot share a rule: this one is unconditional, that one is inside a
+   media query, and plain CSS has no way to scope half a selector list. Change
+   one, change the other. */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -87,6 +93,26 @@ body {
 }
 
 a { color: inherit; text-decoration: none; }
+
+/* The only hover state on the site. Every link-like thing dims to 0.8 over the
+   same 0.2s, so hovering reads identically wherever you are on the page. The two
+   exceptions are the platform icons, which shift to their brand colour instead
+   (see .platform-icon), and prose links, which lift to --fg. */
+.logo a,
+.site-nav a,
+.platforms a,
+.episode-summary,
+.episode-listen,
+.credit-link,
+.about-closing a { transition: opacity 0.2s ease; }
+
+.logo a:hover,
+.site-nav a:hover,
+.platforms a:hover,
+.episode-summary:hover,
+.episode-listen:hover,
+.credit-link:hover,
+.about-closing a:hover { opacity: 0.8; }
 
 /* ---- Header ---- */
 
@@ -113,9 +139,6 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
-.site-nav a { transition: opacity 0.2s ease; }
-.site-nav a:hover { opacity: 0.8; }
-
 /* Only used below 40rem, where the nav row folds the "Available on" label in
    beside About/Credits (see the mobile block near .header-top). Hidden here
    so desktop keeps the label on its own line above the platform icons. */
@@ -134,8 +157,7 @@ a { color: inherit; text-decoration: none; }
    SVG text's anti-aliasing mode mid-hover. Safari re-hints glyphs when that
    switch happens, which reads as the wordmark jumping a fraction of a pixel;
    most visible on the credits page, where the logo renders smaller. */
-.logo a { display: block; transition: opacity 0.2s ease; will-change: opacity; }
-.logo a:hover { opacity: 0.8; }
+.logo a { display: block; will-change: opacity; }
 
 .logo svg { width: 100%; height: auto; display: block; fill: currentColor; }
 
@@ -150,10 +172,9 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
-.platforms-label { color: var(--muted); letter-spacing: 0.12em; }
+.platforms-label { color: var(--muted); }
 
-.platforms a { display: inline-flex; align-items: center; gap: 0.5em; transition: opacity 0.2s ease; }
-.platforms a:hover { opacity: 0.8; }
+.platforms a { display: inline-flex; align-items: center; gap: 0.5em; }
 
 /* A masked shape (not an <img>) so its color can follow currentColor at rest and
    shift to the platform's brand color on hover, without swapping source files. */
@@ -186,11 +207,12 @@ a { color: inherit; text-decoration: none; }
 /* Measured in-browser: full names wrap to 2 lines below ~582px, so 40rem
    (640px) gives margin. Icon-only stays on one line down to ~300px. The rule
    is unscoped on purpose: the header nav and the per-episode listen links both
-   mark their label with .platform-name, so they drop to icons together.
-   Absolute positioning also takes the label out of the flex flow, so the
-   0.5em icon-to-name gap does not linger as empty space. */
+   mark their label with .platform-name, so they drop to icons together. */
 @media (max-width: 40rem) {
   .platform-icon { width: 1.25em; height: 1.25em; }
+  /* Kept out of the flex flow rather than display: none, so the link keeps an
+     accessible name while the 0.5em icon-to-name gap does not linger as empty
+     space. Same declarations as .visually-hidden, for the reason noted there. */
   .platform-name {
     position: absolute;
     width: 1px;
@@ -249,8 +271,6 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-
-.episodes-lead + .episodes-layout .episodes { margin-top: 0; }
 
 /* The persistent cover on the left and the episode list on the right. The panel
    is a fixed width, the list takes what's left. */
@@ -326,14 +346,12 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   list-style: none;
   font-weight: 700;
-  font-size: var(--type-row);
+  font-size: clamp(0.95rem, 1.9vw, 1.45rem);
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  transition: opacity 0.2s ease;
 }
 
 .episode-summary::-webkit-details-marker { display: none; }
-.episode-summary:hover { opacity: 0.8; }
 
 .episode-number { flex: none; color: var(--muted); }
 
@@ -366,21 +384,19 @@ a { color: inherit; text-decoration: none; }
 .episode-toggle::after { transform: rotate(90deg); }
 .episode[open] .episode-toggle::after { transform: rotate(0deg); opacity: 0; }
 
+/* One text column: the persistent art panel beside the list already shows the
+   open row's cover, so the row itself carries no image (see .episode-art). */
 .episode-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-columns: 1fr;
   gap: clamp(1.5rem, 4vw, 3.5rem);
   padding: 0.5rem 0 clamp(2.5rem, 5vw, 4rem);
 }
 
-.episode-art {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 6px;
-  background: var(--surface);
-}
+/* Still emitted by build.py into every row, and still the source the art panel
+   reads its covers from, but never displayed: showing it here would be a cover
+   inside the cover. */
+.episode-art { display: none; }
 
 .episode-meta {
   margin-top: 0;
@@ -421,16 +437,7 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  transition: opacity 0.2s ease;
 }
-
-.episode-listen:hover { opacity: 0.8; }
-
-/* The persistent art panel already shows an opened row's cover (stacked above
-   the list on mobile, beside it on desktop), so the same image repeated inside
-   the row itself would be a cover inside the cover. Dropped everywhere. */
-.episode-art { display: none; }
-.episode-panel { grid-template-columns: 1fr; }
 
 /* Below the point where the platform names already drop to icons, the top-right
    nav and the persistent cover no longer have room to sit beside anything: the
@@ -488,8 +495,8 @@ a { color: inherit; text-decoration: none; }
   .platforms .platform-icon { width: 1.75em; height: 1.75em; }
 
   /* align-items reset to stretch: flex-start (the desktop value) only sizes a
-     column's cross axis to content, and the episode title's white-space: nowrap
-     then lets a long title stretch the whole row past the viewport. */
+     column's cross axis to content, so the stacked cover and list would each
+     shrink to their content instead of filling the page width. */
   .episodes-layout { flex-direction: column; align-items: stretch; }
 
   /* Stuck flush to the very top of the viewport instead of the desktop's
@@ -561,10 +568,7 @@ a { color: inherit; text-decoration: none; }
   display: block;
   color: inherit;
   text-decoration: none;
-  transition: opacity 0.2s ease;
 }
-
-.credit-link:hover { opacity: 0.8; }
 
 /* The source files are square. They are cropped to a circle here, which is the
    only decoration on this page, so it stays the same shape at every size. */
@@ -692,15 +696,12 @@ a { color: inherit; text-decoration: none; }
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 0.2em;
-  transition: opacity 0.2s ease;
 }
-
-.about-closing a:hover { opacity: 0.8; }
 
 .site-footer {
   padding: 6rem var(--gutter) 0.75rem;
   text-align: center;
-  color: #5C5C5C;
+  color: var(--muted-dim);
   font-size: 0.8rem;
 }
 
