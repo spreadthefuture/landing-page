@@ -2,6 +2,10 @@
   "feed_url": "https://anchor.fm/s/469ddf8c/podcast/rss",
   "title": "SPREAD THE FUTURE",
   "episode_count": 7,
+  "seasons": [
+    2,
+    1
+  ],
   "episodes": [
     {
       "guid": "00ac3941-e736-4355-8961-4dafa4f41408",

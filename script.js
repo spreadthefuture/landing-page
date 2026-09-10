@@ -1,10 +1,21 @@
-// Episodes are an exclusive accordion (<details name="episode">), so opening one
-// collapses the one above and the clicked row can slide off the top of the window.
-// Clamp it: the row may move up, but never past the top edge. Anything else is left
-// exactly where the browser put it.
-const episodes = document.querySelector('.episodes');
+// Enhancement only: the site is complete with this file absent, the page just
+// jumps on open and the covers pop instead of crossfading.
+//
+// Everything here is per season. Each .episodes-layout holds one season's cover
+// panel and one season's list, so a panel is wired only to the rows beside it
+// and never answers to a hover in another season's list.
+for (const layout of document.querySelectorAll('.episodes-layout')) {
+  const episodes = layout.querySelector('.episodes');
+  const artPanel = layout.querySelector('.episode-art-panel');
+  if (!episodes) continue;
 
-if (episodes) {
+  // Episodes are an exclusive accordion (<details name="episode">), so opening one
+  // collapses the one above and the clicked row can slide off the top of the window.
+  // Clamp it: the row may move up, but never past the top edge. Anything else is left
+  // exactly where the browser put it. The accordion is shared across seasons (one
+  // name for the whole page), so the row that collapses may sit in another list;
+  // the listener still fires on the list that was clicked, which is the one whose
+  // row must stay in view.
   episodes.addEventListener('click', (event) => {
     const summary = event.target.closest('.episode-summary');
     if (!summary) return;
@@ -14,20 +25,18 @@ if (episodes) {
       if (top < 0) window.scrollBy(0, top);
     });
   });
-}
 
-// Row hover swaps the panel's cover only on pointer devices with real hover;
-// touch would otherwise leave the wrong cover showing after a tap.
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (!artPanel) continue;
 
-// The persistent cover to the left of the list: the latest episode's art at
-// rest, the hovered row's while the pointer is over it, the open row's
-// whenever one is expanded. Two stacked <img> layers so a change crossfades
-// instead of popping: the incoming cover loads into the hidden layer, then
-// swap which one carries .is-active and CSS transitions the opacity.
-const artPanel = document.querySelector('.episode-art-panel');
+  // Row hover swaps the panel's cover only on pointer devices with real hover;
+  // touch would otherwise leave the wrong cover showing after a tap.
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-if (episodes && artPanel) {
+  // The persistent cover to the left of the list: the season's latest episode's
+  // art at rest, the hovered row's while the pointer is over it, the open row's
+  // whenever one is expanded. Two stacked <img> layers so a change crossfades
+  // instead of popping: the incoming cover loads into the hidden layer, then
+  // swap which one carries .is-active and CSS transitions the opacity.
   const layers = artPanel.querySelectorAll('.episode-art-layer');
   let activeLayer = 0;
   let currentSrc = null;
@@ -73,7 +82,7 @@ if (episodes && artPanel) {
   // it is actually stuck, without affecting its unpinned, in-flow position: a
   // sentinel sits right above the panel in the markup, and once scrolling
   // carries it past the viewport top the panel must be pinned.
-  const artSentinel = document.querySelector('.episode-art-sentinel');
+  const artSentinel = layout.querySelector('.episode-art-sentinel');
 
   if (artSentinel) {
     const pinObserver = new IntersectionObserver(

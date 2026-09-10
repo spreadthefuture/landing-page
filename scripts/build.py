@@ -30,18 +30,22 @@ LINKS_FILE = ROOT / "links.json"
 START = "<!-- episodes:start -->"
 END = "<!-- episodes:end -->"
 
-TEMPLATE = re.compile(r'<template id="episode-template">\n(.*?)\s*</template>', re.DOTALL)
-LINK_TEMPLATE = re.compile(r'<template id="episode-link-template">\n(.*?)\s*</template>', re.DOTALL)
 RAW_PLACEHOLDER = re.compile(r"\{\{\{(\w+)\}\}\}")
 PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
 
 ITUNES = "{http://www.itunes.com/dtds/podcast-1.0.dtd}"
 
-# Titles carry their own display number ahead of the colon, e.g.
+# Seasons the site announces before the feed has anything for them: they render
+# through #season-upcoming-template as a heading ending in "coming soon", with
+# no cover and no rows. A season listed here that does have episodes renders as
+# normal, so this only ever needs pruning once a season has landed.
+ANNOUNCED_SEASONS = (2,)
+
+# Titles carry their own season and display number ahead of the colon, e.g.
 # "S1E6: Fabio on our Relations with Objects". The season is optional so the older
-# "E06: ..." form still parses. itunes:episode counts each language version
-# separately (1 to 14 for 7 episodes), so it is not usable for display. The title
-# prefix is, and its season wins over itunes:season when both are present.
+# "E06: ..." form still parses. The prefix is the source of truth for both the
+# label and the season grouping, and its season wins over itunes:season when both
+# are present; itunes:episode is not used at all.
 NUMBER_PREFIX = re.compile(r"^\s*(?:S(?P<season>\d+))?E(?P<number>\d+)\s*[:.\-]\s*", re.IGNORECASE)
 
 # Description HTML is copied straight out of the feed, so its links arrive with
@@ -49,18 +53,6 @@ NUMBER_PREFIX = re.compile(r"^\s*(?:S(?P<season>\d+))?E(?P<number>\d+)\s*[:.\-]\
 # opens in a new tab, so normalise them here rather than trusting the feed.
 DESCRIPTION_LINK = re.compile(r"<a\s+([^>]*?)\s*>", re.IGNORECASE)
 LINK_ATTR = re.compile(r'\s*(target|rel)\s*=\s*"[^"]*"', re.IGNORECASE)
-
-# Season 1 was recorded in English, French, Italian and Spanish, with every
-# language published as its own feed item under the same S#E# label. There is no
-# itunes:language per item, but each language uses a fixed connector phrase before
-# the episode subject ("on our Resources" / "sur nos Ressources" / "sulle nostre
-# Risorse" / "sobre nuestros Recursos"), so it doubles as a language marker. This
-# is a blocklist, not an English allowlist: season 2 titles that don't match any
-# of these phrases pass through untouched.
-NON_ENGLISH_MARKER = re.compile(
-    r"\b(sur nos?|sur cette|sulle nostre|sul nostro|sulla nostra|sobre nuestr[oa]s?)\b",
-    re.IGNORECASE,
-)
 
 
 def open_links_in_new_tab(description_html):
@@ -104,6 +96,12 @@ def parse_episode(item):
     season = match.group("season") if match else None
     if season is None:
         season = text(item, f"{ITUNES}season")
+    # The season groups the page, so every episode needs one. Season 1 predates the
+    # S#E# prefix ("E06: ...") and carries no itunes:season either, so an episode
+    # with a season nowhere is one of those; anything newer always labels its own.
+    if not season:
+        print(f"  no season on {raw_title!r}, filing it under season 1")
+        season = 1
 
     # The prefix is displayed exactly as the feed writes it, e.g. "S1E6". No padding,
     # no reformatting: the title is the source of truth for the label too.
@@ -118,7 +116,7 @@ def parse_episode(item):
     return {
         "guid": text(item, "guid"),
         "number": number,
-        "season": int(season) if season else None,
+        "season": int(season),
         "label": label,
         "title": title,
         "title_full": raw_title,
@@ -145,20 +143,36 @@ def fetch(url=FEED_URL):
 def build_data(feed_bytes):
     channel = ET.fromstring(feed_bytes).find("channel")
     episodes = [parse_episode(item) for item in channel.findall("item")]
-    # Every language version is listed on its own; keep only English.
-    episodes = [e for e in episodes if not NON_ENGLISH_MARKER.search(e["title_full"])]
     episodes.sort(key=lambda e: e["published"], reverse=True)
     return {
         "feed_url": FEED_URL,
         "title": text(channel, "title"),
         "episode_count": len(episodes),
+        "seasons": sorted({e["season"] for e in episodes} | set(ANNOUNCED_SEASONS), reverse=True),
         "episodes": episodes,
     }
 
 
-def read_template(page, pattern, name):
-    """Pull markup out of index.html. This script owns no markup of its own."""
-    match = pattern.search(page)
+def group_by_season(data):
+    """[(season, episodes)] newest season first, each season newest episode first.
+
+    An announced season with nothing in the feed yet comes back with an empty
+    list, which is what render() turns into the "coming soon" block.
+    """
+    return [
+        (season, [e for e in data["episodes"] if e["season"] == season])
+        for season in data["seasons"]
+    ]
+
+
+def read_template(page, name):
+    """Pull one <template> out of index.html by id.
+
+    This script owns no markup of its own: every tag the site renders comes from
+    here. Dedented so a template can be nested in the page at any depth and still
+    be re-indented once, at the point it is injected.
+    """
+    match = re.search(rf'<template id="{name}">\n(.*?)\s*</template>', page, re.DOTALL)
     if not match:
         raise SystemExit(f'index.html is missing <template id="{name}">')
     return textwrap.dedent(match.group(1)).strip("\n")
@@ -187,17 +201,17 @@ def build_links(episode, links, template):
     return "\n" + "\n".join("  " + row for row in rows) + "\n" if rows else ""
 
 
-def fill(template, episode):
-    """Substitute placeholders against one episode.
+def fill(template, values):
+    """Substitute placeholders against one dict, an episode or a season.
 
     {{key}}   escaped, safe anywhere including attributes.
     {{{key}}} raw, for values that are already HTML such as description_html.
     """
     def lookup(match):
         key = match.group(1)
-        if key not in episode:
+        if key not in values:
             raise SystemExit(f"index.html template uses unknown placeholder {{{{{key}}}}}")
-        return str(episode[key] or "")
+        return str(values[key] or "")
 
     def lookup_raw(match):
         # A multi-line value is indented to match the line it was dropped into.
@@ -210,9 +224,17 @@ def fill(template, episode):
     return PLACEHOLDER.sub(lambda m: html.escape(lookup(m), quote=True), filled)
 
 
-def render(episodes, template):
-    rows = [textwrap.indent(fill(template, episode), "      ") for episode in episodes]
-    return '    <ul class="episodes">\n' + "\n".join(rows) + "\n    </ul>"
+def render(seasons, templates):
+    """One <section> per season, newest first, indented to sit at the markers."""
+    blocks = []
+    for season, episodes in seasons:
+        if episodes:
+            rows = "\n".join(fill(templates["episode"], episode) for episode in episodes)
+            blocks.append(fill(templates["season"], {"season": season, "episodes": rows}))
+        else:
+            print(f"  season {season} has no episodes yet, rendering the coming-soon block")
+            blocks.append(fill(templates["season-upcoming"], {"season": season}))
+    return textwrap.indent("\n".join(blocks), "    ")
 
 
 def inject(page, markup):
@@ -229,12 +251,19 @@ def main():
 
     page = PAGE_FILE.read_text(encoding="utf-8")
     links = load_links()
-    link_template = read_template(page, LINK_TEMPLATE, "episode-link-template")
+    templates = {
+        name: read_template(page, f"{name}-template")
+        for name in ("episode", "episode-link", "season", "season-upcoming")
+    }
     for episode in data["episodes"]:
-        episode["links"] = build_links(episode, links, link_template)
+        episode["links"] = build_links(episode, links, templates["episode-link"])
 
-    inject(page, render(data["episodes"], read_template(page, TEMPLATE, "episode-template")))
-    print(f"{data['episode_count']} episodes written to {DATA_FILE.name} and {PAGE_FILE.name}")
+    seasons = group_by_season(data)
+    inject(page, render(seasons, templates))
+    print(
+        f"{data['episode_count']} episodes across {len(seasons)} seasons "
+        f"written to {DATA_FILE.name} and {PAGE_FILE.name}"
+    )
 
 
 if __name__ == "__main__":

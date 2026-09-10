@@ -11,7 +11,7 @@
 > update this file in the same commit, along with `PROJECT-CONTEXT.md` and its
 > "Last updated" line.
 >
-> Last updated: 2026-09-09
+> Last updated: 2026-09-10
 
 Spread The Future is a podcast site built as a single typographic stack. There is
 no chrome: no cards, no shadows, no borders except hairline rules, no chromatic
@@ -21,7 +21,7 @@ comes from scale and weight alone, on one family, in two weights. Every size is 
 two breakpoints that do exist (40rem, 46rem) are structural, not cosmetic. The
 signature moves are the wordmark set as wide as the viewport allows, the thin
 `--rule` lines that separate every episode, and the persistent square cover that
-crossfades beside the list.
+crossfades beside the list, one per season.
 
 ## Colors
 
@@ -29,7 +29,7 @@ crossfades beside the list.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas, everywhere. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | All primary text, the wordmark, icon fill at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider |
+| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider, "coming soon" in an announced season's heading |
 | Rule | `--rule` | `#2A2A2A` | The 1px lines under the episodes lead-in and every episode row. The only border in the system |
 | Surface | `--surface` | `#1A1A1A` | Sits behind cover artwork while it loads, so the frame is never a hole in the page |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only. A step further back than `--muted` |
@@ -48,7 +48,9 @@ rules (regular, bold, italic, bold italic), TTF, `font-display: swap`. Stack:
 - **Weights:** 400 (body, meta, prose) and 700 (everything else). No other weight.
 - **Case:** headings, nav, episode rows, credit names and the tagline are
   uppercase. All of it is written in sentence case in the markup and uppercased
-  in CSS, so screen readers read words rather than spelling them out.
+  in CSS, so screen readers read words rather than spelling them out. The one
+  exception is the season heading, which is set in sentence case and carries no
+  `text-transform` at all: "Season 1", one capital.
 - **Letter spacing:** `0.01em`–`0.02em` on large bold type, `0.1em`–`0.12em` on
   the small gray tracked labels. Nothing negative.
 - **Open question:** the choice between Liberation Sans and Inter is still open.
@@ -66,7 +68,7 @@ Every size is fluid. The `clamp()` is the spec; the min/max are the ends of it.
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 | — |
 | site nav | `clamp(2rem, 5vw, 4rem)` · `4.6vw` below 40rem | 700 | 1 | — |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 40rem | 700 | 1.15 | 0.01em |
-| credits intro | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
+| credits intro / season title | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
 | about heading | `clamp(1.15rem, 2.4vw, 1.6rem)` | 700 | 1.2 | 0.02em |
 | episode row | `clamp(0.95rem, 1.9vw, 1.45rem)` | 700 | — | 0.01em |
 | credit name | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | — | 0.01em |
@@ -150,7 +152,30 @@ Asymmetric margins on purpose: `--space-m` above ties it to the masthead,
 **Role:** Quiet signpost above the list
 
 Small gray tracked uppercase with a `--rule` bottom border, the same line used
-between episode rows, so the two read as one family.
+between episode rows, so the two read as one family. It appears once, at the top,
+above the first season heading, and leads the whole page rather than any one
+season.
+
+### Season section
+**Role:** One season: its heading, then its episodes
+
+A `<section class="season">` per season, newest first. The heading is the credits
+page's "Our Team" type (`clamp(1.6rem, 4vw, 3.25rem)`, bold) left aligned on the
+page edge under the wordmark rather than centred, followed by that season's own
+art panel and episode list. It is the site's only heading **not** uppercased:
+"Season 1" keeps its single capital, so it labels the list below it instead of
+reading as a second masthead. Spacing is `--space-m` from the lead-in
+down to the first heading (a margin collapse: the heading carries no margin, the
+section owns it) and `--space-xl` between seasons, the same break the tagline
+takes to the list.
+
+A season the show has announced but has no episodes for yet renders the heading
+alone, finished by "coming soon" inside it: `.season-coming`, a span at the
+heading's own size and weight in `--muted`, so it reads "Season 2 coming soon"
+as one line, white then gray. No cover and no rows. It was once a small tracked
+label under the heading, which matched the lead-in above too closely. Which
+seasons those are is `ANNOUNCED_SEASONS` in `scripts/build.py`; the words
+disappear on their own once the feed carries an episode for that season.
 
 ### Episode row
 **Role:** One episode, expanded in place
@@ -163,9 +188,13 @@ scales with the row. A `--rule` line under every row. Opening reveals meta,
 description (justified, hyphenated, capped at 60ch) and platform links.
 
 ### Episode art panel
-**Role:** Persistent square cover beside the list
+**Role:** Persistent square cover beside one season's list
 
-`clamp(240px, 47vw, 620px)`, sticky at `--gutter` from the top on desktop. Two
+One per season, inside that season's `.episodes-layout`, which bounds how far it
+sticks: a cover travels with its own rows and releases at the end of them. It
+shows its season's latest cover at rest and answers only to hovers in the list
+beside it. `clamp(240px, 47vw, 620px)`, sticky at `--gutter` from the top on
+desktop. Two
 stacked `<img>` layers inside one frame; `script.js` loads the incoming cover into
 whichever layer is hidden, then swaps `.is-active`, so the 0.4s opacity transition
 crossfades between real pixels. Shows the first episode's cover at rest, the
@@ -236,8 +265,9 @@ Centered, `#5C5C5C`, 6rem of space above it. One line on every page.
 - Do not add a JavaScript dependency: the site must work fully with JS off, and
   `script.js` is enhancement only (scroll clamp, cover crossfade, pinned padding).
 - Do not edit `archive/`, or link to it. It is read-only history.
-- Do not put markup or styling in `scripts/build.py`. Episode markup lives in the
-  `<template>` blocks in `index.html`.
+- Do not put markup or styling in `scripts/build.py`. Every tag it renders lives
+  in the four `<template>` blocks in `index.html`: `episode`, `episode-link`,
+  `season` and `season-upcoming`.
 
 ## Elevation
 
@@ -268,7 +298,8 @@ no centered column, except the about page, which caps its `main` at 46rem and
 centers it for a comfortable measure.
 
 The homepage reads top to bottom: wordmark and nav side by side, platform bar,
-tagline, lead-in, then a two-column flex row of persistent cover and episode list.
+tagline, lead-in, then one section per season, newest first, each a left-aligned
+heading over a two-column flex row of persistent cover and episode list.
 The credits page is a three-column grid with one spacing band. The about page is a
 centered stack of three heading-and-paragraph sections plus two closing lines.
 

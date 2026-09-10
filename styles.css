@@ -257,9 +257,9 @@ a { color: inherit; text-decoration: none; }
 /* Lead-in above the episode list. Set like the header's "Available on" label,
    uppercase and tracked in gray, so it reads as a quiet signpost rather than a
    second headline competing with the tagline. Sentence case in the markup and
-   capitalised here, so screen readers do not spell it out. Its own bottom margin
-   sets the gap to the first rule; .episodes' top margin is zeroed after it so the
-   two do not stack. */
+   capitalised here, so screen readers do not spell it out. It leads the whole
+   page, once, above the first season heading: its bottom margin collapses with
+   that heading's section margin, so the two do not stack. */
 .episodes-lead {
   margin: 0 0 var(--space-s);
   padding-bottom: var(--space-s);
@@ -272,8 +272,45 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
-/* The persistent cover on the left and the episode list on the right. The panel
-   is a fixed width, the list takes what's left. */
+/* ---- Seasons ---- */
+
+/* One section per season: the heading, then that season's cover and rows. The
+   first sits --space-m under the lead-in (a margin collapse, since the heading is
+   this section's first child and carries no margin of its own), and season to
+   season is --space-xl, the page's largest gap, the same break the tagline takes
+   to the list. */
+.season { margin-top: var(--space-m); }
+
+.season + .season { margin-top: var(--space-xl); }
+
+/* The credits page's "Our Team" heading at the same size and weight, just left
+   aligned on the page edge under the wordmark instead of centred: both are the one
+   line of type that names the block below it. The one departure is case: this is
+   the only heading on the site set in sentence case rather than uppercased, so
+   "Season 1" carries a single capital and reads as a label on the list rather than
+   a second masthead. No text-transform, so the markup's case is what renders.
+   The margin is zero so .season above owns the spacing, and .episodes-layout's
+   own top margin owns the gap down to the cover. */
+.season-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+/* A season with nothing in the feed yet. "coming soon" finishes the heading at
+   its own size and weight, only in gray, so the one line both names the season
+   and says it is not out yet. Set as a label under the heading instead, it
+   matched the lead-in above and the two read as a pair of captions. */
+.season-coming { color: var(--muted); }
+
+/* ---- Episode list ---- */
+
+/* The persistent cover on the left and the episode list on the right, once per
+   season. The panel is a fixed width, the list takes what's left. Sticky is
+   bounded by this container, so a season's cover travels with its own rows and
+   releases at the end of them. */
 .episodes-layout {
   position: relative;
   display: flex;
@@ -293,9 +330,10 @@ a { color: inherit; text-decoration: none; }
   height: 1px;
 }
 
-/* Shows the latest episode's cover at rest, swaps to whichever row is hovered
-   or open. script.js crossfades between the two stacked layers below; this
-   panel never has an opinion of its own about which image that is. */
+/* Shows its own season's latest cover at rest, swaps to whichever row of that
+   season is hovered or open. script.js crossfades between the two stacked layers
+   below, and keeps each panel wired only to the list beside it; this panel never
+   has an opinion of its own about which image that is. */
 .episode-art-panel {
   flex: 0 0 clamp(240px, 47vw, 620px);
   position: sticky;
@@ -326,8 +364,8 @@ a { color: inherit; text-decoration: none; }
 
 .episode-art-layer.is-active { opacity: 1; }
 
-/* No horizontal bleed, so the row rules line up with the cover's left edge and
-   the lead-in rule above them on both sides. */
+/* No horizontal bleed, so the row rules line up with the cover's left edge on one
+   side and the page gutter on the other, like the lead-in rule at the top. */
 .episodes {
   flex: 1;
   min-width: 0;
