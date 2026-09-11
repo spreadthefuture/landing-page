@@ -104,7 +104,8 @@ a { color: inherit; text-decoration: none; }
 .episode-summary,
 .episode-listen,
 .credit-link,
-.about-closing a { transition: opacity 0.2s ease; }
+.about-closing a,
+.footer-social a { transition: opacity 0.2s ease; }
 
 .logo a:hover,
 .site-nav a:hover,
@@ -112,7 +113,8 @@ a { color: inherit; text-decoration: none; }
 .episode-summary:hover,
 .episode-listen:hover,
 .credit-link:hover,
-.about-closing a:hover { opacity: 0.8; }
+.about-closing a:hover,
+.footer-social a:hover { opacity: 0.8; }
 
 /* ---- Header ---- */
 
@@ -741,6 +743,62 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
   color: var(--muted-dim);
   font-size: 0.8rem;
+}
+
+/* A step brighter than the copyright under it: --muted-dim belongs to that line
+   alone, and these are links. The row carries the gap down to the copyright, so
+   the footer's 6rem of space above still measures to the first thing in it. */
+.footer-social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: var(--space-s);
+  color: var(--muted);
+}
+
+/* Padding, not size, buys the tap target: 0.375rem all round takes a 20px glyph
+   to a 32px target without drawing it any larger. The 12px of facing padding
+   comes back out of the gap, which is why that reads 1rem for a 1.75rem space
+   between glyphs, the same figure the platform bar uses. */
+.footer-social a {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem;
+}
+
+/* Both glyphs are drawn edge to edge inside a 24x24 box, so one fixed square
+   here lands their outer edges on the same four lines. Fixed rather than em:
+   the row must not resize with the copyright type below it. */
+.social-icon {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.social-icon--linkedin { -webkit-mask-image: url(/assets/social/linkedin.svg); mask-image: url(/assets/social/linkedin.svg); }
+.social-icon--instagram { -webkit-mask-image: url(/assets/social/instagram.svg); mask-image: url(/assets/social/instagram.svg); }
+
+/* Bold and tracked like the "Available on" bar, the site's other small uppercase
+   row. line-height: 1 drops the word's box to its own type size, which leaves the
+   cap height within a fraction of a pixel of that box's centre, so the row's
+   align-items: center lands the caps on the glyphs' axis rather than hanging the
+   word off a baseline. The negative margin takes back the trailing letter-space
+   that 0.12em adds after the final S, which would otherwise sit the whole row a
+   hair left of centre. */
+.social-rss {
+  margin-right: -0.12em;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.12em;
 }
 
 @media (min-width: 46rem) {

@@ -11,7 +11,7 @@
 > update this file in the same commit, along with `PROJECT-CONTEXT.md` and its
 > "Last updated" line.
 >
-> Last updated: 2026-09-10
+> Last updated: 2026-09-11
 
 Spread The Future is a podcast site built as a single typographic stack. There is
 no chrome: no cards, no shadows, no borders except hairline rules, no chromatic
@@ -29,7 +29,7 @@ crossfades beside the list, one per season.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas, everywhere. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | All primary text, the wordmark, icon fill at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider, "coming soon" in an announced season's heading |
+| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider, the footer's social links, "coming soon" in an announced season's heading |
 | Rule | `--rule` | `#2A2A2A` | The 1px lines under the episodes lead-in and every episode row. The only border in the system |
 | Surface | `--surface` | `#1A1A1A` | Sits behind cover artwork while it loads, so the frame is never a hole in the page |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only. A step further back than `--muted` |
@@ -219,17 +219,28 @@ in white and country in gray, sharing one rule so the two lines always match.
 Three across, one per row below 46rem.
 
 ### Footer
-**Role:** Copyright line
+**Role:** Social links over the copyright line
 
-Centered, `#5C5C5C`, 6rem of space above it. One line on every page.
+Two lines on every page, both centered, with 6rem of space above the first. A row
+of links (LinkedIn, Instagram, then RSS as a word) sits in `--muted`, one step
+brighter than the copyright beneath it, and carries the `--space-s` gap down to
+it. The two glyphs are CSS masks like the platform icons, but sized in `rem`
+rather than `em`: the row must not resize with the copyright type. Both are drawn
+edge to edge inside a 24x24 box, so one 1.25rem square lands their outer edges on
+the same four lines; the RSS word is bold and tracked like the "Available on"
+bar, centered on the glyphs' axis rather than hung off a baseline. Each link is
+padded, not enlarged, to a 32px tap target, and the facing padding comes back out
+of the row's gap so the space between glyphs still reads 1.75rem.
+
+The copyright stays `#5C5C5C` and is still the only thing using it.
 
 ## Interaction
 
 - **The hover fade is the only hover state on the site:** `opacity: 0.8` over a
   `0.2s ease` transition, declared once as a single grouped rule near the top of
   `styles.css` covering the wordmark, the site nav, the platform links, the
-  episode summary, the per-episode listen links, the credit cards and the about
-  page's prose link. Add new hoverable things to that rule rather than giving
+  episode summary, the per-episode listen links, the credit cards, the about
+  page's prose link and the footer's social links. Add new hoverable things to that rule rather than giving
   them their own. The exceptions are the platform icons, which shift to their
   brand color instead, and episode-description links, which lift to `--fg`.
 - **Links carry no underline** except inside prose (episode descriptions, the
@@ -288,7 +299,10 @@ Two kinds only, both real photographs, both from outside the repo's design syste
   720×720, JPEG q68, ~125KB each, from `assets/credits-photos/`.
 
 No illustration, no decorative graphics, no iconography beyond the three masked
-platform glyphs.
+platform glyphs in the header and the two masked social glyphs in the footer,
+from `assets/social/`. Those two are single-path, single-color and full-bleed in
+their 24x24 box, which is what lets the mask recolor them and what keeps their
+edges aligned with each other.
 
 ## Layout
 
