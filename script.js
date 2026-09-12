@@ -1,22 +1,22 @@
 // Enhancement only: the site is complete with this file absent, the page just
 // jumps on open and the covers pop instead of crossfading.
 //
-// Everything here is per season. Each .episodes-layout holds one season's cover
-// panel and one season's list, so a panel is wired only to the rows beside it
-// and never answers to a hover in another season's list.
+// One .episodes-layout holds the page's single cover panel and, beside it, every
+// season's list. The panel answers to any row in any of those lists; the loop is
+// still written per layout so a second one would work on its own.
 for (const layout of document.querySelectorAll('.episodes-layout')) {
-  const episodes = layout.querySelector('.episodes');
+  const lists = layout.querySelectorAll('.episodes');
   const artPanel = layout.querySelector('.episode-art-panel');
-  if (!episodes) continue;
+  if (!lists.length) continue;
 
   // Episodes are an exclusive accordion (<details name="episode">), so opening one
   // collapses the one above and the clicked row can slide off the top of the window.
   // Clamp it: the row may move up, but never past the top edge. Anything else is left
   // exactly where the browser put it. The accordion is shared across seasons (one
   // name for the whole page), so the row that collapses may sit in another list;
-  // the listener still fires on the list that was clicked, which is the one whose
-  // row must stay in view.
-  episodes.addEventListener('click', (event) => {
+  // the listener still fires on the row that was clicked, which is the one that
+  // must stay in view.
+  layout.addEventListener('click', (event) => {
     const summary = event.target.closest('.episode-summary');
     if (!summary) return;
 
@@ -32,17 +32,19 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   // touch would otherwise leave the wrong cover showing after a tap.
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-  // The persistent cover to the left of the list: the season's latest episode's
-  // art at rest, the hovered row's while the pointer is over it, the open row's
-  // whenever one is expanded. Two stacked <img> layers so a change crossfades
-  // instead of popping: the incoming cover loads into the hidden layer, then
-  // swap which one carries .is-active and CSS transitions the opacity.
+  // The persistent cover to the left of the list: the newest episode's art at
+  // rest, the hovered row's while the pointer is over it, the open row's whenever
+  // one is expanded. Two stacked <img> layers so a change crossfades instead of
+  // popping: the incoming cover loads into the hidden layer, then swap which one
+  // carries .is-active and CSS transitions the opacity.
   const layers = artPanel.querySelectorAll('.episode-art-layer');
   let activeLayer = 0;
   let currentSrc = null;
   let openSrc = null;
 
-  const firstCover = episodes.querySelector('.episode-art');
+  // Seasons render newest first and rows newest first within a season, so the
+  // first cover in the markup is the latest episode's.
+  const firstCover = layout.querySelector('.episode-art');
   const defaultSrc = firstCover ? firstCover.src : null;
 
   const showArt = (src) => {
@@ -57,7 +59,7 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
 
   showArt(defaultSrc);
 
-  for (const details of episodes.querySelectorAll('.episode')) {
+  for (const details of layout.querySelectorAll('.episode')) {
     const cover = details.querySelector('.episode-art');
     details.addEventListener('toggle', () => {
       if (details.open) {
@@ -70,7 +72,7 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   }
 
   if (finePointer.matches) {
-    for (const summary of episodes.querySelectorAll('.episode-summary')) {
+    for (const summary of layout.querySelectorAll('.episode-summary')) {
       const cover = summary.closest('.episode').querySelector('.episode-art');
       summary.addEventListener('mouseenter', () => showArt(cover.src));
       summary.addEventListener('mouseleave', () => showArt(openSrc || defaultSrc));

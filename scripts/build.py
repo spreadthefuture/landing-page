@@ -225,7 +225,7 @@ def fill(template, values):
 
 
 def render(seasons, templates):
-    """One <section> per season, newest first, indented to sit at the markers."""
+    """One <section> per season, newest first. inject() handles the indentation."""
     blocks = []
     for season, episodes in seasons:
         if episodes:
@@ -234,15 +234,23 @@ def render(seasons, templates):
         else:
             print(f"  season {season} has no episodes yet, rendering the coming-soon block")
             blocks.append(fill(templates["season-upcoming"], {"season": season}))
-    return textwrap.indent("\n".join(blocks), "    ")
+    return "\n".join(blocks)
 
 
 def inject(page, markup):
+    """Drop the rendered seasons between the markers, at the markers' own depth.
+
+    The indent is read off the start marker's line rather than fixed here, so the
+    markers can be nested (they sit inside .episodes-layout, beside the page's one
+    cover) without this script needing to know how deep.
+    """
     if START not in page or END not in page:
         raise SystemExit(f"index.html is missing the {START} / {END} markers")
     before, rest = page.split(START, 1)
     _, after = rest.split(END, 1)
-    PAGE_FILE.write_text(f"{before}{START}\n{markup}\n    {END}{after}", encoding="utf-8")
+    indent = before[before.rfind("\n") + 1:]
+    body = textwrap.indent(markup, indent)
+    PAGE_FILE.write_text(f"{before}{START}\n{body}\n{indent}{END}{after}", encoding="utf-8")
 
 
 def main():

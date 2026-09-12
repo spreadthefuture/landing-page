@@ -276,14 +276,14 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- Seasons ---- */
 
-/* One section per season: the heading, then that season's cover and rows. The
-   first sits --space-m under the lead-in (a margin collapse, since the heading is
-   this section's first child and carries no margin of its own), and season to
-   season is --space-xl, the page's largest gap, the same break the tagline takes
-   to the list. */
-.season { margin-top: var(--space-m); }
-
-.season + .season { margin-top: var(--space-xl); }
+/* One section per season: the heading, then that season's rows. The seasons are
+   stacked in the column beside the cover, so the first one starts flush with the
+   top of that column (.episodes-layout owns the --space-m down from the lead-in)
+   and season to season is --space-m. Not --space-xl: that gap is the break
+   between blocks of the page, and inside one column it opens a hole beside the
+   cover. The pairing is what carries the hierarchy instead: --space-s from a
+   heading to its own rows, --space-m from one season to the next. */
+.season + .season { margin-top: var(--space-m); }
 
 /* The credits page's "Our Team" heading at the same size and weight, just left
    aligned on the page edge under the wordmark instead of centred: both are the one
@@ -291,10 +291,11 @@ a { color: inherit; text-decoration: none; }
    the only heading on the site set in sentence case rather than uppercased, so
    "Season 1" carries a single capital and reads as a label on the list rather than
    a second masthead. No text-transform, so the markup's case is what renders.
-   The margin is zero so .season above owns the spacing, and .episodes-layout's
-   own top margin owns the gap down to the cover. */
+   No top margin, so the first heading starts level with the top of the cover
+   beside it; --space-s below pins it to its own rows, the "label to its subject"
+   gap, which also keeps it tighter to its list than to the next season. */
 .season-title {
-  margin: 0;
+  margin: 0 0 var(--space-s);
   font-size: clamp(1.6rem, 4vw, 3.25rem);
   font-weight: 700;
   line-height: 1.2;
@@ -309,10 +310,10 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- Episode list ---- */
 
-/* The persistent cover on the left and the episode list on the right, once per
-   season. The panel is a fixed width, the list takes what's left. Sticky is
-   bounded by this container, so a season's cover travels with its own rows and
-   releases at the end of them. */
+/* The persistent cover on the left and every season's rows on the right, once
+   for the page. The panel is a fixed width, the seasons column takes what's
+   left. Sticky is bounded by this container, so the cover travels the whole list
+   and releases at the end of the last season. */
 .episodes-layout {
   position: relative;
   display: flex;
@@ -366,11 +367,17 @@ a { color: inherit; text-decoration: none; }
 
 .episode-art-layer.is-active { opacity: 1; }
 
+/* The column beside the cover: every season heading and every row. min-width: 0
+   so a long episode title wraps inside it rather than widening the flex item and
+   squeezing the cover. */
+.seasons {
+  flex: 1;
+  min-width: 0;
+}
+
 /* No horizontal bleed, so the row rules line up with the cover's left edge on one
    side and the page gutter on the other, like the lead-in rule at the top. */
 .episodes {
-  flex: 1;
-  min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
