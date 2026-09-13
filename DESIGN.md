@@ -11,7 +11,7 @@
 > update this file in the same commit, along with `PROJECT-CONTEXT.md` and its
 > "Last updated" line.
 >
-> Last updated: 2026-09-12
+> Last updated: 2026-09-13
 
 Spread The Future is a podcast site built as a single typographic stack. There is
 no chrome: no cards, no shadows, no borders except hairline rules, no chromatic
@@ -40,11 +40,28 @@ Spotify `#1ED760`, Apple Podcasts `#A945E3`, Deezer `#A238FF`.
 
 ## Typography
 
-### Liberation Sans — the only typeface
+### Arial — the only typeface
 
-Self-hosted from `assets/font/liberation-fonts-ttf-2.1.5/` via four `@font-face`
-rules (regular, bold, italic, bold italic), TTF, `font-display: swap`. Stack:
-`'Liberation Sans', Arial, Helvetica, sans-serif`.
+Taken from the viewer's system, not downloaded. Stack:
+`Arial, 'Liberation Sans', Helvetica, sans-serif`.
+
+Liberation Sans is still self-hosted from `assets/font/liberation-fonts-ttf-2.1.5/`
+via four `@font-face` rules (regular, bold, italic, bold italic), TTF,
+`font-display: swap`, but only as the second name in the stack, and in practice it
+almost never loads. What each platform actually renders:
+
+| Platform | Renders | Font downloaded |
+|----------|---------|-----------------|
+| Windows, macOS, iOS | Arial, the real one | none |
+| Linux | System Liberation Sans. fontconfig aliases the name Arial to it, so the stack resolves on its first name | none |
+| Android | Roboto. `/system/etc/fonts.xml` carries `<alias name="arial" to="sans-serif" />`, so Arial resolves rather than failing, and the stack never reaches the second name | none |
+
+The `@font-face` files therefore only serve a system that has neither Arial nor an
+alias for it. Android is the one platform where the rendering genuinely departs
+from Arial, and the self-hosted file does not rescue it: a font stack falls
+through only on a name the system cannot resolve, and Android resolves Arial.
+Fixing that needs `local('ArialMT')` inside the `src` of a face whose family name
+Android does not alias, not another name in the stack.
 
 - **Weights:** 400 (body, meta, prose) and 700 (everything else). No other weight.
 - **Case:** headings, nav, episode rows, credit names and the tagline are
@@ -54,11 +71,13 @@ rules (regular, bold, italic, bold italic), TTF, `font-display: swap`. Stack:
   `text-transform` at all: "Season 1", one capital.
 - **Letter spacing:** `0.01em`–`0.02em` on large bold type, `0.1em`–`0.12em` on
   the small gray tracked labels. Nothing negative.
-- **Open question:** the choice between Liberation Sans and Inter is still open.
-  Do not swap the stack without asking.
+- **Settled:** the family is Arial. The earlier open question between Liberation
+  Sans and Inter is closed. Do not swap the stack, or reorder its first two
+  names, without asking.
 
 The wordmark is an inline SVG of live `<text>` in Arial Bold, repeated in each
-page's markup. It is not outlined, so it renders in whatever the viewer has.
+page's markup. It is not outlined, so it renders in whatever the viewer has,
+which is now the same family as the rest of the page.
 
 ### Type Scale
 

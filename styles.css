@@ -1,3 +1,5 @@
+/* Fallback face only. The page is set in Arial; these four files load solely
+   on platforms that have no Arial installed (see the stack on body below). */
 @font-face {
   font-family: 'Liberation Sans';
   src: url('assets/font/liberation-fonts-ttf-2.1.5/LiberationSans-Regular.ttf') format('truetype');
@@ -67,7 +69,13 @@ body {
   padding-bottom: clamp(1.25rem, 5vh, var(--gutter));
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Liberation Sans', Arial, Helvetica, sans-serif;
+  /* Arial is the typeface, taken from the viewer's system. Liberation Sans sits
+     second as a metric-compatible safety net, but note that it almost never
+     loads: Linux aliases the name Arial to Liberation Sans and Android aliases
+     it to Roboto, so on both the stack resolves on its first name and never
+     reaches the second. Android is therefore the one platform that renders
+     something other than Arial. See DESIGN.md for the per-platform table. */
+  font-family: Arial, 'Liberation Sans', Helvetica, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
