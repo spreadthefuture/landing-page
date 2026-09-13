@@ -22,6 +22,7 @@ at deploy time.
 ├── links.json              # hand maintained per-episode platform URLs
 ├── scripts/build.py        # fetches the RSS feed and generates the episode list
 ├── assets/
+│   ├── font/               # Liberation Sans, the fallback for viewers without Arial
 │   ├── logos/              # STF wordmark and favicon
 │   ├── platforms/          # streaming platform icons
 │   ├── social/             # footer social icons

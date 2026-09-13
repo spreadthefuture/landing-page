@@ -42,26 +42,39 @@ Spotify `#1ED760`, Apple Podcasts `#A945E3`, Deezer `#A238FF`.
 
 ### Arial — the only typeface
 
-Taken from the viewer's system, not downloaded. Stack:
-`Arial, 'Liberation Sans', Helvetica, sans-serif`.
+Taken from the viewer's own system wherever one exists, downloaded only where it
+does not. Stack: `'STF Sans', Arial, Helvetica, sans-serif`.
 
-Liberation Sans is still self-hosted from `assets/font/liberation-fonts-ttf-2.1.5/`
-via four `@font-face` rules (regular, bold, italic, bold italic), TTF,
-`font-display: swap`, but only as the second name in the stack, and in practice it
-almost never loads. What each platform actually renders:
+`STF Sans` is not a separate typeface. It is the name of four `@font-face` rules
+at the top of `styles.css`, each of which asks for Arial's matching PostScript
+face first and falls back to the bundled Liberation Sans:
+
+```css
+src: local('ArialMT'),
+     url('assets/font/liberation-fonts-ttf-2.1.5/LiberationSans-Regular.ttf') format('truetype');
+```
+
+The indirection is the whole point, so do not flatten it back to
+`font-family: Arial`. A font stack falls through only on a name the system cannot
+resolve, and both platforms without Arial resolve the name anyway: Android aliases
+`arial` to `sans-serif`, which is Roboto (`<alias name="arial" to="sans-serif" />`
+in `/system/etc/fonts.xml`), and Linux fontconfig aliases it to Liberation Sans.
+A stack led by `Arial` therefore never reaches any fallback, and Android renders
+Roboto. Naming a family the system has no alias for is what forces the `src` list
+to be consulted; naming the PostScript face rather than the family (`ArialMT`, not
+`Arial`) keeps `local()` out of the same aliases. The wordmark SVG has always used
+the same trick with `Arial-BoldMT`.
 
 | Platform | Renders | Font downloaded |
 |----------|---------|-----------------|
-| Windows, macOS, iOS | Arial, the real one | none |
-| Linux | System Liberation Sans. fontconfig aliases the name Arial to it, so the stack resolves on its first name | none |
-| Android | Roboto. `/system/etc/fonts.xml` carries `<alias name="arial" to="sans-serif" />`, so Arial resolves rather than failing, and the stack never reaches the second name | none |
+| Windows, macOS, iOS | Arial, the real one, matched by PostScript name | none |
+| Linux with Arial installed | Arial | none |
+| Android, Linux without Arial | Liberation Sans, metric-compatible with Arial: same advance widths, same line breaks | ~400KB per face used |
 
-The `@font-face` files therefore only serve a system that has neither Arial nor an
-alias for it. Android is the one platform where the rendering genuinely departs
-from Arial, and the self-hosted file does not rescue it: a font stack falls
-through only on a name the system cannot resolve, and Android resolves Arial.
-Fixing that needs `local('ArialMT')` inside the `src` of a face whose family name
-Android does not alias, not another name in the stack.
+Because the faces are matched one at a time, a viewer with Arial installed
+downloads nothing at any weight, and a viewer without it downloads only the faces
+the page actually uses: regular and bold always, italic once an episode
+description is open, bold italic effectively never.
 
 - **Weights:** 400 (body, meta, prose) and 700 (everything else). No other weight.
 - **Case:** headings, nav, episode rows, credit names and the tagline are
@@ -72,8 +85,17 @@ Android does not alias, not another name in the stack.
 - **Letter spacing:** `0.01em`–`0.02em` on large bold type, `0.1em`–`0.12em` on
   the small gray tracked labels. Nothing negative.
 - **Settled:** the family is Arial. The earlier open question between Liberation
-  Sans and Inter is closed. Do not swap the stack, or reorder its first two
-  names, without asking.
+  Sans and Inter is closed. Do not swap the stack, change the `local()` names, or
+  rename the `STF Sans` family without asking.
+
+Two loading consequences to keep in mind:
+
+- `font-display: swap` means a viewer without Arial paints in Roboto (Android) or
+  their default sans first and swaps when the file lands, which reflows slightly
+  on a slow connection. The alternative was hiding the text until it arrives.
+- **Do not add `rel="preload"` for these files.** Preload fetches unconditionally,
+  which would force a 400KB download onto every visitor who already has Arial and
+  needs nothing. The `src` fallback is deliberately lazy.
 
 The wordmark is an inline SVG of live `<text>` in Arial Bold, repeated in each
 page's markup. It is not outlined, so it renders in whatever the viewer has,
