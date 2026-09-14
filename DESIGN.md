@@ -11,7 +11,7 @@
 > update this file in the same commit, along with `PROJECT-CONTEXT.md` and its
 > "Last updated" line.
 >
-> Last updated: 2026-09-13
+> Last updated: 2026-09-14
 
 Spread The Future is a podcast site built as a single typographic stack. There is
 no chrome: no cards, no shadows, no borders except hairline rules, no chromatic
@@ -30,7 +30,7 @@ to it.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas, everywhere. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | All primary text, the wordmark, icon fill at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider, the footer's social links, "coming soon" in an announced season's heading |
+| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider, the footer's social links, the "Coming soon." row in an announced season |
 | Rule | `--rule` | `#2A2A2A` | The 1px lines under the episodes lead-in and every episode row. The only border in the system |
 | Surface | `--surface` | `#1A1A1A` | Sits behind cover artwork while it loads, so the frame is never a hole in the page |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only. A step further back than `--muted` |
@@ -216,13 +216,13 @@ season above. Not `--space-xl` between seasons any more, which was right when a
 season was a full-width block of the page and opens a hole in the column now.
 
 A season the show has announced but has no episodes for yet renders the heading
-alone, finished by "coming soon" inside it: `.season-coming`, a span at the
-heading's own size and weight in `--muted`, so it reads "Season 2, coming soon."
-as one line, white then gray. Being an announced season, it is the top of the
-column, above the seasons that do have rows. No cover and no rows. It was once a small tracked
-label under the heading, which matched the lead-in above too closely. Which
-seasons those are is `ANNOUNCED_SEASONS` in `scripts/build.py`; the words
-disappear on their own once the feed carries an episode for that season.
+alone, then a "Coming soon." row below it: `.season-coming`, sized and weighted
+like an episode number (`.episode-number`'s font size and weight, same row
+padding) in `--muted`, so it reads as the row this season doesn't have yet
+rather than a caption under the heading. Being an announced season, it is the
+top of the column, above the seasons that do have rows. No cover and no other
+rows. Which seasons those are is `ANNOUNCED_SEASONS` in `scripts/build.py`; the
+row disappears on its own once the feed carries an episode for that season.
 
 ### Episode row
 **Role:** One episode, expanded in place
