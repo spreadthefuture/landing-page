@@ -868,51 +868,128 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- About ---- */
 
-/* Three short sections read down the middle of the page. The column is capped at
-   a comfortable measure rather than the full gutter width, and centred, so the
-   lines stay readable on a wide screen. */
-.page-about main {
-  width: min(100%, 46rem);
-  margin-inline: auto;
-  padding-top: clamp(3rem, 9vw, 7rem);
-  text-align: center;
-}
+/* A manifesto in three beats: one loud statement, three numbered principles side
+   by side, one quiet line to close. Loud to quiet on purpose, so the page has a
+   shape of its own rather than repeating the homepage's stack. */
 
-.about-section + .about-section { margin-top: clamp(2.75rem, 7vw, 4.5rem); }
-
-/* Sized below the wordmark and above the prose it leads. Set in sentence case in
-   the markup and capitalised here, so screen readers do not spell it out. */
-.about-heading {
-  margin: 0;
-  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+/* The page's one belief, as a poster. The site nav's scale and case, so it holds
+   its own under the wordmark, but pulled a step back in gray: only the words the
+   podcast is about light up in --fg. --space-xl both sides, so it stands apart
+   from the masthead as a block instead of finishing it the way the homepage
+   tagline does. */
+.about-statement {
+  margin: var(--space-xl) 0;
+  color: var(--muted);
+  font-size: clamp(1.35rem, 5vw, 4rem);
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
 }
 
+/* Inherit, not the browser's bolder: there is no weight above 700. */
+.about-statement strong {
+  color: var(--fg);
+  font-weight: inherit;
+}
+
+/* Three across, one per row at the credits breakpoint, the same grid moment as
+   that page. */
+.about-sections {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-m);
+}
+
+/* The credit name's type. The number sits on its own line above the words in
+   gray, the episode row's number and title stacked instead of side by side, so
+   the three headings start level however their words wrap. */
+.about-heading {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.about-number {
+  display: block;
+  color: var(--muted);
+}
+
 .about-text {
-  margin: 1rem 0 0;
+  margin: var(--space-s) 0 0;
   font-size: clamp(1rem, 1.7vw, 1.25rem);
   line-height: 1.6;
 }
 
-/* The two lines that close the page. They sit apart from the sections above so
-   they read as a sign off rather than a fourth section. */
+@media (max-width: 46rem) {
+  .about-sections { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The sign off, at the prose's size and in gray, centred under the grid: after
+   the statement it should read as a whisper, not a third headline. */
 .about-closing {
-  margin: clamp(3.5rem, 9vw, 6rem) 0 0;
+  margin: var(--space-xl) 0 0;
+  color: var(--muted);
   font-size: clamp(1rem, 1.7vw, 1.25rem);
   line-height: 1.6;
+  text-align: center;
 }
 
-.about-closing + .about-closing { margin-top: 1.5rem; }
+/* Entrance, in the manifesto's reading order: the statement, then the three
+   principles one by one, then the sign off.
 
-.about-closing-muted { color: var(--muted); }
+   Opacity and movement are two animations on purpose. An ease-out on opacity
+   does most of its change in the first few hundred milliseconds, which reads as
+   the text snapping on; ease-in-out starts slowly, so the text genuinely fades
+   up out of the background. The drift is a separate, barely there 0.375rem on a
+   gentle ease-out, which is where ease-out belongs: motion that comes to rest.
 
-/* The one link in the prose, so it is underlined to be findable and lifts to the
-   page's text colour on hover. */
+   The statement waits 0.15s so the first paint (and on devices without Arial,
+   the font swap) is out of the way before anything moves. The principles follow
+   250ms apart, slow enough to read as a sequence, and the page is whole by about
+   3s, though every line is legible well before it reaches full opacity. Only
+   opacity and transform animate, which the browser composites without layout or
+   repaint. Pure CSS, so it runs with JS off; fill-mode both keeps each block
+   hidden only through its own delay. */
+.about-statement,
+.about-section,
+.about-closing {
+  animation:
+    about-fade 1.8s ease-in-out both,
+    about-drift 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: 0.15s;
+}
+
+.about-section:nth-child(1) { animation-delay: 0.6s; }
+.about-section:nth-child(2) { animation-delay: 0.85s; }
+.about-section:nth-child(3) { animation-delay: 1.1s; }
+.about-closing { animation-delay: 1.35s; }
+
+@keyframes about-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes about-drift {
+  from { transform: translateY(0.375rem); }
+  to { transform: none; }
+}
+
+/* Removed outright rather than left to the global reduced-motion rule: that one
+   shortens durations but not delays, so the blocks would still blink in late. */
+@media (prefers-reduced-motion: reduce) {
+  .about-statement,
+  .about-section,
+  .about-closing { animation: none; }
+}
+
+/* The one link in the prose, underlined to be findable and lifted to --fg so it
+   is the brightest thing in the line. */
 .about-closing a {
-  color: inherit;
+  color: var(--fg);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }

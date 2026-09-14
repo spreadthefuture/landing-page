@@ -11,7 +11,7 @@
 > update this file in the same commit, along with `PROJECT-CONTEXT.md` and its
 > "Last updated" line.
 >
-> Last updated: 2026-09-14
+> Last updated: 2026-09-15
 
 Spread The Future is a podcast site built as a single typographic stack. There is
 no chrome: no cards, no shadows, no borders except hairline rules, no chromatic
@@ -110,10 +110,10 @@ Every size is fluid. The `clamp()` is the spec; the min/max are the ends of it.
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 | — |
 | site nav | `clamp(2rem, 5vw, 4rem)` · `4.6vw` below 40rem | 700 | 1 | — |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 40rem | 700 | 1.15 | 0.01em |
-| credits intro / season title | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
-| about heading | `clamp(1.15rem, 2.4vw, 1.6rem)` | 700 | 1.2 | 0.02em |
+| about statement | `clamp(1.35rem, 5vw, 4rem)` | 700 | 1.1 | 0.01em |
+| credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
 | episode row | `clamp(0.95rem, 1.9vw, 1.45rem)` | 700 | — | 0.01em |
-| credit name | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | — | 0.01em |
+| credit name / about heading | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 on about | 0.01em |
 | about text / closing | `clamp(1rem, 1.7vw, 1.25rem)` | 400 | 1.6 | — |
 | credit role / location | `clamp(0.9rem, 1.4vw, 1.125rem)` · `1rem` below 46rem | 400 | 1.2 | — |
 | episode description | `clamp(0.9rem, 1.1vw, 1rem)` | 400 | 1.6 | — |
@@ -153,8 +153,8 @@ Two, both structural:
 - **40rem** — platform names collapse to icons, the site nav moves under the
   masthead as one row, the episode art panel stacks above the list, the tagline
   switches to viewport sizing.
-- **46rem** — the credits and thanks grids drop from three columns to one; the
-  footer steps up one size.
+- **46rem** — the credits and thanks grids drop from three columns to one, the
+  about principles drop from three columns to one; the footer steps up one size.
 
 ## Components
 
@@ -256,7 +256,6 @@ opaque gutter of padding once pinned so nothing shows through the gap.
 
 1px `var(--rule)`, as a `border-bottom` on the episodes lead-in and on every
 `.episode`. There is no standalone divider element and no other border anywhere.
-
 ### Credit card
 **Role:** One team member
 
@@ -264,6 +263,34 @@ The whole card is a single link to that person's LinkedIn: circular portrait
 (`clamp(150px, 24vw, 360px)`, `object-fit: cover`), bold uppercase name, then role
 in white and country in gray, sharing one rule so the two lines always match.
 Three across, one per row below 46rem.
+
+### About page
+**Role:** What the podcast is, as a manifesto in three beats, loud to quiet
+
+1. **Statement.** `.about-statement`, the page's one belief as a poster: bold
+   uppercase at `clamp(1.35rem, 5vw, 4rem)`, line height 1.1, `--space-xl` above
+   and below so it stands apart from the masthead rather than finishing it (the
+   homepage tagline's job). The sentence is `--muted`; only "the unexpected and
+   the improbable", a `<strong>` with its weight reset to inherit, is `--fg`. This
+   gray-with-a-lit-phrase move exists only here.
+2. **Principles.** `.about-sections`, a three-column grid, `--space-m` gap, one
+   column below 46rem, with no rules: space and the numbers carry the structure.
+   The heading is the credit name's type, uppercase, with
+   its number (`01`, `02`, `03`, `aria-hidden`) on its own line above in `--muted`,
+   so the three headings start level however their words wrap. Prose follows
+   `--space-s` below, in `--fg`.
+3. **Sign off.** `.about-closing`, centred, `--space-xl` above, at the prose size in
+   `--muted`, with its link to the credits in `--fg` and underlined.
+
+**Entrance.** Pure CSS, once on load, in reading order, and a fade first. Two
+animations per block, both 1.8s: opacity 0 to 1 on `ease-in-out`, and a 0.375rem
+upward drift on a gentle ease-out (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`).
+Opacity must not go on an ease-out: it front-loads the change and the text snaps
+on. Delays: statement 0.15s (clear of first paint and the font swap), principles
+0.6s / 0.85s / 1.1s, sign off 1.35s, so the page is whole by about 3s. Only opacity
+and transform animate. The brief is calm: a 0.5s version with line draws felt
+stressful, and a 1.4s ease-out fade still felt abrupt. Under reduced motion the animations are removed, not shortened,
+because the global rule does not shorten delays.
 
 ### Quotes
 **Role:** The homepage's closing block, between the episode list and the footer
@@ -383,8 +410,8 @@ edges aligned with each other.
 
 A single flex column per page: `body` is `display: flex; flex-direction: column`
 at `min-height: 100svh`, padded by `--gutter`. There is no max-width container and
-no centered column on the homepage. The about page caps its `main` at 46rem and
-centers it for a comfortable measure; the credits page caps its `main` at 85rem
+no centered column on the homepage or the about page, which runs gutter to
+gutter like the homepage; the credits page caps its `main` at 85rem
 and centers it too, so the three-column grid keeps some air at the edges on a
 wide screen instead of running out to the gutter.
 
@@ -393,7 +420,8 @@ tagline, lead-in, then one two-column flex row: the persistent cover on the left
 and on the right a column of seasons, newest first, each a left-aligned heading
 over its own rows, then the rotating quotes before the footer.
 The credits page is a three-column grid with one spacing band. The about page is a
-centered stack of three heading-and-paragraph sections plus two closing lines.
+poster-sized statement, three numbered principles side by side, and one quiet
+centred closing line.
 
 Every page is standalone: no includes, so the head block, the wordmark SVG and the
 footer are repeated in all three files on purpose. Change one, change all three.
