@@ -94,3 +94,41 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     pinObserver.observe(artSentinel);
   }
 }
+
+// Quotes after the episode list. Without this they stack; with it they share one
+// spot and rotate. Each bar's fill animation (styles.css) is the timer: when the
+// active one finishes, the next quote comes up, so hover, focus and reduced motion
+// pause or stop the rotation from CSS alone.
+const quoteBlock = document.querySelector('.quotes');
+const quotes = quoteBlock ? quoteBlock.querySelectorAll('.quote') : [];
+
+if (quotes.length > 1) {
+  const nav = document.createElement('div');
+  nav.className = 'quotes-nav';
+
+  const dots = [...quotes].map((quote, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'quote-dot';
+    dot.setAttribute('aria-label', `Quote ${i + 1} of ${quotes.length}`);
+    dot.addEventListener('click', () => showQuote(i));
+    dot.addEventListener('animationend', () => showQuote((i + 1) % quotes.length));
+    nav.append(dot);
+    return dot;
+  });
+
+  const showQuote = (index) => {
+    quotes.forEach((quote, i) => quote.classList.toggle('is-active', i === index));
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === index);
+      dot.setAttribute('aria-current', i === index);
+    });
+  };
+
+  // .is-starting holds the transitions off for the first frame, so the quotes
+  // that were stacked a moment ago drop out instantly instead of fading away.
+  quoteBlock.classList.add('is-rotating', 'is-starting');
+  quoteBlock.append(nav);
+  showQuote(0);
+  requestAnimationFrame(() => requestAnimationFrame(() => quoteBlock.classList.remove('is-starting')));
+}

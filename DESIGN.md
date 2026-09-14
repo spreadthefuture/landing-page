@@ -73,8 +73,8 @@ the same trick with `Arial-BoldMT`.
 
 Because the faces are matched one at a time, a viewer with Arial installed
 downloads nothing at any weight, and a viewer without it downloads only the faces
-the page actually uses: regular and bold always, italic once an episode
-description is open, bold italic effectively never.
+the page actually uses: regular and bold always, italic at load too, for
+the work titles in the quote sources, bold italic effectively never.
 
 - **Weights:** 400 (body, meta, prose) and 700 (everything else). No other weight.
 - **Case:** headings, nav, episode rows, credit names and the tagline are
@@ -265,6 +265,31 @@ The whole card is a single link to that person's LinkedIn: circular portrait
 in white and country in gray, sharing one rule so the two lines always match.
 Three across, one per row below 46rem.
 
+### Quotes
+**Role:** The homepage's closing block, between the episode list and the footer
+
+A `<section class="quotes">` of `<figure>`s, each a `<blockquote>` and a
+`<figcaption>`. `--space-xl` above it (the break between blocks, as under the
+tagline); the footer's own 6rem carries the space below. The quote is set at the
+credits intro / season title scale (`clamp(1.6rem, 4vw, 3.25rem)`, bold, 1.2
+line height), capped at 38ch and centered on the page, source and bars
+included, and in sentence case like the season heading:
+these are someone's words, and uppercase would shout them. The source sits
+`--space-s` under it as the small gray tracked uppercase label; the title of a
+work in it is a `<cite>`, left in italic.
+
+Without JS the quotes simply stack, `--space-m` apart. `script.js` adds
+`.is-rotating`, which puts every quote in one grid cell (so the block is as tall
+as the longest quote and never jumps), bottom aligned so the source line always
+sits the same distance above the bars, and crossfades between them: 0.6s opacity
+plus a 0.5rem rise, the incoming one 0.2s behind the outgoing. It also appends
+`.quotes-nav`, one button per quote, each drawn as a 2.5rem `--rule` hairline.
+The active bar fills left to right in `--fg` over **9s**, and that CSS animation is
+the timer: `script.js` advances on its `animationend`, so the interval lives once,
+in `styles.css`. The fill pauses while the pointer is over the block (on real
+hover devices) or a bar has keyboard focus, and under reduced motion it is removed
+outright, which stops the rotation and leaves the bars as manual controls.
+
 ### Footer
 **Role:** Social links over the copyright line
 
@@ -287,7 +312,7 @@ The copyright stays `#5C5C5C` and is still the only thing using it.
   `0.2s ease` transition, declared once as a single grouped rule near the top of
   `styles.css` covering the wordmark, the site nav, the platform links, the
   episode summary, the per-episode listen links, the credit cards, the about
-  page's prose link and the footer's social links. Add new hoverable things to that rule rather than giving
+  page's prose link, the footer's social links and the quote bars. Add new hoverable things to that rule rather than giving
   them their own. The exceptions are the platform icons, which shift to their
   brand color instead, and episode-description links, which lift to `--fg`.
 - **Links carry no underline** except inside prose (episode descriptions, the
@@ -321,7 +346,8 @@ The copyright stays `#5C5C5C` and is still the only thing using it.
 - Do not use the em dash in prose or UI copy.
 - Do not add a font, a weight, or a fourth spacing size without asking.
 - Do not add a JavaScript dependency: the site must work fully with JS off, and
-  `script.js` is enhancement only (scroll clamp, cover crossfade, pinned padding).
+  `script.js` is enhancement only (scroll clamp, cover crossfade, pinned padding,
+  quote rotation).
 - Do not edit `archive/`, or link to it. It is read-only history.
 - Do not put markup or styling in `scripts/build.py`. Every tag it renders lives
   in the four `<template>` blocks in `index.html`: `episode`, `episode-link`,
@@ -365,7 +391,7 @@ wide screen instead of running out to the gutter.
 The homepage reads top to bottom: wordmark and nav side by side, platform bar,
 tagline, lead-in, then one two-column flex row: the persistent cover on the left,
 and on the right a column of seasons, newest first, each a left-aligned heading
-over its own rows.
+over its own rows, then the rotating quotes before the footer.
 The credits page is a three-column grid with one spacing band. The about page is a
 centered stack of three heading-and-paragraph sections plus two closing lines.
 

@@ -133,7 +133,8 @@ a { color: inherit; text-decoration: none; }
 .episode-listen,
 .credit-link,
 .about-closing a,
-.footer-social a { transition: opacity 0.2s ease; }
+.footer-social a,
+.quote-dot { transition: opacity 0.2s ease; }
 
 .logo a:hover,
 .site-nav a:hover,
@@ -142,7 +143,8 @@ a { color: inherit; text-decoration: none; }
 .episode-listen:hover,
 .credit-link:hover,
 .about-closing a:hover,
-.footer-social a:hover { opacity: 0.8; }
+.footer-social a:hover,
+.quote-dot:hover { opacity: 0.8; }
 
 /* ---- Header ---- */
 
@@ -608,6 +610,132 @@ a { color: inherit; text-decoration: none; }
     padding-top: var(--gutter);
     background: var(--bg);
   }
+}
+
+/* ---- Quotes ---- */
+
+/* The homepage's closing block, after the episode list. --space-xl above is the
+   break between blocks, the same one under the tagline; the footer's own 6rem
+   carries the space below. */
+.quotes {
+  margin-top: var(--space-xl);
+  text-align: center;
+}
+
+.quote { margin: 0; }
+.quote + .quote { margin-top: var(--space-m); }
+
+/* The credits intro / season title scale: big enough to hold the page after the
+   list, a step under the tagline so it does not read as a second one. Sentence
+   case like the season heading, since these are someone's words and uppercase
+   would shout them. Capped in ch so a long quote breaks into a comfortable
+   block instead of running out to the gutter, and centred in the page. */
+.quote-text { margin: 0; }
+
+.quote-text p {
+  max-width: 38ch;
+  margin: 0 auto;
+  font-size: clamp(1.6rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+/* The tracked gray label, pinned to its quote with --space-s. A work's title in
+   it is a <cite>, left in the browser's default italic: on devices without Arial
+   that fetches the regular italic face at page load, the one episode
+   descriptions already use. */
+.quote-source {
+  margin-top: var(--space-s);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* With script.js: every quote in one grid cell, so the block is as tall as the
+   longest one and never jumps as they change. Each quote sits on the bottom of
+   that cell, so the source line keeps one fixed distance to the bars below and
+   a shorter quote gives up space above it, where the gap from the episode list
+   is already large, rather than opening a hole between the quote and its
+   controls. The hidden ones keep visibility until their fade out finishes, then
+   drop out of the accessibility tree. */
+.quotes.is-rotating { display: grid; }
+
+.quotes.is-rotating .quote {
+  grid-area: 1 / 1;
+  align-self: end;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+  transition: opacity 0.6s ease, transform 0.6s ease, visibility 0s linear 0.6s;
+}
+
+.quotes.is-rotating .quote.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s, visibility 0s;
+}
+
+.quotes.is-starting .quote { transition: none; }
+
+.quotes-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: var(--space-m);
+}
+
+/* One hairline per quote, the site's rule turned into a progress bar. The fill
+   on the active one is the timer itself: script.js advances on its animationend,
+   so the interval lives here, once, and pausing the animation pauses the
+   rotation. Padding, not height, buys the tap target. */
+.quote-dot {
+  position: relative;
+  width: 2.5rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.quote-dot::before,
+.quote-dot::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 2px;
+  background: var(--rule);
+}
+
+.quote-dot::after {
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.quote-dot.is-active::after { animation: quote-progress 9s linear forwards; }
+
+@keyframes quote-progress {
+  to { transform: scaleX(1); }
+}
+
+/* Hold still while someone is reading with the pointer on it or has focused a
+   bar. Gated on real hover so a tap on touch does not leave it paused. */
+.quotes:has(:focus-visible) .quote-dot.is-active::after { animation-play-state: paused; }
+
+@media (hover: hover) {
+  .quotes:hover .quote-dot.is-active::after { animation-play-state: paused; }
+}
+
+/* No animation means no animationend, so the rotation stops and the bars become
+   plain manual controls. The global reduced-motion rule below only shortens
+   durations, which would spin through the quotes instead. */
+@media (prefers-reduced-motion: reduce) {
+  .quote-dot.is-active::after { animation: none; transform: none; }
 }
 
 /* ---- Credits ---- */
