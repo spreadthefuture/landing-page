@@ -620,6 +620,14 @@ a { color: inherit; text-decoration: none; }
    row to row are all this value, so the page reads as evenly spaced bands. */
 .page-credits { --band: clamp(5rem, 13vw, 12rem); }
 
+/* The grid has no natural cap of its own (portrait width does, but column width
+   doesn't), so on a wide screen it runs all the way out to the body gutter. A
+   second, wider cap than the about page's keeps a bit more air at the edges. */
+.page-credits main {
+  width: min(100%, 85rem);
+  margin-inline: auto;
+}
+
 /* The page's one line of type. Sized between the credit names below it and the
    about page's headings, so it leads the grid without competing with the
    wordmark. */
@@ -637,7 +645,7 @@ a { color: inherit; text-decoration: none; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   /* Row gap is its own value, a step tighter than the band: the bands above the
      grid separate different things, while row to row is the same thing twice. */
-  gap: clamp(3.5rem, 9vw, 8rem) clamp(3rem, 8vw, 9rem);
+  gap: clamp(3.5rem, 9vw, 8rem) clamp(3rem, 8vw, 10.5rem);
   margin: var(--band) 0 0;
   padding: 0;
   list-style: none;

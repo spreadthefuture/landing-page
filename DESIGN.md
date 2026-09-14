@@ -357,8 +357,10 @@ edges aligned with each other.
 
 A single flex column per page: `body` is `display: flex; flex-direction: column`
 at `min-height: 100svh`, padded by `--gutter`. There is no max-width container and
-no centered column, except the about page, which caps its `main` at 46rem and
-centers it for a comfortable measure.
+no centered column on the homepage. The about page caps its `main` at 46rem and
+centers it for a comfortable measure; the credits page caps its `main` at 85rem
+and centers it too, so the three-column grid keeps some air at the edges on a
+wide screen instead of running out to the gutter.
 
 The homepage reads top to bottom: wordmark and nav side by side, platform bar,
 tagline, lead-in, then one two-column flex row: the persistent cover on the left,
