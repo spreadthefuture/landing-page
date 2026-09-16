@@ -265,6 +265,12 @@ The whole card is a single link to that person's LinkedIn: circular portrait
 in white and country in gray, sharing one rule so the two lines always match.
 Three across, one per row below 46rem.
 
+**Entrance.** The about page's `about-fade` and `about-drift` with the same
+curves, per block, but quicker: 1.2s, 100ms between beats. "Our Team" at 0.1s,
+each row of cards as one block at 0.2s and 0.3s, the videographers heading and
+list together at 0.4s. Whole by about 1.6s. Below 46rem the "rows" are still
+cards 1 to 3 and 4 to 6. Removed under reduced motion.
+
 ### About page
 **Role:** What the podcast is, as a manifesto in three beats, loud to quiet
 

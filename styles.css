@@ -897,6 +897,33 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+/* Entrance, the about page's two animations and curves, applied per block, but
+   quicker: 1.2s instead of 1.8s and 100ms between beats, since this page is
+   mostly faces to reach. The heading at 0.1s, each row of cards as one block at
+   0.2s and 0.3s, then the videographers, heading and names together, at 0.4s.
+   The page is whole by about 1.6s. */
+.page-credits .credits-intro,
+.credit,
+.thanks-list {
+  animation:
+    about-fade 1.2s ease-in-out both,
+    about-drift 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: 0.1s;
+}
+
+.credit:nth-child(-n + 3) { animation-delay: 0.2s; }
+.credit:nth-child(n + 4) { animation-delay: 0.3s; }
+.page-credits .credits-intro:nth-of-type(2),
+.thanks-list { animation-delay: 0.4s; }
+
+/* Removed outright, as on the about page: the global rule shortens durations
+   but not delays. */
+@media (prefers-reduced-motion: reduce) {
+  .page-credits .credits-intro,
+  .credit,
+  .thanks-list { animation: none; }
+}
+
 /* ---- About ---- */
 
 /* A manifesto in three beats: one loud statement, three numbered principles side
