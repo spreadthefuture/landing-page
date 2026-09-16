@@ -1024,7 +1024,13 @@ a { color: inherit; text-decoration: none; }
 }
 
 .site-footer {
-  padding: 6rem var(--gutter) 0.75rem;
+  /* The drop from the last thing on the page to the footer. It ramps with the
+     viewport up to 9rem, which is where the desktop pages need it: on the
+     credits page every other break is a full --band, so the old flat 6rem read
+     as half a beat and pulled the footer up against the names. The 6rem floor
+     keeps the phone layout exactly where it was, where 9rem would have been
+     nearly twice that page's own rhythm. */
+  padding: clamp(6rem, 10vw, 9rem) var(--gutter) 0.75rem;
   text-align: center;
   color: var(--muted-dim);
   font-size: 0.8rem;
