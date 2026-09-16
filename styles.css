@@ -746,13 +746,26 @@ a { color: inherit; text-decoration: none; }
 
    One spacing band for the whole page: wordmark to line, line to portraits, and
    row to row are all this value, so the page reads as evenly spaced bands. */
-.page-credits { --band: clamp(5rem, 13vw, 12rem); }
+.page-credits {
+  --band: clamp(5rem, 13vw, 12rem);
 
-/* The grid has no natural cap of its own (portrait width does, but column width
-   doesn't), so on a wide screen it runs all the way out to the body gutter. A
-   second, wider cap than the about page's keeps a bit more air at the edges. */
+  /* The two numbers the whole grid is built from. A column is exactly one
+     portrait wide, so --col-gap is the space you actually see between two
+     circles, and the margin left over at the sides is what balances against it.
+     Both scale with the viewport at rates that keep that balance steady:
+     roughly one and a quarter times more air outside the grid than inside it,
+     from a small laptop up to a wide desktop. */
+  --portrait: clamp(180px, 21vw, 390px);
+  --col-gap: clamp(3rem, 8.5vw, 10rem);
+}
+
+/* Sized to the portraits rather than to the page: three columns and the two
+   gaps between them, centred, with everything outside that becoming the side
+   margin. Capping the portraits and letting the columns run wide is what used
+   to split the two apart, leaving circles hard against the gutter with the air
+   pooled between them. */
 .page-credits main {
-  width: min(100%, 85rem);
+  width: min(100%, calc(3 * var(--portrait) + 2 * var(--col-gap)));
   margin-inline: auto;
 }
 
@@ -773,7 +786,8 @@ a { color: inherit; text-decoration: none; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   /* Row gap is its own value, a step tighter than the band: the bands above the
      grid separate different things, while row to row is the same thing twice. */
-  gap: clamp(3.5rem, 9vw, 8rem) clamp(3rem, 8vw, 10.5rem);
+  row-gap: clamp(3.5rem, 9vw, 8rem);
+  column-gap: var(--col-gap);
   margin: var(--band) 0 0;
   padding: 0;
   list-style: none;
@@ -792,7 +806,7 @@ a { color: inherit; text-decoration: none; }
 /* The source files are square. They are cropped to a circle here, which is the
    only decoration on this page, so it stays the same shape at every size. */
 .credit-portrait {
-  width: min(100%, clamp(150px, 24vw, 360px));
+  width: min(100%, var(--portrait));
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
@@ -815,6 +829,12 @@ a { color: inherit; text-decoration: none; }
   margin: 0.5rem 0 0;
   font-size: clamp(0.9rem, 1.4vw, 1.125rem);
   line-height: 1.2;
+  /* The column is exactly one portrait wide, which the longest role outgrows.
+     These two lines are allowed a little under a third of the gutter on each
+     side so they stay on one line and every location sits at the same height
+     across a row. The circles still mark where the column is. */
+  width: calc(100% + var(--col-gap) * 0.6);
+  margin-inline: calc(var(--col-gap) * -0.3);
 }
 
 .credit-role { color: var(--fg); }
@@ -825,7 +845,10 @@ a { color: inherit; text-decoration: none; }
 .thanks-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(2rem, 5vw, 4rem) clamp(3rem, 8vw, 9rem);
+  /* The same column gap as the grid above, so these names sit on the portraits'
+     columns rather than on a second set of their own. */
+  row-gap: clamp(2rem, 5vw, 4rem);
+  column-gap: var(--col-gap);
   margin: var(--band) 0 0;
   padding: 0;
   list-style: none;
@@ -842,17 +865,22 @@ a { color: inherit; text-decoration: none; }
 
 /* One per row below the point where three columns start crowding the names. */
 @media (max-width: 46rem) {
-  .page-credits { --band: clamp(5rem, 17vw, 8rem); }
+  .page-credits {
+    --band: clamp(5rem, 17vw, 8rem);
+    /* One column, so the portrait sets the page's width on its own instead of
+       being one third of it, and the gap between columns has nothing to do. */
+    --portrait: clamp(180px, 55vw, 280px);
+    --col-gap: 0px;
+  }
 
-  /* One column here, so the column gap is inert and the row gap carries the
-     whole grid. Given more room than on desktop, where the two rows sit side by
-     side and read as one block anyway. */
+  /* With the column gap inert, the row gap carries the whole grid. Given more
+     room than on desktop, where the two rows sit side by side and read as one
+     block anyway. */
   .credits {
     grid-template-columns: minmax(0, 1fr);
     row-gap: clamp(4.5rem, 13vw, 8rem);
   }
 
-  .credit-portrait { width: clamp(180px, 55vw, 280px); }
   .credit-role,
   .credit-location { font-size: 1rem; }
 
