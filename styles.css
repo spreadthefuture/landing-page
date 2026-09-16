@@ -752,10 +752,11 @@ a { color: inherit; text-decoration: none; }
   /* The two numbers the whole grid is built from. A column is exactly one
      portrait wide, so --col-gap is the space you actually see between two
      circles, and the margin left over at the sides is what balances against it.
-     Both scale with the viewport at rates that keep that balance steady:
+     Both scale with the viewport at rates that keep that balance steady, at
      roughly one and a quarter times more air outside the grid than inside it,
-     from a small laptop up to a wide desktop. */
-  --portrait: clamp(180px, 21vw, 390px);
+     from a small laptop up to the point where the portrait stops growing.
+     Past that the grid is done widening and the margins take the rest. */
+  --portrait: clamp(180px, 21vw, 360px);
   --col-gap: clamp(3rem, 8.5vw, 10rem);
 }
 
