@@ -240,8 +240,9 @@ description (justified, hyphenated, capped at 60ch) and platform links.
 One for the page, inside the single `.episodes-layout`, which bounds how far it
 sticks: it travels the full list and releases at the end of the last season. It
 shows the newest episode's cover at rest and answers to a hover on any row in any
-season. `clamp(240px, 47vw, 620px)`, sticky at `--gutter` from the top on
-desktop. Two
+season. `clamp(240px, 47vw, max(620px, 100vw / 3))`: it tops out at 620px, then
+from a 1860px viewport up it grows again at a third of the viewport width. Sticky
+at `--gutter` from the top on desktop. Two
 stacked `<img>` layers inside one frame; `script.js` loads the incoming cover into
 whichever layer is hidden, then swaps `.is-active`, so the 0.4s opacity transition
 crossfades between real pixels. Shows the first episode's cover at rest, the

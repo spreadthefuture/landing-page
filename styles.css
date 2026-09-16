@@ -375,8 +375,10 @@ a { color: inherit; text-decoration: none; }
    season is hovered or open. script.js crossfades between the two stacked layers
    below, and keeps each panel wired only to the list beside it; this panel never
    has an opinion of its own about which image that is. */
+/* The cap is 620px or a third of the viewport, whichever is larger, so on very
+   wide screens the cover keeps growing instead of stopping at 620px. */
 .episode-art-panel {
-  flex: 0 0 clamp(240px, 47vw, 620px);
+  flex: 0 0 clamp(240px, 47vw, max(620px, 100vw / 3));
   position: sticky;
   top: var(--gutter);
 }
