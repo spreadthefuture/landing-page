@@ -11,7 +11,7 @@
 > update this file in the same commit, along with `PROJECT-CONTEXT.md` and its
 > "Last updated" line.
 >
-> Last updated: 2026-09-16
+> Last updated: 2026-09-17
 
 Spread The Future is a podcast site built as a single typographic stack. There is
 no chrome: no cards, no shadows, no borders except hairline rules, no chromatic
@@ -31,7 +31,7 @@ to it.
 | Near black | `--bg` | `#0A0A0A` | The page canvas, everywhere. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | All primary text, the wordmark, icon fill at rest, the focus ring. Never pure white |
 | Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider, the footer's social links, the "Coming soon." row in an announced season |
-| Rule | `--rule` | `#2A2A2A` | The 1px lines under the episodes lead-in and every episode row. The only border in the system |
+| Rule | `--rule` | `#2A2A2A` | The 1px lines under the episodes lead-in and every episode row, above 40rem. The only border in the system |
 | Surface | `--surface` | `#1A1A1A` | Sits behind cover artwork while it loads, so the frame is never a hole in the page |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only. A step further back than `--muted` |
 
@@ -82,8 +82,9 @@ the work titles in the quote sources, bold italic effectively never.
   in CSS, so screen readers read words rather than spelling them out. The one
   exception is the season heading, which is set in sentence case and carries no
   `text-transform` at all: "Season 1", one capital.
-- **Letter spacing:** `0.01em`–`0.02em` on large bold type, `0.1em`–`0.12em` on
-  the small gray tracked labels. Nothing negative.
+- **Letter spacing:** `0.01em`–`0.02em` on large bold type, `0.12em` on
+  the small gray tracked labels. The episode date and duration line is plain
+  text, not a tracked label. Nothing negative.
 - **Settled:** the family is Arial. The earlier open question between Liberation
   Sans and Inter is closed. Do not swap the stack, change the `local()` names, or
   rename the `STF Sans` family without asking.
@@ -116,8 +117,8 @@ Every size is fluid. The `clamp()` is the spec; the min/max are the ends of it.
 | credit name / about heading | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 on about | 0.01em |
 | about text / closing | `clamp(1rem, 1.7vw, 1.25rem)` | 400 | 1.6 | — |
 | credit role / location | `clamp(0.9rem, 1.4vw, 1.125rem)` · `1rem` below 46rem | 400 | 1.2 | — |
-| episode description | `clamp(0.9rem, 1.1vw, 1rem)` | 400 | 1.6 | — |
-| tracked label | `0.8125rem` | 400 | — | 0.12em (0.1em on episode meta) |
+| episode description / meta (date - duration) | `clamp(0.9rem, 1.1vw, 1rem)` | 400 | 1.6 on description | — |
+| tracked label | `0.8125rem` | 400 | — | 0.12em |
 | footer | `0.8rem` · `0.875rem` above 46rem | 400 | — | — |
 
 ## Spacing & Layout
@@ -151,8 +152,9 @@ bottom edge on every page.
 Two, both structural:
 
 - **40rem** — platform names collapse to icons, the site nav moves under the
-  masthead as one row, the episode art panel stacks above the list, the tagline
-  switches to viewport sizing.
+  masthead as one row, the episode list becomes the mobile feed (the art panel
+  and the rules go, every row is its own cover), the tagline switches to
+  viewport sizing.
 - **46rem** — the credits and thanks grids drop from three columns to one, the
   about principles drop from three columns to one; the footer steps up one size.
 
@@ -231,7 +233,7 @@ Native `<details>` / `<summary>`, every row sharing `name="episode"` so opening
 one closes the last. Works with JavaScript off. The summary is a flex line: gray
 number, bold uppercase title (wrapping, never truncated), and a plus/minus toggle
 at the right edge built from two `::before`/`::after` bars, sized in `em` so it
-scales with the row. A `--rule` line under every row. Opening reveals meta,
+scales with the row. A `--rule` line under every row (above 40rem; the mobile feed has none). Opening reveals meta,
 description (justified, hyphenated, capped at 60ch) and platform links.
 
 ### Episode art panel
@@ -248,15 +250,42 @@ whichever layer is hidden, then swaps `.is-active`, so the 0.4s opacity transiti
 crossfades between real pixels. Shows the first episode's cover at rest, the
 hovered row's cover while the pointer is on a row (gated on
 `(hover: hover) and (pointer: fine)`), and the open row's cover whenever one is
-expanded. Below 40rem it stacks full-width above the list and sticks flush to the
-viewport top; a zero-size sentinel above it drives `.is-pinned`, which adds an
-opaque gutter of padding once pinned so nothing shows through the gap.
+expanded. Below 40rem it is hidden: the mobile feed gives every row its own
+cover instead.
+
+### Mobile feed
+**Role:** The episode list below 40rem
+
+A feed of covers, nothing pinned. The season headings, the "Coming soon." row
+and the lead-in stay (the lead-in loses its rule); the episode rows lose their
+rules, number, title and toggle, and each summary is just its episode's cover:
+full column width, square, 6px radius over `--surface`, `--space-s` between
+covers. The number and title stay in the summary for screen readers (they ride
+on the mobile `.platform-name` visually-hidden rule) and are shown at the top of
+the open text as `.episode-heading`, in the episode row's type a step larger
+(bold uppercase, 1.15rem, number in `--muted`), `aria-hidden` so they are not read twice. Below
+that: meta, description, platform icons, with `--space-s` of padding above and
+below. That padding sits on `.episode-body`, not on the panel: the panel is what
+slides to 0, and padding on it would stop the fold short and then snap.
+
+Tapping a cover opens its text underneath and the covers below slide down;
+tapping it again folds it back; opening one closes any other. With `script.js`,
+one frame loop drives every sliding panel and the scroll together over 500ms on
+a cubic ease-in-out, so nothing moves on a separate clock. The panel heights
+ease, and so does the tapped cover's place on screen, from where it was tapped
+to its `scroll-margin-top` (`--gutter`); the scroll is whatever keeps it there
+each frame, so the cover travels one way only while a row above it folds.
+`.is-feed-moving` switches scroll anchoring off on the root for the length of
+the motion. Closing does not scroll. Under reduced motion
+both are instant. Without JS the native accordion opens and closes without
+animation or scrolling.
 
 ### Hairline rule
 **Role:** The only divider in the system
 
 1px `var(--rule)`, as a `border-bottom` on the episodes lead-in and on every
-`.episode`. There is no standalone divider element and no other border anywhere.
+`.episode`, above 40rem only. There is no standalone divider element and no other
+border anywhere.
 ### Credit card
 **Role:** One team member
 
@@ -380,8 +409,8 @@ The copyright stays `#5C5C5C` and is still the only thing using it.
 - Do not use the em dash in prose or UI copy.
 - Do not add a font, a weight, or a fourth spacing size without asking.
 - Do not add a JavaScript dependency: the site must work fully with JS off, and
-  `script.js` is enhancement only (scroll clamp, cover crossfade, pinned padding,
-  quote rotation).
+  `script.js` is enhancement only (scroll clamp, cover crossfade, the mobile
+  feed's slide and scroll, quote rotation).
 - Do not edit `archive/`, or link to it. It is read-only history.
 - Do not put markup or styling in `scripts/build.py`. Every tag it renders lives
   in the four `<template>` blocks in `index.html`: `episode`, `episode-link`,
@@ -391,19 +420,19 @@ The copyright stays `#5C5C5C` and is still the only thing using it.
 
 ## Elevation
 
-There is none. No shadow, no glow, no z-axis depth except the single `z-index: 1`
-that keeps the pinned mobile cover above the list it scrolls over. Separation is
-done with space and hairline rules.
+There is none. No shadow, no glow, no z-axis depth. Separation is done with
+space and hairline rules.
 
 ## Imagery
 
 Two kinds only, both real photographs, both from outside the repo's design system:
 
 - **Episode covers** — square, from the RSS feed on Cloudfront, shown at 6px
-  radius over `--surface`, `object-fit: cover`, in the persistent panel only.
-  `build.py` still writes an `.episode-art` image into every row and the panel
-  reads its sources from those, but the in-row copy is `display: none` at every
-  width: it would be a cover inside the cover.
+  radius over `--surface`, `object-fit: cover`. Above 40rem, in the persistent
+  panel only: `build.py` writes an `.episode-art` image into every row's summary
+  and the panel reads its sources from those, but the in-row copy is
+  `display: none` there, since it would be a cover beside the cover. Below 40rem
+  the panel is hidden and the in-row copy is the row (see Mobile feed).
 - **Credit portraits** — square source files cropped to a circle, served at
   720×720, JPEG q68, ~125KB each, from `assets/credits-photos/`.
 

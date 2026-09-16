@@ -4,22 +4,130 @@
 // One .episodes-layout holds the page's single cover panel and, beside it, every
 // season's list. The panel answers to any row in any of those lists; the loop is
 // still written per layout so a second one would work on its own.
+
+// The mobile feed (styles.css, below 40rem): every row is a cover, and a tap
+// slides its text open while the page brings that cover to the top.
+const feed = window.matchMedia('(max-width: 40rem)');
+const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+const FEED_DURATION = 500;
+// Ease in and out, so the fold starts as gently as it lands.
+const feedEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
+
 for (const layout of document.querySelectorAll('.episodes-layout')) {
   const lists = layout.querySelectorAll('.episodes');
   const artPanel = layout.querySelector('.episode-art-panel');
+  const episodes = [...layout.querySelectorAll('.episode')];
   if (!lists.length) continue;
 
-  // Episodes are an exclusive accordion (<details name="episode">), so opening one
-  // collapses the one above and the clicked row can slide off the top of the window.
-  // Clamp it: the row may move up, but never past the top edge. Anything else is left
-  // exactly where the browser put it. The accordion is shared across seasons (one
-  // name for the whole page), so the row that collapses may sit in another list;
-  // the listener still fires on the row that was clicked, which is the one that
-  // must stay in view.
+  // The accordion is exclusive (<details name="episode">), but the browser closes
+  // the other row instantly, which would cut the feed's closing slide short. So
+  // with this file present, exclusivity is done here instead: the name comes off,
+  // and on desktop opening one row closes the rest at once, as before. The feed
+  // closes them itself, with the slide.
+  let current = null;
+
+  for (const details of episodes) {
+    details.removeAttribute('name');
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        current = details;
+        if (feed.matches) return;
+        for (const other of episodes) if (other !== details) other.open = false;
+      } else if (current === details) {
+        current = null;
+      }
+    });
+  }
+
+  // One motion at a time drives every sliding panel and the scroll together,
+  // from a single frame loop on a single curve, so the page never moves on one
+  // clock and the panels on another. A tap mid-motion starts a new one from
+  // wherever everything currently is. Closing only clears `open` once the fold
+  // has finished, so the text stays visible while it folds.
+  const root = document.documentElement;
+  let motion = null;
+  let frame = null;
+
+  const measure = (details, opening) => {
+    const panel = details.querySelector('.episode-panel');
+    const from = details.open ? panel.getBoundingClientRect().height : 0;
+    details.open = true;
+    panel.style.height = '';
+    const to = opening ? panel.scrollHeight : 0;
+    panel.style.overflow = 'hidden';
+    panel.style.height = `${from}px`;
+    return { panel, from, to };
+  };
+
+  const tick = (now) => {
+    const m = motion;
+    m.start ??= now;
+    const t = calm.matches ? 1 : Math.min((now - m.start) / FEED_DURATION, 1);
+    const e = feedEase(t);
+
+    for (const { panel, from, to } of m.panels.values()) {
+      panel.style.height = `${from + (to - from) * e}px`;
+    }
+
+    // The cover's place on screen is what eases, from where it was tapped to its
+    // scroll-margin-top, so it travels one way only however the rows above it
+    // fold. Read after the heights are written, so this frame's fold counts.
+    if (m.focus) {
+      const top = m.focus.getBoundingClientRect().top;
+      window.scrollBy(0, top - (m.topFrom + (m.margin - m.topFrom) * e));
+    }
+
+    if (t < 1) {
+      frame = requestAnimationFrame(tick);
+      return;
+    }
+    for (const [details, { panel, to }] of m.panels) {
+      panel.style.height = '';
+      panel.style.overflow = '';
+      if (!to) details.open = false;
+    }
+    motion = null;
+    frame = null;
+    root.classList.remove('is-feed-moving');
+  };
+
+  // changes: [details, opening] pairs. focus: the row to bring to the top.
+  const run = (changes, focus) => {
+    const targets = new Map();
+    if (motion) for (const [details, { to }] of motion.panels) targets.set(details, to > 0);
+    for (const [details, opening] of changes) targets.set(details, opening);
+    motion = {
+      panels: new Map([...targets].map(([details, opening]) => [details, measure(details, opening)])),
+      focus,
+      margin: focus ? parseFloat(getComputedStyle(focus).scrollMarginTop) || 0 : 0,
+      topFrom: focus ? focus.getBoundingClientRect().top : 0,
+      start: null,
+    };
+    root.classList.add('is-feed-moving');
+    frame ??= requestAnimationFrame(tick);
+  };
+
   layout.addEventListener('click', (event) => {
     const summary = event.target.closest('.episode-summary');
     if (!summary) return;
+    const details = summary.closest('.episode');
 
+    if (feed.matches) {
+      event.preventDefault();
+      if (current === details) {
+        current = null;
+        run([[details, false]], null);
+        return;
+      }
+      const changes = current ? [[current, false], [details, true]] : [[details, true]];
+      current = details;
+      run(changes, details);
+      return;
+    }
+
+    // Desktop: opening one row collapses the one above, and the clicked row can
+    // slide off the top of the window. Clamp it: the row may move up, but never
+    // past the top edge. Anything else is left where the browser put it.
     requestAnimationFrame(() => {
       const { top } = summary.getBoundingClientRect();
       if (top < 0) window.scrollBy(0, top);
@@ -77,21 +185,6 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       summary.addEventListener('mouseenter', () => showArt(cover.src));
       summary.addEventListener('mouseleave', () => showArt(openSrc || defaultSrc));
     }
-  }
-
-  // On narrow screens the panel becomes sticky flush to the viewport top (see
-  // styles.css). .is-pinned adds back a gutter of space above the cover once
-  // it is actually stuck, without affecting its unpinned, in-flow position: a
-  // sentinel sits right above the panel in the markup, and once scrolling
-  // carries it past the viewport top the panel must be pinned.
-  const artSentinel = layout.querySelector('.episode-art-sentinel');
-
-  if (artSentinel) {
-    const pinObserver = new IntersectionObserver(
-      ([entry]) => artPanel.classList.toggle('is-pinned', !entry.isIntersecting),
-      { threshold: 0 }
-    );
-    pinObserver.observe(artSentinel);
   }
 }
 
