@@ -11,7 +11,7 @@
 > update this file in the same commit, along with `PROJECT-CONTEXT.md` and its
 > "Last updated" line.
 >
-> Last updated: 2026-09-15
+> Last updated: 2026-09-16
 
 Spread The Future is a podcast site built as a single typographic stack. There is
 no chrome: no cards, no shadows, no borders except hairline rules, no chromatic
@@ -110,7 +110,7 @@ Every size is fluid. The `clamp()` is the spec; the min/max are the ends of it.
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 | — |
 | site nav | `clamp(2rem, 5vw, 4rem)` · `4.6vw` below 40rem | 700 | 1 | — |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 40rem | 700 | 1.15 | 0.01em |
-| about statement | `clamp(1.35rem, 5vw, 4rem)` | 700 | 1.1 | 0.01em |
+| about statement | `clamp(1.35rem, 5vw, 4rem)` · `8vw` below 40rem | 700 | 1.1 | 0.01em |
 | credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
 | episode row | `clamp(0.95rem, 1.9vw, 1.45rem)` | 700 | — | 0.01em |
 | credit name / about heading | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 on about | 0.01em |
@@ -268,7 +268,7 @@ Three across, one per row below 46rem.
 **Role:** What the podcast is, as a manifesto in three beats, loud to quiet
 
 1. **Statement.** `.about-statement`, the page's one belief as a poster: bold
-   uppercase at `clamp(1.35rem, 5vw, 4rem)`, line height 1.1, `--space-xl` above
+   uppercase at `clamp(1.35rem, 5vw, 4rem)` (`8vw` below 40rem), line height 1.1, `--space-xl` above
    and below so it stands apart from the masthead rather than finishing it (the
    homepage tagline's job). The sentence is `--muted`; only "the unexpected and
    the improbable", a `<strong>` with its weight reset to inherit, is `--fg`. This

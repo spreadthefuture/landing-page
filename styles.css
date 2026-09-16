@@ -916,6 +916,15 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
+/* Below this width the clamp's 5vw sits at or under its own 1.35rem floor, so
+   the poster statement reads no bigger than body text. Sized off the viewport
+   instead, the same move as the tagline below 40rem. */
+@media (max-width: 40rem) {
+  .about-statement {
+    font-size: 8vw;
+  }
+}
+
 /* Inherit, not the browser's bolder: there is no weight above 700. */
 .about-statement strong {
   color: var(--fg);
