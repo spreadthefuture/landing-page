@@ -6,7 +6,8 @@
 // still written per layout so a second one would work on its own.
 
 // Rows slide open and closed. In the mobile feed (styles.css, below 40rem) every
-// row is a cover, and a tap also brings that episode's title to the top.
+// row is a cover, and a tap also brings that episode's title a third of the way
+// down the screen.
 const feed = window.matchMedia('(max-width: 40rem)');
 const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 const FEED_DURATION = 500;
@@ -41,7 +42,7 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   // clock and the panels on another. A tap mid-motion starts a new one from
   // wherever everything currently is. Closing only clears `open` once the fold
   // has finished, so the text stays visible while it folds; .is-closing marks
-  // that fold, so the cover takes its colour back at the tap, not at the end.
+  // that fold, so the toggle turns back at the tap, not at the end.
   const root = document.documentElement;
   let motion = null;
   let frame = null;
@@ -125,7 +126,8 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     current = details;
 
     if (feed.matches) {
-      // The open text's title is what comes to the top, not the cover above it.
+      // The open text's title is what lands at its scroll-margin-top (a third
+      // of the way down), not the cover above it.
       const heading = details.querySelector('.episode-heading');
       run(changes, heading, parseFloat(getComputedStyle(heading).scrollMarginTop) || 0);
       return;

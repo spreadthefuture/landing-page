@@ -115,10 +115,10 @@ Every size is fluid. The `clamp()` is the spec; the min/max are the ends of it.
 | credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
 | episode row | `clamp(0.95rem, 1.9vw, 1.45rem)` | 700 | — | 0.01em |
 | credit name / about heading | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 on about | 0.01em |
-| about text / closing | `clamp(1rem, 1.7vw, 1.25rem)` | 400 | 1.6 | — |
+| about text / closing, episode description / meta (date - duration) | `clamp(1rem, 1.7vw, 1.25rem)` | 400 | 1.6 | — |
 | credit role / location | `clamp(0.9rem, 1.4vw, 1.125rem)` · `1rem` below 46rem | 400 | 1.2 | — |
-| episode description / meta (date - duration) | `clamp(0.9rem, 1.2vw, 1.125rem)` | 400 | 1.6 on description | — |
-| small label | `0.8125rem` | 700 | — | — |
+| quote source label | `0.8125rem` | 700 | — | — |
+| platform bar, episode listen links | `clamp(0.875rem, 1.2vw, 1rem)`, a step under the body text | 700 | — | — |
 | footer | `0.8rem` · `0.875rem` above 46rem | 400 | — | — |
 
 ## Spacing & Layout
@@ -133,6 +133,7 @@ A fourth size means the stack itself is wrong.
 | `--space-s` | `clamp(1rem, 2vw, 1.5rem)` | Label to its subject |
 | `--space-m` | `clamp(2rem, 5vw, 3.5rem)` | Gap inside a block |
 | `--space-xl` | `clamp(4rem, 10vw, 8rem)` | Break between blocks |
+| `--row-pad` | `clamp(1.1rem, 2.2vw, 1.6rem)` | Not a gap: the padding above and below an episode row's text, named so `.season-title` can subtract it |
 | `--band` | `clamp(5rem, 13vw, 12rem)` · `clamp(5rem, 17vw, 8rem)` below 46rem | Credits page only: the one spacing value for that whole page |
 
 Bottom padding is `clamp(1.25rem, 5vh, var(--gutter))` — measured against
@@ -190,9 +191,9 @@ mechanism drives the per-episode listen links, so both drop to icons together.
 **Role:** The one sentence on the homepage, between masthead and list
 
 Bold uppercase, sized near the wordmark, wrapping edge to edge under it.
-Asymmetric margins on purpose: `--space-m` above ties it to the masthead,
-`--space-xl` below is the largest gap on the page and marks the break to the list.
-Centring it vertically in that gap was tried and read as floating.
+Spaced like the about statement: `--space-xl` above from the platform links, and
+`--space-xl` below plus `.episodes-layout`'s `--space-m` padding down to the cover
+and the first season, the same total as under the about statement.
 
 **Homepage entrance.** The credits page's entrance (the about page's `about-fade`
 and `about-drift`, 1.2s) on two beats: the tagline at 0.1s, then
@@ -212,7 +213,11 @@ aligned on the column edge. It is the site's only heading **not** uppercased:
 "Season 1" keeps its single capital, so it labels the list below it instead of
 reading as a second masthead. Spacing: no rule over the list, just `--space-m` of padding at the top of
 `.episodes-layout` down to the cover and the first heading, `--space-s` from a
-heading to its own rows, and `--space-m` from one season to the next. The pairing
+heading to its own rows (visible gap: the heading's bottom margin is
+`--space-s - --row-pad`, since the first row's own top padding supplies the rest;
+this matches an about page heading to its text, so changing `--space-s` moves
+both; below 40rem, where rows have no padding, the margin is plain `--space-s` and
+"Coming soon." drops its top padding), and `--space-m` from one season to the next. The pairing
 is what separates the seasons: each heading sits closer to its rows than to the
 season above. Not `--space-xl` between seasons any more, which was right when a
 season was a full-width block of the page and opens a hole in the column now.
@@ -282,9 +287,7 @@ the open text as `.episode-heading`, in the episode row's type a step larger
 that: description, meta, platform icons, with `--gutter` of padding above (the
 same as beside the cover) and `--space-m` below, so an open episode's end plus the
 next cover's `--gutter` is a clearly bigger break than between two closed covers.
-An open cover goes black and white (`filter: grayscale(1)`, 0.5s ease) and takes
-its colour back at the tap that closes it: `script.js` sets `.is-closing` on the
-row for the fold, since `open` itself stays set until the fold ends. That padding sits on `.episode-body`, not on the panel: the panel is what
+An open cover keeps its colour. That padding sits on `.episode-body`, not on the panel: the panel is what
 slides to 0, and padding on it would stop the fold short and then snap.
 
 Tapping a cover opens its text underneath and the covers below slide down;
@@ -293,8 +296,9 @@ one frame loop drives every sliding panel and the scroll together over 500ms on
 a cubic ease-in-out, so nothing moves on a separate clock. The panel heights
 ease, and so does the place on screen of the opening episode's title
 (`.episode-heading`), from where it sits under the cover at the tap to its
-`scroll-margin-top` (`--gutter`), so the title lands at the top and the cover
-scrolls off above. The scroll is whatever keeps it there each frame, set with
+`scroll-margin-top` (`calc(100svh / 3)`), so the title lands a third of the way
+down the screen: the bottom of the cover stays in view above it, the description
+runs below, then the next cover. The scroll is whatever keeps it there each frame, set with
 `scrollTo` to a whole pixel from its page position (fractional `scrollBy`
 nudges made the end of the ease shiver on mobile), so it travels one way only
 while a row above it folds.
@@ -328,8 +332,8 @@ cards 1 to 3 and 4 to 6. Removed under reduced motion.
 
 1. **Statement.** `.about-statement`, the page's one belief as a poster: bold
    uppercase at `clamp(1.35rem, 5vw, 4rem)` (`8vw` below 40rem), line height 1.1, `--space-xl` above
-   and below so it stands apart from the masthead rather than finishing it (the
-   homepage tagline's job). The sentence is `--muted`; only "the unexpected and
+   so it stands apart from the masthead, and `--space-xl` + `--space-m` below as a
+   wider break down to the principles. The homepage tagline uses the same gaps. The sentence is `--muted`; only "the unexpected and
    the improbable", a `<strong>` with its weight reset to inherit, is `--fg`. This
    gray-with-a-lit-phrase move exists only here.
 2. **Principles.** `.about-sections`, a three-column grid, `--space-m` gap, one

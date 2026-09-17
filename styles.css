@@ -72,6 +72,10 @@
   --space-s: clamp(1rem, 2vw, 1.5rem);
   --space-m: clamp(2rem, 5vw, 3.5rem);
   --space-xl: clamp(4rem, 10vw, 8rem);
+  /* Not a fourth gap: the air above and below the text of an episode row (and
+     the "Coming soon." row). A named value only so a season heading can take
+     it back off its own --space-s, see .season-title. */
+  --row-pad: clamp(1.1rem, 2.2vw, 1.6rem);
   /* The site's one motion, as two curves: opacity on ease-in-out so it fades up
      rather than snapping on, and movement on a gentle ease-out so it comes to
      rest. Every entrance and crossfade uses this pair. */
@@ -203,7 +207,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   gap: 0.75rem 1.75rem;
   margin-top: var(--space-m);
-  font-size: 0.8125rem;
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
   /* Bold uppercase at normal spacing, like the nav and episode rows: thin,
      widely tracked small caps read as a generic template label. */
   font-weight: 700;
@@ -273,14 +277,10 @@ a { color: inherit; text-decoration: none; }
    wordmark above it. Set in sentence case in the markup and capitalised here, so
    screen readers do not spell it out. */
 .tagline {
-  /* Asymmetric on purpose, and heavily so. The space above is the same as the one
-     above the platform links, which ties the wordmark, the links and this sentence
-     into a single masthead; the space below is the largest on the page, the break
-     between that masthead and the episode list. An earlier pass had these at
-     roughly 1:1.75 and the sentence read as floating between two voids rather than
-     belonging to either. A fully centred split was tried on 2026-09-17 and read
-     the same way. */
-  margin: var(--space-m) 0 var(--space-xl);
+  /* The same gaps as the about page's statement: --space-xl down from the
+     platform links, and --space-xl here plus the --space-m that .episodes-layout
+     pads in above the list, the same total as under that statement. */
+  margin: var(--space-xl) 0;
   font-size: clamp(1.35rem, 3vw, 3.75rem);
   font-weight: 700;
   line-height: 1.15;
@@ -314,9 +314,12 @@ a { color: inherit; text-decoration: none; }
    a second masthead. No text-transform, so the markup's case is what renders.
    No top margin, so the first heading starts level with the top of the cover
    beside it; --space-s below pins it to its own rows, the "label to its subject"
-   gap, which also keeps it tighter to its list than to the next season. */
+   gap, which also keeps it tighter to its list than to the next season. The rows
+   carry --row-pad of air above their text with no rule to show it, so that is
+   taken back off here: the visible gap is exactly --space-s, the same as from an
+   about page heading to its text. */
 .season-title {
-  margin: 0 0 var(--space-s);
+  margin: 0 0 calc(var(--space-s) - var(--row-pad));
   font-size: clamp(1.6rem, 4vw, 3.25rem);
   font-weight: 700;
   line-height: 1.2;
@@ -329,7 +332,7 @@ a { color: inherit; text-decoration: none; }
    heading. */
 .season-coming {
   margin: 0;
-  padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
+  padding: var(--row-pad) 0;
   color: var(--muted);
   font-weight: 700;
   font-size: clamp(0.95rem, 1.9vw, 1.45rem);
@@ -446,7 +449,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
+  padding: var(--row-pad) 0;
   cursor: pointer;
   list-style: none;
   font-weight: 700;
@@ -511,13 +514,13 @@ a { color: inherit; text-decoration: none; }
 .episode-meta {
   margin: 0;
   color: var(--muted);
-  font-size: clamp(0.9rem, 1.2vw, 1.125rem);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
 }
 
 .episode-description {
   max-width: 60ch;
   color: var(--muted);
-  font-size: clamp(0.9rem, 1.2vw, 1.125rem);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
   line-height: 1.6;
   text-align: justify;
   hyphens: auto;
@@ -535,7 +538,7 @@ a { color: inherit; text-decoration: none; }
   margin-top: 1.75rem;
   padding: 0;
   list-style: none;
-  font-size: 0.8125rem;
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -639,15 +642,22 @@ a { color: inherit; text-decoration: none; }
      feed reads as one even grid of cover and margin. */
   .episodes > li + li { margin-top: var(--gutter); }
 
-  /* Where script.js stops the page when it opens a cover: its title at the
-     top, with a gutter of air above it, the same as above the wordmark. The
-     cover itself scrolls off above. */
-  .episode-heading { scroll-margin-top: var(--gutter); }
+  /* Where script.js stops the page when it opens a cover: its title a third
+     of the way down the screen, so the bottom of the cover stays in view above
+     it and the description runs on below. svh, so the spot does not shift as
+     the browser bars show and hide. */
+  .episode-heading { scroll-margin-top: calc(100svh / 3); }
 
   .episode-summary {
     display: block;
     padding: 0;
   }
+
+  /* The rows lose their padding here, so the heading keeps its full --space-s
+     down to the first cover, and "Coming soon." drops its top padding to sit the
+     same --space-s under its heading. */
+  .season-title { margin-bottom: var(--space-s); }
+  .season-coming { padding-top: 0; }
 
   .episode-summary .episode-art {
     display: block;
@@ -657,12 +667,7 @@ a { color: inherit; text-decoration: none; }
     object-fit: cover;
     border-radius: 6px;
     background: var(--surface);
-    transition: filter 0.5s ease;
   }
-
-  /* An open cover goes black and white, and takes its colour back as soon as
-     it is tapped closed (.is-closing, set by script.js for the fold). */
-  .episode[open]:not(.is-closing) .episode-art { filter: grayscale(1); }
 
   /* --gutter above the text, the same air as beside the cover, and --space-m
      below, which with the --gutter before the next cover makes a clearly
@@ -928,7 +933,7 @@ a { color: inherit; text-decoration: none; }
 .credit-role,
 .credit-location {
   margin: 0.5rem 0 0;
-  font-size: clamp(0.9rem, 1.4vw, 1.125rem);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
   line-height: 1.2;
   /* The column is exactly one portrait wide, which the longest role outgrows.
      These two lines are allowed a little under a third of the gutter on each
@@ -1030,11 +1035,11 @@ a { color: inherit; text-decoration: none; }
 
 /* The page's one belief, as a poster. The site nav's scale and case, so it holds
    its own under the wordmark, but pulled a step back in gray: only the words the
-   podcast is about light up in --fg. --space-xl both sides, so it stands apart
-   from the masthead as a block instead of finishing it the way the homepage
-   tagline does. */
+   podcast is about light up in --fg. --space-xl above, so it stands apart from
+   the masthead as a block, and --space-xl plus --space-m below, a wider break
+   down to the principles. The homepage tagline uses the same pair. */
 .about-statement {
-  margin: var(--space-xl) 0;
+  margin: var(--space-xl) 0 calc(var(--space-xl) + var(--space-m));
   color: var(--muted);
   font-size: clamp(1.35rem, 5vw, 4rem);
   font-weight: 700;
