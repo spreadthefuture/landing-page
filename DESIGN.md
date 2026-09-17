@@ -252,21 +252,22 @@ each row of cards at 0.2s and 0.3s, the videographers at 0.4s. Whole by about 1.
 Removed under reduced motion.
 
 ### About page
-A manifesto in three beats, loud to quiet:
+A manifesto in three beats, the statement landing as the conclusion:
 
-1. **Statement.** `.about-statement`, bold uppercase, `--space-xl` above and
+1. **Principles.** `.about-sections`, `--space-xl` below the masthead, three columns
+   with `--space-m` gap, one below 46rem, no rules. Each heading has its number (`01`
+   to `03`, `aria-hidden`, `--muted`) on its own line above, so headings start level.
+   Prose in `--fg`, `--space-s` below.
+2. **Statement.** `.about-statement`, bold uppercase, `--space-xl` above and
    `--space-xl` + `--space-m` below. The sentence is `--muted`; only "the unexpected
    and the improbable" (a `<strong>` with weight reset) is `--fg`. The same lit-phrase
    move as the homepage tagline, on different words, so the two pages don't echo.
-2. **Principles.** `.about-sections`, three columns with `--space-m` gap, one below
-   46rem, no rules. Each heading has its number (`01` to `03`, `aria-hidden`, `--muted`)
-   on its own line above, so headings start level. Prose in `--fg`, `--space-s` below.
 3. **Sign off.** `.about-closing`, centred, `--space-xl` above, prose size in
    `--muted`, its credits link in `--fg` and underlined.
 
 **Entrance:** pure CSS, in reading order, 1.8s per block: opacity on `ease-in-out`
-and a 0.375rem drift on `--ease-drift`. Delays: statement 0.15s, principles 0.6s /
-0.85s / 1.1s, sign off 1.35s. Whole by about 3s. The brief is calm. Under reduced
+and a 0.375rem drift on `--ease-drift`. Delays: principles 0.15s / 0.4s / 0.65s,
+statement 1s, sign off 1.35s. Whole by about 3s. The brief is calm. Under reduced
 motion the animations are removed, not shortened, because the global rule does not
 shorten delays.
 
