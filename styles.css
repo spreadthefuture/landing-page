@@ -278,7 +278,8 @@ a { color: inherit; text-decoration: none; }
      into a single masthead; the space below is the largest on the page, the break
      between that masthead and the episode list. An earlier pass had these at
      roughly 1:1.75 and the sentence read as floating between two voids rather than
-     belonging to either. */
+     belonging to either. A fully centred split was tried on 2026-09-17 and read
+     the same way. */
   margin: var(--space-m) 0 var(--space-xl);
   font-size: clamp(1.35rem, 3vw, 3.75rem);
   font-weight: 700;
@@ -298,7 +299,7 @@ a { color: inherit; text-decoration: none; }
 
 /* One section per season: the heading, then that season's rows. The seasons are
    stacked in the column beside the cover, so the first one starts flush with the
-   top of that column (.episodes-layout owns the --space-m down from its rule),
+   top of that column (.episodes-layout owns the --space-m above it),
    and season to season is --space-m. Not --space-xl: that gap is the break
    between blocks of the page, and inside one column it opens a hole beside the
    cover. The pairing is what carries the hierarchy instead: --space-s from a
@@ -362,16 +363,15 @@ a { color: inherit; text-decoration: none; }
 /* The persistent cover on the left and every season's rows on the right, once
    for the page. The panel is a fixed width, the seasons column takes what's
    left. Sticky is bounded by this container, so the cover travels the whole list
-   and releases at the end of the last season. The top border is the one rule
-   over the whole list, the same line as between episode rows, with --space-m
-   down to the cover and the first heading. */
+   and releases at the end of the last season. No rule over the list: the
+   tagline's --space-xl is the break, plus --space-m down to the cover and the
+   first heading. */
 .episodes-layout {
   position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--space-m);
   padding-top: var(--space-m);
-  border-top: 1px solid var(--rule);
 }
 
 /* Shows its own season's latest cover at rest, swaps to whichever row of that
@@ -507,13 +507,12 @@ a { color: inherit; text-decoration: none; }
 .episode-heading { display: none; }
 
 .episode-meta {
-  margin-top: 0;
+  margin: 0;
   color: var(--muted);
   font-size: clamp(0.9rem, 1.2vw, 1.125rem);
 }
 
 .episode-description {
-  margin-top: 1.5rem;
   max-width: 60ch;
   color: var(--muted);
   font-size: clamp(0.9rem, 1.2vw, 1.125rem);
@@ -612,16 +611,14 @@ a { color: inherit; text-decoration: none; }
 /* Below 40rem the list becomes a feed of covers: nothing pinned, no rows, no
    rules. Each summary is its episode's cover, and tapping it opens the text
    underneath, pushing the covers below it down. The season headings and the
-   coming-soon row stay; the rule over the list and the page's one cover panel
-   go, since every row now carries its own cover. Titles are still in the summary for screen
+   coming-soon row stay; the page's one cover panel
+   goes, since every row now carries its own cover. Titles are still in the summary for screen
    readers (see the .platform-name rule), and shown on screen at the top of the
    open text. script.js slides the text open and closed and brings the tapped
    cover to the top; without it the text simply appears. */
 @media (max-width: 40rem) {
   .episode-art-panel,
   .episode-toggle { display: none; }
-
-  .episodes-layout { border-top: 0; }
 
   .episode { border-bottom: 0; }
 
@@ -663,7 +660,7 @@ a { color: inherit; text-decoration: none; }
   .episode-panel { padding: 0; }
   .episode-body { padding: var(--gutter) 0 var(--space-m); }
 
-  /* The episode row's type, a step larger, number in gray, above the meta line. */
+  /* The episode row's type, a step larger, number in gray, above the description. */
   .episode-heading {
     display: block;
     margin: 0 0 0.75rem;
@@ -673,8 +670,6 @@ a { color: inherit; text-decoration: none; }
     letter-spacing: 0.01em;
     text-transform: uppercase;
   }
-
-  .episode-meta { margin-bottom: 0; }
 }
 
 /* Set by script.js only while a cover slides open and the page scrolls to it.

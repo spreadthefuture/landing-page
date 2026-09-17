@@ -31,7 +31,7 @@ to it.
 | Near black | `--bg` | `#0A0A0A` | The page canvas, everywhere. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | All primary text, the wordmark, icon fill at rest, the focus ring. Never pure white |
 | Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the per-episode listen links and their icons at rest, the "Listen on" label, credit locations, the mobile nav divider, the footer's social links, the "Coming soon." row in an announced season |
-| Rule | `--rule` | `#2A2A2A` | The 1px line over the episode list and under every episode row, above 40rem. The only border in the system |
+| Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row, above 40rem. The only border in the system |
 | Surface | `--surface` | `#1A1A1A` | Sits behind cover artwork while it loads, so the frame is never a hole in the page |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only. A step further back than `--muted` |
 
@@ -192,6 +192,7 @@ mechanism drives the per-episode listen links, so both drop to icons together.
 Bold uppercase, sized near the wordmark, wrapping edge to edge under it.
 Asymmetric margins on purpose: `--space-m` above ties it to the masthead,
 `--space-xl` below is the largest gap on the page and marks the break to the list.
+Centring it vertically in that gap was tried and read as floating.
 
 **Homepage entrance.** The credits page's entrance (the about page's `about-fade`
 and `about-drift`, 1.2s) on two beats: the tagline at 0.1s, then
@@ -209,8 +210,8 @@ it: the first heading starts level with the top of the cover. The heading is the
 credits page's "Our Team" type (`clamp(1.6rem, 4vw, 3.25rem)`, bold), left
 aligned on the column edge. It is the site's only heading **not** uppercased:
 "Season 1" keeps its single capital, so it labels the list below it instead of
-reading as a second masthead. Spacing: a `--rule` line over the list (`.episodes-layout`'s top border, desktop
-only), then `--space-m` down to the cover and the first heading, `--space-s` from a
+reading as a second masthead. Spacing: no rule over the list, just `--space-m` of padding at the top of
+`.episodes-layout` down to the cover and the first heading, `--space-s` from a
 heading to its own rows, and `--space-m` from one season to the next. The pairing
 is what separates the seasons: each heading sits closer to its rows than to the
 season above. Not `--space-xl` between seasons any more, which was right when a
@@ -232,8 +233,9 @@ Native `<details>` / `<summary>`, every row sharing `name="episode"` so opening
 one closes the last. Works with JavaScript off. The summary is a flex line: gray
 number, bold uppercase title (wrapping, never truncated), and a plus/minus toggle
 at the right edge built from two `::before`/`::after` bars, sized in `em` so it
-scales with the row. A `--rule` line under every row (above 40rem; the mobile feed has none). Opening reveals meta,
-description (justified, hyphenated, capped at 60ch) and platform links.
+scales with the row. A `--rule` line under every row (above 40rem; the mobile feed has none). Opening reveals the
+description (justified, hyphenated, capped at 60ch), then meta (date - duration)
+and platform links.
 
 ### Episode art panel
 **Role:** Persistent square cover beside the whole episode list
@@ -270,7 +272,7 @@ covers (the same air as either side of them). The number and title stay in the s
 on the mobile `.platform-name` visually-hidden rule) and are shown at the top of
 the open text as `.episode-heading`, in the episode row's type a step larger
 (bold uppercase, 1.15rem, number in `--muted`), `aria-hidden` so they are not read twice. Below
-that: meta, description, platform icons, with `--gutter` of padding above (the
+that: description, meta, platform icons, with `--gutter` of padding above (the
 same as beside the cover) and `--space-m` below, so an open episode's end plus the
 next cover's `--gutter` is a clearly bigger break than between two closed covers.
 An open cover goes black and white (`filter: grayscale(1)`, 0.5s ease) and takes
@@ -297,8 +299,8 @@ animation or scrolling.
 ### Hairline rule
 **Role:** The only divider in the system
 
-1px `var(--rule)`, as the `border-top` of `.episodes-layout` and a `border-bottom` on every
-`.episode`, above 40rem only. There is no standalone divider element and no other
+1px `var(--rule)`, as a `border-bottom` on every `.episode`, above 40rem only.
+There is no rule over the list. There is no standalone divider element and no other
 border anywhere.
 ### Credit card
 **Role:** One team member
