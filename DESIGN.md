@@ -36,7 +36,7 @@ near-duplicate.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | Primary text, the wordmark, icons at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the tagline and about statement, the mobile nav divider, footer social links, "Coming soon." |
+| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, the mobile nav divider, footer social links, "Coming soon." |
 | Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row, above 46rem. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only |
@@ -79,9 +79,9 @@ uses the same trick with `Arial-BoldMT`.
 
 - **Weights:** 400 (body, meta, prose) and 700 (everything else). Nothing else.
 - **Case:** uppercase for the site nav, platform labels, episode rows, credit names,
-  the homepage tagline, the about statement and about headings. Written in sentence
+  the about statement and about headings. Written in sentence
   case in the markup and uppercased in CSS, so screen readers read words. Not
-  uppercased: the season heading ("Season 1"), the quotes, and the credits headings.
+  uppercased: the homepage tagline, the season heading ("Season 1"), the quotes, and the credits headings.
   The brand name is the one thing uppercase in the markup.
 - **Line height:** `1.2` on `body`, `1` on the site nav, `1.6` on prose.
   `line-height: 0` on the wordmark and `1` on the RSS word are box resets.
@@ -168,12 +168,12 @@ hidden and the icons enlarge. The same `.platform-name` rule drives the per-epis
 listen links.
 
 ### Tagline
-The homepage's one sentence, bold uppercase, wrapping edge to edge. Lit like the
-about statement: the sentence is `--muted`, and "explore possible tomorrows" and
-"the one worth spreading" are `<strong>`s in `--fg` with the weight reset.
+The homepage's one sentence, bold, in sentence case and all `--fg`, wrapping edge
+to edge. No lit phrases.
 
-Same gaps as the about statement: `--space-xl` above, `--space-xl` plus `.episodes-layout`'s
-`--space-m` padding below.
+`--space-xl` minus `--space-m` above, tighter than the about statement, so it
+leans toward the masthead. Below, the same as the about statement: `--space-xl` plus
+`.episodes-layout`'s `--space-m` padding.
 
 **Homepage entrance:** `fade-in` and `drift-in` over 1.2s, in two beats: tagline at
 0.1s, then the whole `.episodes-layout` at 0.2s. The header stays still. Settled by
@@ -260,8 +260,7 @@ A manifesto in three beats, the statement landing as the conclusion:
    Prose in `--fg`, `--space-s` below.
 2. **Statement.** `.about-statement`, bold uppercase, `--space-xl` above and
    `--space-xl` + `--space-m` below. The sentence is `--muted`; only "the unexpected
-   and the improbable" (a `<strong>` with weight reset) is `--fg`. The same lit-phrase
-   move as the homepage tagline, on different words, so the two pages don't echo.
+   and the improbable" (a `<strong>` with weight reset) is `--fg`.
 3. **Sign off.** `.about-closing`, centred, `--space-xl` above, prose size in
    `--muted`, its credits link in `--fg` and underlined.
 
@@ -352,7 +351,7 @@ apart.
 
 Left as is, each waiting on a design call:
 
-- **Page openers.** Tagline and about statement are both uppercase at different sizes;
+- **Page openers.** Tagline (sentence case, all white) and about statement (uppercase, lit phrases) differ in size and treatment;
 - **Off-token values.** Summary gap `1.5rem`, `.episode-links` top `1.75rem`,
   `.episode-body` bottom `clamp(2.5rem, 5vw, 4rem)`, credit name/role margins
   `1rem` / `0.5rem`, mobile open heading margin `0.75rem`, toggle transition `0.25s`

@@ -289,21 +289,19 @@ a { color: inherit; text-decoration: none; }
 /* ---- Tagline ---- */
 
 /* The paragraph that opens the home page, between the header and the episode
-   list. Uppercase like the episode rows, set nearly as large as the wordmark and
-   on the page's left edge under it, wrapping naturally edge to edge like the
-   wordmark above it. Set in sentence case in the markup and capitalised here, so
-   screen readers do not spell it out. */
+   list. Sentence case in soft white, set nearly as large as the wordmark and on
+   the page's left edge under it, wrapping naturally edge to edge like the
+   wordmark above it. */
 .tagline {
-  /* The same gaps as the about page's statement: --space-xl down from the
-     platform links, and --space-xl here plus the --space-m that .episodes-layout
-     pads in above the list, the same total as under that statement. */
-  margin: var(--space-xl) 0;
-  color: var(--muted);
+  /* Well under the break below: --space-xl less --space-m down
+     from the platform links, so the sentence leans toward the masthead, and
+     --space-xl here plus the --space-m that .episodes-layout pads in above the
+     list, the same total as under the about statement. */
+  margin: calc(var(--space-xl) - var(--space-m)) 0 var(--space-xl);
   font-size: clamp(1.35rem, 3vw, 3.75rem);
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.01em;
-  text-transform: uppercase;
 }
 
 /* Below this width the sentence is sized off the viewport instead of the clamp
@@ -1046,7 +1044,7 @@ a { color: inherit; text-decoration: none; }
    its own under the wordmark, but pulled a step back in gray: only the words the
    podcast is about light up in --fg. --space-xl above, so it stands apart from
    the principles as a block, and --space-xl plus --space-m below, a wider break
-   down to the sign off. The homepage tagline uses the same pair. */
+   down to the sign off. */
 .about-statement {
   margin: var(--space-xl) 0 calc(var(--space-xl) + var(--space-m));
   color: var(--muted);
@@ -1066,9 +1064,8 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* The lit phrases, shared with the homepage tagline. Inherit, not the
-   browser's bolder: there is no weight above 700. */
-.tagline strong,
+/* The lit phrases. Inherit, not the browser's bolder: there is no weight
+   above 700. */
 .about-statement strong {
   color: var(--fg);
   font-weight: inherit;
