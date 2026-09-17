@@ -259,22 +259,30 @@ cover instead.
 A feed of covers, nothing pinned. The season headings, the "Coming soon." row
 and the lead-in stay (the lead-in loses its rule); the episode rows lose their
 rules, number, title and toggle, and each summary is just its episode's cover:
-full column width, square, 6px radius over `--surface`, `--space-s` between
-covers. The number and title stay in the summary for screen readers (they ride
+full column width, square, 6px radius over `--surface`, `--gutter` between
+covers (the same air as either side of them). The number and title stay in the summary for screen readers (they ride
 on the mobile `.platform-name` visually-hidden rule) and are shown at the top of
 the open text as `.episode-heading`, in the episode row's type a step larger
 (bold uppercase, 1.15rem, number in `--muted`), `aria-hidden` so they are not read twice. Below
-that: meta, description, platform icons, with `--space-s` of padding above and
-below. That padding sits on `.episode-body`, not on the panel: the panel is what
+that: meta, description, platform icons, with `--gutter` of padding above (the
+same as beside the cover) and `--space-m` below, so an open episode's end plus the
+next cover's `--gutter` is a clearly bigger break than between two closed covers.
+An open cover goes black and white (`filter: grayscale(1)`, 0.5s ease) and takes
+its colour back at the tap that closes it: `script.js` sets `.is-closing` on the
+row for the fold, since `open` itself stays set until the fold ends. That padding sits on `.episode-body`, not on the panel: the panel is what
 slides to 0, and padding on it would stop the fold short and then snap.
 
 Tapping a cover opens its text underneath and the covers below slide down;
 tapping it again folds it back; opening one closes any other. With `script.js`,
 one frame loop drives every sliding panel and the scroll together over 500ms on
 a cubic ease-in-out, so nothing moves on a separate clock. The panel heights
-ease, and so does the tapped cover's place on screen, from where it was tapped
-to its `scroll-margin-top` (`--gutter`); the scroll is whatever keeps it there
-each frame, so the cover travels one way only while a row above it folds.
+ease, and so does the place on screen of the opening episode's title
+(`.episode-heading`), from where it sits under the cover at the tap to its
+`scroll-margin-top` (`--gutter`), so the title lands at the top and the cover
+scrolls off above. The scroll is whatever keeps it there each frame, set with
+`scrollTo` to a whole pixel from its page position (fractional `scrollBy`
+nudges made the end of the ease shiver on mobile), so it travels one way only
+while a row above it folds.
 `.is-feed-moving` switches scroll anchoring off on the root for the length of
 the motion. Closing does not scroll. Under reduced motion
 both are instant. Without JS the native accordion opens and closes without

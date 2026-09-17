@@ -6,7 +6,7 @@
 // still written per layout so a second one would work on its own.
 
 // The mobile feed (styles.css, below 40rem): every row is a cover, and a tap
-// slides its text open while the page brings that cover to the top.
+// slides its text open while the page brings that episode's title to the top.
 const feed = window.matchMedia('(max-width: 40rem)');
 const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 const FEED_DURATION = 500;
@@ -43,7 +43,8 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   // from a single frame loop on a single curve, so the page never moves on one
   // clock and the panels on another. A tap mid-motion starts a new one from
   // wherever everything currently is. Closing only clears `open` once the fold
-  // has finished, so the text stays visible while it folds.
+  // has finished, so the text stays visible while it folds; .is-closing marks
+  // that fold, so the cover takes its colour back at the tap, not at the end.
   const root = document.documentElement;
   let motion = null;
   let frame = null;
@@ -52,6 +53,7 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     const panel = details.querySelector('.episode-panel');
     const from = details.open ? panel.getBoundingClientRect().height : 0;
     details.open = true;
+    details.classList.toggle('is-closing', !opening);
     panel.style.height = '';
     const to = opening ? panel.scrollHeight : 0;
     panel.style.overflow = 'hidden';
@@ -69,12 +71,15 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       panel.style.height = `${from + (to - from) * e}px`;
     }
 
-    // The cover's place on screen is what eases, from where it was tapped to its
+    // The focus's place on screen is what eases, from where it was tapped to its
     // scroll-margin-top, so it travels one way only however the rows above it
     // fold. Read after the heights are written, so this frame's fold counts.
+    // Scrolled to a whole pixel, worked out from the page position rather than
+    // nudged by the fractional difference: browsers round the scroll, and those
+    // sub-pixel nudges made the slow end of the ease shiver up and down.
     if (m.focus) {
-      const top = m.focus.getBoundingClientRect().top;
-      window.scrollBy(0, top - (m.topFrom + (m.margin - m.topFrom) * e));
+      const top = m.focus.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo(0, Math.round(top - (m.topFrom + (m.margin - m.topFrom) * e)));
     }
 
     if (t < 1) {
@@ -85,6 +90,7 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       panel.style.height = '';
       panel.style.overflow = '';
       if (!to) details.open = false;
+      details.classList.remove('is-closing');
     }
     motion = null;
     frame = null;
@@ -121,7 +127,8 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       }
       const changes = current ? [[current, false], [details, true]] : [[details, true]];
       current = details;
-      run(changes, details);
+      // The open text's title is what comes to the top, not the cover above it.
+      run(changes, details.querySelector('.episode-heading'));
       return;
     }
 

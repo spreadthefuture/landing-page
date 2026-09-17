@@ -601,13 +601,14 @@ a { color: inherit; text-decoration: none; }
 
   .episode { border-bottom: 0; }
 
-  /* --space-s between covers, the same gap that pins a heading to its rows,
-     so a season heading and its first cover sit as close as two covers do. */
-  .episodes > li + li { margin-top: var(--space-s); }
+  /* --gutter between covers, the same air as either side of them, so the
+     feed reads as one even grid of cover and margin. */
+  .episodes > li + li { margin-top: var(--gutter); }
 
-  /* Where script.js stops the page when it brings a cover to the top: a
-     gutter of air above it, the same as above the wordmark. */
-  .episode { scroll-margin-top: var(--gutter); }
+  /* Where script.js stops the page when it opens a cover: its title at the
+     top, with a gutter of air above it, the same as above the wordmark. The
+     cover itself scrolls off above. */
+  .episode-heading { scroll-margin-top: var(--gutter); }
 
   .episode-summary {
     display: block;
@@ -622,14 +623,21 @@ a { color: inherit; text-decoration: none; }
     object-fit: cover;
     border-radius: 6px;
     background: var(--surface);
+    transition: filter 0.5s ease;
   }
 
-  /* A --space-s cushion above and below the text, so an open cover's text sits
-     as far from the next cover as the heading sits from its cover. It lives on
-     the body, not the panel: script.js slides the panel's height to 0, and
-     padding on the panel itself would stop it short and then snap shut. */
+  /* An open cover goes black and white, and takes its colour back as soon as
+     it is tapped closed (.is-closing, set by script.js for the fold). */
+  .episode[open]:not(.is-closing) .episode-art { filter: grayscale(1); }
+
+  /* --gutter above the text, the same air as beside the cover, and --space-m
+     below, which with the --gutter before the next cover makes a clearly
+     bigger break than the one between two closed covers, so the next episode
+     reads as a new one. It lives on the body, not the panel: script.js slides
+     the panel's height to 0, and padding on the panel itself would stop it
+     short and then snap shut. */
   .episode-panel { padding: 0; }
-  .episode-body { padding: var(--space-s) 0; }
+  .episode-body { padding: var(--gutter) 0 var(--space-m); }
 
   /* The episode row's type, a step larger, number in gray, above the meta line. */
   .episode-heading {
