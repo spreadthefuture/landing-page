@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-17
+> Last updated: 2026-09-18
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows, no borders except hairline rules, no chromatic color except three platform
@@ -179,6 +179,17 @@ leans toward the masthead. Below, the same as the about statement: `--space-xl` 
 0.1s, then the whole `.episodes-layout` at 0.2s. The header stays still. Settled by
 about 1.5s. Pure CSS, removed under reduced motion.
 
+**Intro (trial):** on every visit and reload, the page opens on the header and the
+tagline only: the sentence, at its usual size, is centred in the space left below
+the header, with a muted `↓` at the foot of the screen fading in at 1.2s. Everything
+below is taken out and the page does not scroll. The first scroll, key or tap swaps
+`.is-intro` for `.is-revealed`: the sentence glides into its usual place over 1.2s
+on `--ease-drift`, and `.episodes-layout` plays the entrance above at 0.2s. The
+header stays still. `.is-intro` is set by an inline script in the head (before first
+paint) and never on back/forward navigation, a `#` link or under reduced motion; if
+`script.js` does not arm it by `load`, it is dropped. Without JS the page is
+unchanged.
+
 ### Season section
 A `<section class="season">` per season, newest first, stacked in `.seasons` to the
 right of the cover. The first heading starts level with the top of the cover. The
@@ -308,7 +319,7 @@ apart.
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
   (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`) for movement. One pair of keyframes,
   `fade-in` and `drift-in` (0.375rem rise). Opacity never goes on an ease-out: it snaps
-  on. Entrances start within 0.3s and settle by about 1.5s (about is the 3s
+  on. Entrances start within 0.3s (of load, or of the first scroll after the homepage intro) and settle by about 1.5s (about is the 3s
   exception). No animation library.
 - **Reduced motion:** a global `prefers-reduced-motion` block cuts every transition,
   animation and smooth scroll to 0.01ms.

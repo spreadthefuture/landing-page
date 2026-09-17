@@ -14,6 +14,32 @@ const FEED_DURATION = 500;
 // Ease in and out, so the fold starts as gently as it lands.
 const feedEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
 
+// The home intro (styles.css): the first scroll, key or tap ends it. The
+// sentence is measured by its text, not its box, before and after the swap, and
+// eased from the one place to the other.
+const tagline = document.querySelector('.tagline');
+
+if (tagline && document.documentElement.classList.contains('is-intro')) {
+  const cues = ['wheel', 'touchmove', 'keydown', 'click', 'scroll'];
+  const textTop = () => {
+    const range = document.createRange();
+    range.selectNodeContents(tagline);
+    return range.getBoundingClientRect().top;
+  };
+  const reveal = () => {
+    for (const cue of cues) window.removeEventListener(cue, reveal);
+    const from = textTop();
+    document.documentElement.classList.replace('is-intro', 'is-revealed');
+    window.scrollTo(0, 0);
+    tagline.animate(
+      [{ transform: `translateY(${from - textTop()}px)` }, { transform: 'none' }],
+      { duration: 1200, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' },
+    );
+  };
+  for (const cue of cues) window.addEventListener(cue, reveal, { passive: true });
+  document.documentElement.classList.add('is-intro-armed');
+}
+
 for (const layout of document.querySelectorAll('.episodes-layout')) {
   const lists = layout.querySelectorAll('.episodes');
   const artPanel = layout.querySelector('.episode-art-panel');
