@@ -1,5 +1,5 @@
 // Enhancement only: the site is complete with this file absent, the page just
-// jumps on open and the covers pop instead of crossfading.
+// jumps on open, the covers pop instead of crossfading, and the quotes stack.
 //
 // One .episodes-layout holds the page's single cover panel and, beside it, every
 // season's list. The panel answers to any row in any of those lists; the loop is
@@ -162,14 +162,26 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   const firstCover = layout.querySelector('.episode-art');
   const defaultSrc = firstCover ? firstCover.src : null;
 
+  // Applied once per frame, with the last cover asked for. Moving from one row
+  // to the next fires leave and enter together; swapping on both would flip the
+  // layers back before the browser draws, so the new cover would replace the old
+  // one in place, with no crossfade and no settle.
+  let pendingSrc = null;
+  let swapFrame = null;
+
   const showArt = (src) => {
-    if (!src || src === currentSrc) return;
-    currentSrc = src;
-    const next = layers[1 - activeLayer];
-    next.src = src;
-    next.classList.add('is-active');
-    layers[activeLayer].classList.remove('is-active');
-    activeLayer = 1 - activeLayer;
+    if (!src) return;
+    pendingSrc = src;
+    swapFrame ??= requestAnimationFrame(() => {
+      swapFrame = null;
+      if (pendingSrc === currentSrc) return;
+      currentSrc = pendingSrc;
+      const next = layers[1 - activeLayer];
+      next.src = currentSrc;
+      next.classList.add('is-active');
+      layers[activeLayer].classList.remove('is-active');
+      activeLayer = 1 - activeLayer;
+    });
   };
 
   showArt(defaultSrc);
@@ -231,4 +243,17 @@ if (quotes.length > 1) {
   quoteBlock.append(nav);
   showQuote(0);
   requestAnimationFrame(() => requestAnimationFrame(() => quoteBlock.classList.remove('is-starting')));
+
+  // The block rises in the first time it comes into view, and the rotation
+  // waits for that (.is-waiting holds the bar's fill in styles.css). Under
+  // reduced motion it is simply there.
+  if (!calm.matches && 'IntersectionObserver' in window) {
+    quoteBlock.classList.add('is-waiting');
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      quoteBlock.classList.replace('is-waiting', 'is-entering');
+      observer.disconnect();
+    }, { threshold: 0.25 });
+    observer.observe(quoteBlock);
+  }
 }

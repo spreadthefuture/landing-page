@@ -72,6 +72,11 @@
   --space-s: clamp(1rem, 2vw, 1.5rem);
   --space-m: clamp(2rem, 5vw, 3.5rem);
   --space-xl: clamp(4rem, 10vw, 8rem);
+  /* The site's one motion, as two curves: opacity on ease-in-out so it fades up
+     rather than snapping on, and movement on a gentle ease-out so it comes to
+     rest. Every entrance and crossfade uses this pair. */
+  --ease-fade: ease-in-out;
+  --ease-drift: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   color-scheme: dark;
 }
 
@@ -350,6 +355,31 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
+/* Entrance, the about page's fade and drift at the credits page's tempo: the
+   tagline, the lead-in, then the cover and every season together as one block,
+   100ms apart. The header stays still, as on the other pages. The list is
+   legible by about half a second and the page settled by about 1.5s. The
+   layout's transform ends at none, so the sticky cover is unaffected after. */
+.tagline,
+.episodes-lead,
+.episodes-layout {
+  animation:
+    about-fade 1.2s var(--ease-fade) both,
+    about-drift 1.2s var(--ease-drift) both;
+  animation-delay: 0.1s;
+}
+
+.episodes-lead { animation-delay: 0.2s; }
+.episodes-layout { animation-delay: 0.3s; }
+
+/* Removed outright, as on the other pages: the global rule shortens durations
+   but not delays. */
+@media (prefers-reduced-motion: reduce) {
+  .tagline,
+  .episodes-lead,
+  .episodes-layout { animation: none; }
+}
+
 /* ---- Episode list ---- */
 
 /* The persistent cover on the left and every season's rows on the right, once
@@ -387,7 +417,14 @@ a { color: inherit; text-decoration: none; }
 /* Two stacked copies of whatever cover is current. script.js loads the next
    image into the hidden layer, then swaps which one is .is-active so the
    opacity transition crossfades between real pixels instead of flashing
-   through an empty frame. */
+   through an empty frame.
+
+   The incoming cover also settles from a hair larger than the frame, which
+   clips it, so the change reads as a print laid down rather than a slide
+   swapped. Scale, not a rise: a rise would open a gap at the bottom edge. An
+   animation rather than a transition, so it replays in full every time a layer
+   becomes active, even one that was still fading out a moment ago. The
+   outgoing layer only fades. */
 .episode-art-layer {
   position: absolute;
   inset: 0;
@@ -395,10 +432,17 @@ a { color: inherit; text-decoration: none; }
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.4s var(--ease-fade);
 }
 
-.episode-art-layer.is-active { opacity: 1; }
+.episode-art-layer.is-active {
+  opacity: 1;
+  animation: cover-settle 0.8s var(--ease-drift);
+}
+
+@keyframes cover-settle {
+  from { transform: scale(1.015); }
+}
 
 /* The column beside the cover: every season heading and every row. min-width: 0
    so a long episode title wraps inside it rather than widening the flex item and
@@ -715,17 +759,41 @@ a { color: inherit; text-decoration: none; }
   opacity: 0;
   visibility: hidden;
   transform: translateY(0.5rem);
-  transition: opacity 0.6s ease, transform 0.6s ease, visibility 0s linear 0.6s;
+  transition:
+    opacity 0.6s var(--ease-fade),
+    transform 0.6s var(--ease-drift),
+    visibility 0s linear 0.6s;
 }
 
 .quotes.is-rotating .quote.is-active {
   opacity: 1;
   visibility: visible;
   transform: none;
-  transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s, visibility 0s;
+  transition:
+    opacity 0.6s var(--ease-fade) 0.2s,
+    transform 0.6s var(--ease-drift) 0.2s,
+    visibility 0s;
 }
 
 .quotes.is-starting .quote { transition: none; }
+
+/* The block rises in the first time it scrolls into view, the homepage
+   entrance's fade and drift, with the bars a beat behind the words. script.js
+   sets .is-waiting (never under reduced motion), so without it the quotes are
+   simply there. Waiting also holds the first bar's fill, so the rotation starts
+   when the reader arrives rather than at page load. */
+.quotes.is-waiting { opacity: 0; }
+
+.quotes.is-entering,
+.quotes.is-entering .quotes-nav {
+  animation:
+    about-fade 1.2s var(--ease-fade) both,
+    about-drift 1.2s var(--ease-drift) both;
+}
+
+.quotes.is-entering .quotes-nav { animation-delay: 0.2s; }
+
+.quotes.is-waiting .quote-dot.is-active::after { animation-play-state: paused; }
 
 .quotes-nav {
   display: flex;
@@ -950,8 +1018,8 @@ a { color: inherit; text-decoration: none; }
 .credit,
 .thanks-list {
   animation:
-    about-fade 1.2s ease-in-out both,
-    about-drift 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    about-fade 1.2s var(--ease-fade) both,
+    about-drift 1.2s var(--ease-drift) both;
   animation-delay: 0.1s;
 }
 
@@ -1069,8 +1137,8 @@ a { color: inherit; text-decoration: none; }
 .about-section,
 .about-closing {
   animation:
-    about-fade 1.8s ease-in-out both,
-    about-drift 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    about-fade 1.8s var(--ease-fade) both,
+    about-drift 1.8s var(--ease-drift) both;
   animation-delay: 0.15s;
 }
 

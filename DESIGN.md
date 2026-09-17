@@ -192,6 +192,13 @@ Bold uppercase, sized near the wordmark, wrapping edge to edge under it.
 Asymmetric margins on purpose: `--space-m` above ties it to the masthead,
 `--space-xl` below is the largest gap on the page and marks the break to the list.
 
+**Homepage entrance.** The credits page's entrance (the about page's `about-fade`
+and `about-drift`, 1.2s) on three beats: the tagline at 0.1s, the episodes
+lead-in at 0.2s, then `.episodes-layout`, the cover and every season as one
+block, at 0.3s. The header stays still, as on the other pages. The list is
+legible by about 0.5s and the page settled by about 1.5s. Pure CSS, runs with JS
+off, removed under reduced motion.
+
 ### Episodes lead-in
 **Role:** Quiet signpost above the list
 
@@ -247,7 +254,14 @@ from a 1860px viewport up it grows again at a third of the viewport width. Stick
 at `--gutter` from the top on desktop. Two
 stacked `<img>` layers inside one frame; `script.js` loads the incoming cover into
 whichever layer is hidden, then swaps `.is-active`, so the 0.4s opacity transition
-crossfades between real pixels. Shows the first episode's cover at rest, the
+crossfades between real pixels. The incoming cover also settles from
+`scale(1.015)` to full size over 0.8s on `--ease-drift` (`cover-settle`, an
+animation so it replays on every swap), clipped by the frame, so it reads as a
+print laid down. The outgoing one only fades. Scale rather than a rise, which
+would open a gap at the frame's bottom edge. `script.js` applies at most one swap
+per frame, with the last cover asked for: moving from row to row fires leave and
+enter together, and swapping on both used to flip the layers back before a paint,
+so the new cover replaced the old one in place with no crossfade. Shows the first episode's cover at rest, the
 hovered row's cover while the pointer is on a row (gated on
 `(hover: hover) and (pointer: fine)`), and the open row's cover whenever one is
 expanded. Below 40rem it is hidden: the mobile feed gives every row its own
@@ -361,6 +375,13 @@ in `styles.css`. The fill pauses while the pointer is over the block (on real
 hover devices) or a bar has keyboard focus, and under reduced motion it is removed
 outright, which stops the rotation and leaves the bars as manual controls.
 
+**Entrance.** The block rises in the first time a quarter of it scrolls into
+view: `script.js` sets `.is-waiting` (opacity 0, first bar's fill paused), and an
+`IntersectionObserver` swaps it for `.is-entering`, which runs the homepage
+entrance's fade and drift, the bars 0.2s behind the words. So the 9s rotation
+starts when the reader arrives, not at page load. Without JS, or under reduced
+motion, the block is simply there.
+
 ### Footer
 **Role:** Social links over the copyright line
 
@@ -390,6 +411,13 @@ The copyright stays `#5C5C5C` and is still the only thing using it.
   about page closing line), where they are underlined with a 3px / 0.2em offset.
 - **Focus:** because links are unstyled, `:focus-visible` is the only keyboard
   affordance — a 2px `--fg` outline at 4px offset.
+- **Motion:** one gesture across the site, a fade plus a small upward drift, on
+  two curves declared once in `:root`: `--ease-fade` (`ease-in-out`) for opacity
+  and `--ease-drift` (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`) for movement. Every
+  entrance, the cover crossfade and the quote rotation use them. Opacity never
+  goes on an ease-out: it snaps on. Motion supports the content and never holds
+  it back: entrances start within 0.3s and settle by about 1.5s (the about page's
+  slower 3s is the one exception). No animation library: CSS does all of it.
 - **Reduced motion:** a global `prefers-reduced-motion` block cuts every
   transition, animation and smooth scroll to 0.01ms.
 
@@ -418,7 +446,7 @@ The copyright stays `#5C5C5C` and is still the only thing using it.
 - Do not add a font, a weight, or a fourth spacing size without asking.
 - Do not add a JavaScript dependency: the site must work fully with JS off, and
   `script.js` is enhancement only (scroll clamp, cover crossfade, the mobile
-  feed's slide and scroll, quote rotation).
+  feed's slide and scroll, quote rotation and its scroll-in entrance).
 - Do not edit `archive/`, or link to it. It is read-only history.
 - Do not put markup or styling in `scripts/build.py`. Every tag it renders lives
   in the four `<template>` blocks in `index.html`: `episode`, `episode-link`,
