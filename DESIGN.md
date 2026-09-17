@@ -235,7 +235,14 @@ number, bold uppercase title (wrapping, never truncated), and a plus/minus toggl
 at the right edge built from two `::before`/`::after` bars, sized in `em` so it
 scales with the row. A `--rule` line under every row (above 40rem; the mobile feed has none). Opening reveals the
 description (justified, hyphenated, capped at 60ch), then meta (date - duration)
-and platform links.
+and platform links. With `script.js` the row slides open and closed on the
+same 500ms cubic ease-in-out as the mobile feed (one engine, see below), and
+opening one row folds the other at the same time. The clicked row holds its
+place on screen while a row above it folds (never above the window's top edge),
+so it stays under the pointer. Above 40rem the text also enters on the site's
+fade and drift (`about-fade` / `about-drift`, 0.6s, no delay), so it is readable
+almost at once. The toggle turns back to plus at the click that closes, via
+`.is-closing`. The panel's padding sits on `.episode-body` so the fold reaches 0.
 
 ### Episode art panel
 **Role:** Persistent square cover beside the whole episode list
@@ -291,7 +298,7 @@ scrolls off above. The scroll is whatever keeps it there each frame, set with
 `scrollTo` to a whole pixel from its page position (fractional `scrollBy`
 nudges made the end of the ease shiver on mobile), so it travels one way only
 while a row above it folds.
-`.is-feed-moving` switches scroll anchoring off on the root for the length of
+`.is-list-moving` switches scroll anchoring off on the root for the length of
 the motion. Closing does not scroll. Under reduced motion
 both are instant. Without JS the native accordion opens and closes without
 animation or scrolling.

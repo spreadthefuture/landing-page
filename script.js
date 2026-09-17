@@ -5,8 +5,8 @@
 // season's list. The panel answers to any row in any of those lists; the loop is
 // still written per layout so a second one would work on its own.
 
-// The mobile feed (styles.css, below 40rem): every row is a cover, and a tap
-// slides its text open while the page brings that episode's title to the top.
+// Rows slide open and closed. In the mobile feed (styles.css, below 40rem) every
+// row is a cover, and a tap also brings that episode's title to the top.
 const feed = window.matchMedia('(max-width: 40rem)');
 const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 const FEED_DURATION = 500;
@@ -20,10 +20,9 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   if (!lists.length) continue;
 
   // The accordion is exclusive (<details name="episode">), but the browser closes
-  // the other row instantly, which would cut the feed's closing slide short. So
-  // with this file present, exclusivity is done here instead: the name comes off,
-  // and on desktop opening one row closes the rest at once, as before. The feed
-  // closes them itself, with the slide.
+  // the other row instantly, which would cut its closing slide short. So with
+  // this file present, exclusivity is done here instead: the name comes off, and
+  // the click handler below closes the open row itself, with the slide.
   let current = null;
 
   for (const details of episodes) {
@@ -31,8 +30,6 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     details.addEventListener('toggle', () => {
       if (details.open) {
         current = details;
-        if (feed.matches) return;
-        for (const other of episodes) if (other !== details) other.open = false;
       } else if (current === details) {
         current = null;
       }
@@ -71,15 +68,14 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       panel.style.height = `${from + (to - from) * e}px`;
     }
 
-    // The focus's place on screen is what eases, from where it was tapped to its
-    // scroll-margin-top, so it travels one way only however the rows above it
-    // fold. Read after the heights are written, so this frame's fold counts.
+    // The focus's place on screen is what eases, from where it was tapped to
+    // topTo, so it travels one way only however the rows above it fold. Read after the heights are written, so this frame's fold counts.
     // Scrolled to a whole pixel, worked out from the page position rather than
     // nudged by the fractional difference: browsers round the scroll, and those
     // sub-pixel nudges made the slow end of the ease shiver up and down.
     if (m.focus) {
       const top = m.focus.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo(0, Math.round(top - (m.topFrom + (m.margin - m.topFrom) * e)));
+      window.scrollTo(0, Math.round(top - (m.topFrom + (m.topTo - m.topFrom) * e)));
     }
 
     if (t < 1) {
@@ -94,22 +90,23 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     }
     motion = null;
     frame = null;
-    root.classList.remove('is-feed-moving');
+    root.classList.remove('is-list-moving');
   };
 
-  // changes: [details, opening] pairs. focus: the row to bring to the top.
-  const run = (changes, focus) => {
+  // changes: [details, opening] pairs. focus: the element whose place on screen
+  // eases to topTo while everything moves.
+  const run = (changes, focus, topTo) => {
     const targets = new Map();
     if (motion) for (const [details, { to }] of motion.panels) targets.set(details, to > 0);
     for (const [details, opening] of changes) targets.set(details, opening);
     motion = {
       panels: new Map([...targets].map(([details, opening]) => [details, measure(details, opening)])),
       focus,
-      margin: focus ? parseFloat(getComputedStyle(focus).scrollMarginTop) || 0 : 0,
       topFrom: focus ? focus.getBoundingClientRect().top : 0,
+      topTo,
       start: null,
     };
-    root.classList.add('is-feed-moving');
+    root.classList.add('is-list-moving');
     frame ??= requestAnimationFrame(tick);
   };
 
@@ -118,27 +115,26 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     if (!summary) return;
     const details = summary.closest('.episode');
 
+    event.preventDefault();
+    if (current === details) {
+      current = null;
+      run([[details, false]], null);
+      return;
+    }
+    const changes = current ? [[current, false], [details, true]] : [[details, true]];
+    current = details;
+
     if (feed.matches) {
-      event.preventDefault();
-      if (current === details) {
-        current = null;
-        run([[details, false]], null);
-        return;
-      }
-      const changes = current ? [[current, false], [details, true]] : [[details, true]];
-      current = details;
       // The open text's title is what comes to the top, not the cover above it.
-      run(changes, details.querySelector('.episode-heading'));
+      const heading = details.querySelector('.episode-heading');
+      run(changes, heading, parseFloat(getComputedStyle(heading).scrollMarginTop) || 0);
       return;
     }
 
-    // Desktop: opening one row collapses the one above, and the clicked row can
-    // slide off the top of the window. Clamp it: the row may move up, but never
-    // past the top edge. Anything else is left where the browser put it.
-    requestAnimationFrame(() => {
-      const { top } = summary.getBoundingClientRect();
-      if (top < 0) window.scrollBy(0, top);
-    });
+    // Desktop: the clicked row holds still while a row above it folds, so it
+    // stays under the pointer, but never sits above the window's top edge.
+    const { top } = summary.getBoundingClientRect();
+    run(changes, summary, Math.max(top, 0));
   });
 
   if (!artPanel) continue;
