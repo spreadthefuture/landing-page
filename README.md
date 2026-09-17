@@ -1,6 +1,6 @@
-# Spread The Future — Website
+# SPREAD THE FUTURE: Website
 
-This repository hosts the website for **Spread The Future**, a podcast about the future of Europe.
+This repository hosts the website for **SPREAD THE FUTURE**, a podcast about the future of Europe.
 
 Static site: plain HTML and CSS, no framework, no dependencies. Pages are
 standalone, so the header and footer are repeated in each one rather than included.
@@ -17,7 +17,7 @@ at deploy time.
 ├── about/index.html        # about page, served at /about/
 ├── CNAME                   # custom domain for GitHub Pages, do not delete
 ├── styles.css              # all styling, for every page
-├── script.js               # one scroll clamp for the episode accordion
+├── script.js               # optional enhancements: row slides, cover crossfade, quote rotation
 ├── episodes.json           # generated episode data, do not hand edit
 ├── links.json              # hand maintained per-episode platform URLs
 ├── scripts/build.py        # fetches the RSS feed and generates the episode list

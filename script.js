@@ -5,10 +5,10 @@
 // season's list. The panel answers to any row in any of those lists; the loop is
 // still written per layout so a second one would work on its own.
 
-// Rows slide open and closed. In the mobile feed (styles.css, below 40rem) every
+// Rows slide open and closed. In the mobile feed (styles.css, below 46rem) every
 // row is a cover, and a tap also brings that episode's title a third of the way
 // down the screen.
-const feed = window.matchMedia('(max-width: 40rem)');
+const feed = window.matchMedia('(max-width: 46rem)');
 const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 const FEED_DURATION = 500;
 // Ease in and out, so the fold starts as gently as it lands.
