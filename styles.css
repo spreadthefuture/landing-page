@@ -128,14 +128,14 @@ body {
 a { color: inherit; text-decoration: none; }
 
 /* The only hover state on the site. Every link-like thing dims to 0.8 over the
-   same 0.2s, so hovering reads identically wherever you are on the page. The two
+   same 0.2s, so hovering reads identically wherever you are on the page. The
    exceptions are the platform icons, which shift to their brand colour instead
-   (see .platform-icon), and prose links, which lift to --fg. */
+   (see .platform-icon), and prose links and the per-episode listen links, which
+   lift to --fg. */
 .logo a,
 .site-nav a,
 .platforms a,
 .episode-summary,
-.episode-listen,
 .credit-link,
 .about-closing a,
 .footer-social a,
@@ -145,7 +145,6 @@ a { color: inherit; text-decoration: none; }
 .site-nav a:hover,
 .platforms a:hover,
 .episode-summary:hover,
-.episode-listen:hover,
 .credit-link:hover,
 .about-closing a:hover,
 .footer-social a:hover,
@@ -176,7 +175,7 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
-/* Only used below 40rem, where the nav row folds the "Available on" label in
+/* Only used below 40rem, where the nav row folds the "Listen on" label in
    beside About/Credits (see the mobile block near .header-top). Hidden here
    so desktop keeps the label on its own line above the platform icons. */
 .site-nav-divider,
@@ -205,7 +204,9 @@ a { color: inherit; text-decoration: none; }
   gap: 0.75rem 1.75rem;
   margin-top: var(--space-m);
   font-size: 0.8125rem;
-  letter-spacing: 0.12em;
+  /* Bold uppercase at normal spacing, like the nav and episode rows: thin,
+     widely tracked small caps read as a generic template label. */
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -293,31 +294,11 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* ---- Episodes ---- */
-
-/* Lead-in above the episode list. Set like the header's "Available on" label,
-   uppercase and tracked in gray, so it reads as a quiet signpost rather than a
-   second headline competing with the tagline. Sentence case in the markup and
-   capitalised here, so screen readers do not spell it out. It leads the whole
-   page, once, above the first season heading: its bottom margin collapses with
-   that heading's section margin, so the two do not stack. */
-.episodes-lead {
-  margin: 0 0 var(--space-s);
-  padding-bottom: var(--space-s);
-  /* Same rule as the ones between episode rows, so the two lists of lines read
-     as one family. */
-  border-bottom: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 0.8125rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
 /* ---- Seasons ---- */
 
 /* One section per season: the heading, then that season's rows. The seasons are
    stacked in the column beside the cover, so the first one starts flush with the
-   top of that column (.episodes-layout owns the --space-m down from the lead-in)
+   top of that column (.episodes-layout owns the --space-m down from its rule),
    and season to season is --space-m. Not --space-xl: that gap is the break
    between blocks of the page, and inside one column it opens a hole beside the
    cover. The pairing is what carries the hierarchy instead: --space-s from a
@@ -356,12 +337,10 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Entrance, the about page's fade and drift at the credits page's tempo: the
-   tagline, the lead-in, then the cover and every season together as one block,
-   100ms apart. The header stays still, as on the other pages. The list is
+   tagline, then the cover and every season together as one block, 100ms apart. The header stays still, as on the other pages. The list is
    legible by about half a second and the page settled by about 1.5s. The
    layout's transform ends at none, so the sticky cover is unaffected after. */
 .tagline,
-.episodes-lead,
 .episodes-layout {
   animation:
     about-fade 1.2s var(--ease-fade) both,
@@ -369,14 +348,12 @@ a { color: inherit; text-decoration: none; }
   animation-delay: 0.1s;
 }
 
-.episodes-lead { animation-delay: 0.2s; }
-.episodes-layout { animation-delay: 0.3s; }
+.episodes-layout { animation-delay: 0.2s; }
 
 /* Removed outright, as on the other pages: the global rule shortens durations
    but not delays. */
 @media (prefers-reduced-motion: reduce) {
   .tagline,
-  .episodes-lead,
   .episodes-layout { animation: none; }
 }
 
@@ -385,13 +362,16 @@ a { color: inherit; text-decoration: none; }
 /* The persistent cover on the left and every season's rows on the right, once
    for the page. The panel is a fixed width, the seasons column takes what's
    left. Sticky is bounded by this container, so the cover travels the whole list
-   and releases at the end of the last season. */
+   and releases at the end of the last season. The top border is the one rule
+   over the whole list, the same line as between episode rows, with --space-m
+   down to the cover and the first heading. */
 .episodes-layout {
   position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--space-m);
-  margin-top: var(--space-m);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--rule);
 }
 
 /* Shows its own season's latest cover at rest, swaps to whichever row of that
@@ -453,7 +433,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* No horizontal bleed, so the row rules line up with the cover's left edge on one
-   side and the page gutter on the other, like the lead-in rule at the top. */
+   side and the page gutter on the other. */
 .episodes {
   margin: 0;
   padding: 0;
@@ -529,14 +509,14 @@ a { color: inherit; text-decoration: none; }
 .episode-meta {
   margin-top: 0;
   color: var(--muted);
-  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  font-size: clamp(0.9rem, 1.2vw, 1.125rem);
 }
 
 .episode-description {
   margin-top: 1.5rem;
   max-width: 60ch;
   color: var(--muted);
-  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  font-size: clamp(0.9rem, 1.2vw, 1.125rem);
   line-height: 1.6;
   text-align: justify;
   hyphens: auto;
@@ -555,15 +535,22 @@ a { color: inherit; text-decoration: none; }
   padding: 0;
   list-style: none;
   font-size: 0.8125rem;
-  letter-spacing: 0.12em;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
+/* Gray like the description above them, icon included (it follows
+   currentColor). On hover the name lifts to --fg, like the description's own
+   links, and the icon takes its brand colour. */
 .episode-listen {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
+  color: var(--muted);
+  transition: color 0.2s ease;
 }
+
+.episode-listen:hover { color: var(--fg); }
 
 /* Below the point where the platform names already drop to icons, the top-right
    nav and the persistent cover no longer have room to sit beside anything: the
@@ -573,7 +560,7 @@ a { color: inherit; text-decoration: none; }
   .header-top { flex-wrap: wrap; }
 
   /* Sized off the viewport width (rather than the desktop clamp) so
-     "About ⎮ Credits ⎮ Available on" keeps fitting one line as the screen
+     "About ⎮ Credits ⎮ Listen on" keeps fitting one line as the screen
      narrows, instead of wrapping. */
   .site-nav {
     flex: 1 1 100%;
@@ -588,19 +575,15 @@ a { color: inherit; text-decoration: none; }
     white-space: nowrap;
   }
 
-  /* The "Available on" label moves in beside About/Credits, kept at the same
+  /* The "Listen on" label moves in beside About/Credits, kept at the same
      size and weight as the nav links, just gray via .platforms-label. The
      line-level .platforms-label stays hidden below so it isn't shown twice. */
   .site-nav-divider,
   .platforms-label--inline { display: inline; }
 
-  /* Overrides .platforms-label's 0.12em letter-spacing, tuned for that label's
-     small desktop size; at the nav's larger inline size it reads as gappy. */
-  .platforms-label--inline { letter-spacing: normal; }
-
   /* Gray, not white: white read as a fourth heavy stroke fighting About/Credits
      for attention, where gray sits back as a quiet separator, in keeping with
-     the "Available on" label it also sits next to. Bold weight and size are
+     the "Listen on" label it also sits next to. Bold weight and size are
      inherited from .site-nav so it matches the surrounding text. */
   .site-nav-divider {
     align-self: stretch;
@@ -628,9 +611,9 @@ a { color: inherit; text-decoration: none; }
 
 /* Below 40rem the list becomes a feed of covers: nothing pinned, no rows, no
    rules. Each summary is its episode's cover, and tapping it opens the text
-   underneath, pushing the covers below it down. The season headings, the
-   coming-soon row and the lead-in stay; the page's one cover panel goes, since
-   every row now carries its own. Titles are still in the summary for screen
+   underneath, pushing the covers below it down. The season headings and the
+   coming-soon row stay; the rule over the list and the page's one cover panel
+   go, since every row now carries its own cover. Titles are still in the summary for screen
    readers (see the .platform-name rule), and shown on screen at the top of the
    open text. script.js slides the text open and closed and brings the tapped
    cover to the top; without it the text simply appears. */
@@ -638,10 +621,7 @@ a { color: inherit; text-decoration: none; }
   .episode-art-panel,
   .episode-toggle { display: none; }
 
-  .episodes-lead {
-    padding-bottom: 0;
-    border-bottom: 0;
-  }
+  .episodes-layout { border-top: 0; }
 
   .episode { border-bottom: 0; }
 
@@ -731,7 +711,8 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.01em;
 }
 
-/* The tracked gray label, pinned to its quote with --space-s. A work's title in
+/* The bold gray label, set like the platform bar, pinned to its quote with
+   --space-s. A work's title in
    it is a <cite>, left in the browser's default italic: on devices without Arial
    that fetches the regular italic face at page load, the one episode
    descriptions already use. */
@@ -739,7 +720,7 @@ a { color: inherit; text-decoration: none; }
   margin-top: var(--space-s);
   color: var(--muted);
   font-size: 0.8125rem;
-  letter-spacing: 0.12em;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -1227,8 +1208,7 @@ a { color: inherit; text-decoration: none; }
 .social-icon--linkedin { -webkit-mask-image: url(/assets/social/linkedin.svg); mask-image: url(/assets/social/linkedin.svg); }
 .social-icon--instagram { -webkit-mask-image: url(/assets/social/instagram.svg); mask-image: url(/assets/social/instagram.svg); }
 
-/* Bold and tracked like the "Available on" bar, the site's other small uppercase
-   row. line-height: 1 drops the word's box to its own type size, which leaves the
+/* Bold and tracked, the site's one small tracked word. line-height: 1 drops the word's box to its own type size, which leaves the
    cap height within a fraction of a pixel of that box's centre, so the row's
    align-items: center lands the caps on the glyphs' axis rather than hanging the
    word off a baseline. The negative margin takes back the trailing letter-space

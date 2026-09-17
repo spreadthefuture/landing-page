@@ -30,8 +30,8 @@ to it.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas, everywhere. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | All primary text, the wordmark, icon fill at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the "Available on" label, credit locations, the mobile nav divider, the footer's social links, the "Coming soon." row in an announced season |
-| Rule | `--rule` | `#2A2A2A` | The 1px lines under the episodes lead-in and every episode row, above 40rem. The only border in the system |
+| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta lines, descriptions, the per-episode listen links and their icons at rest, the "Listen on" label, credit locations, the mobile nav divider, the footer's social links, the "Coming soon." row in an announced season |
+| Rule | `--rule` | `#2A2A2A` | The 1px line over the episode list and under every episode row, above 40rem. The only border in the system |
 | Surface | `--surface` | `#1A1A1A` | Sits behind cover artwork while it loads, so the frame is never a hole in the page |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only. A step further back than `--muted` |
 
@@ -82,9 +82,9 @@ the work titles in the quote sources, bold italic effectively never.
   in CSS, so screen readers read words rather than spelling them out. The one
   exception is the season heading, which is set in sentence case and carries no
   `text-transform` at all: "Season 1", one capital.
-- **Letter spacing:** `0.01em`–`0.02em` on large bold type, `0.12em` on
-  the small gray tracked labels. The episode date and duration line is plain
-  text, not a tracked label. Nothing negative.
+- **Letter spacing:** `0.01em`–`0.02em` on large bold type, normal on the
+  small bold labels (platform bar, episode listen links, quote source), and
+  `0.12em` only on the footer's RSS word. Nothing negative.
 - **Settled:** the family is Arial. The earlier open question between Liberation
   Sans and Inter is closed. Do not swap the stack, change the `local()` names, or
   rename the `STF Sans` family without asking.
@@ -117,8 +117,8 @@ Every size is fluid. The `clamp()` is the spec; the min/max are the ends of it.
 | credit name / about heading | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 on about | 0.01em |
 | about text / closing | `clamp(1rem, 1.7vw, 1.25rem)` | 400 | 1.6 | — |
 | credit role / location | `clamp(0.9rem, 1.4vw, 1.125rem)` · `1rem` below 46rem | 400 | 1.2 | — |
-| episode description / meta (date - duration) | `clamp(0.9rem, 1.1vw, 1rem)` | 400 | 1.6 on description | — |
-| tracked label | `0.8125rem` | 400 | — | 0.12em |
+| episode description / meta (date - duration) | `clamp(0.9rem, 1.2vw, 1.125rem)` | 400 | 1.6 on description | — |
+| small label | `0.8125rem` | 700 | — | — |
 | footer | `0.8rem` · `0.875rem` above 46rem | 400 | — | — |
 
 ## Spacing & Layout
@@ -173,13 +173,14 @@ glyphs mid-hover.
 
 Bold uppercase at heading scale, stacked right-aligned beside the wordmark. Below
 40rem it becomes a single left-aligned row under the masthead, folding the
-"Available on" label in beside About and Credits, separated by gray `⎮` dividers
+"Listen on" label in beside About and Credits, separated by gray `⎮` dividers
 that exist only at that width.
 
 ### Platform bar
-**Role:** "AVAILABLE ON: SPOTIFY / APPLE PODCASTS / DEEZER"
+**Role:** "LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER"
 
-Small tracked uppercase, the label in gray. Each icon is a CSS mask (not an
+Small bold uppercase at normal letter spacing (thin, wide tracking read as a
+generic template label), the label in gray at the same size and weight as the names. Each icon is a CSS mask (not an
 `<img>`) so it inherits `currentColor` at rest and transitions to the platform's
 brand color on hover, with no second source file. Below 40rem the names are
 visually hidden and only the icons show, enlarged. The same `.platform-name`
@@ -193,19 +194,10 @@ Asymmetric margins on purpose: `--space-m` above ties it to the masthead,
 `--space-xl` below is the largest gap on the page and marks the break to the list.
 
 **Homepage entrance.** The credits page's entrance (the about page's `about-fade`
-and `about-drift`, 1.2s) on three beats: the tagline at 0.1s, the episodes
-lead-in at 0.2s, then `.episodes-layout`, the cover and every season as one
-block, at 0.3s. The header stays still, as on the other pages. The list is
+and `about-drift`, 1.2s) on two beats: the tagline at 0.1s, then
+`.episodes-layout`, the cover and every season as one block, at 0.2s. The header stays still, as on the other pages. The list is
 legible by about 0.5s and the page settled by about 1.5s. Pure CSS, runs with JS
 off, removed under reduced motion.
-
-### Episodes lead-in
-**Role:** Quiet signpost above the list
-
-Small gray tracked uppercase with a `--rule` bottom border, the same line used
-between episode rows, so the two read as one family. It appears once, at the top,
-above the first season heading, and leads the whole page rather than any one
-season.
 
 ### Season section
 **Role:** One season: its heading, then its episodes
@@ -217,8 +209,8 @@ it: the first heading starts level with the top of the cover. The heading is the
 credits page's "Our Team" type (`clamp(1.6rem, 4vw, 3.25rem)`, bold), left
 aligned on the column edge. It is the site's only heading **not** uppercased:
 "Season 1" keeps its single capital, so it labels the list below it instead of
-reading as a second masthead. Spacing: `--space-m` from the lead-in down to the
-cover and the first heading (`.episodes-layout` owns it), `--space-s` from a
+reading as a second masthead. Spacing: a `--rule` line over the list (`.episodes-layout`'s top border, desktop
+only), then `--space-m` down to the cover and the first heading, `--space-s` from a
 heading to its own rows, and `--space-m` from one season to the next. The pairing
 is what separates the seasons: each heading sits closer to its rows than to the
 season above. Not `--space-xl` between seasons any more, which was right when a
@@ -270,8 +262,8 @@ cover instead.
 ### Mobile feed
 **Role:** The episode list below 40rem
 
-A feed of covers, nothing pinned. The season headings, the "Coming soon." row
-and the lead-in stay (the lead-in loses its rule); the episode rows lose their
+A feed of covers, nothing pinned. The season headings and the "Coming soon." row
+stay; the episode rows lose their
 rules, number, title and toggle, and each summary is just its episode's cover:
 full column width, square, 6px radius over `--surface`, `--gutter` between
 covers (the same air as either side of them). The number and title stay in the summary for screen readers (they ride
@@ -305,7 +297,7 @@ animation or scrolling.
 ### Hairline rule
 **Role:** The only divider in the system
 
-1px `var(--rule)`, as a `border-bottom` on the episodes lead-in and on every
+1px `var(--rule)`, as the `border-top` of `.episodes-layout` and a `border-bottom` on every
 `.episode`, above 40rem only. There is no standalone divider element and no other
 border anywhere.
 ### Credit card
@@ -360,7 +352,7 @@ credits intro / season title scale (`clamp(1.6rem, 4vw, 3.25rem)`, bold, 1.2
 line height), capped at 38ch and centered on the page, source and bars
 included, and in sentence case like the season heading:
 these are someone's words, and uppercase would shout them. The source sits
-`--space-s` under it as the small gray tracked uppercase label; the title of a
+`--space-s` under it as the small gray bold uppercase label, set like the platform bar; the title of a
 work in it is a `<cite>`, left in italic.
 
 Without JS the quotes simply stack, `--space-m` apart. `script.js` adds
@@ -391,8 +383,8 @@ brighter than the copyright beneath it, and carries the `--space-s` gap down to
 it. The two glyphs are CSS masks like the platform icons, but sized in `rem`
 rather than `em`: the row must not resize with the copyright type. Both are drawn
 edge to edge inside a 24x24 box, so one 1.25rem square lands their outer edges on
-the same four lines; the RSS word is bold and tracked like the "Available on"
-bar, centered on the glyphs' axis rather than hung off a baseline. Each link is
+the same four lines; the RSS word is bold and tracked (the site's one small
+tracked word), centered on the glyphs' axis rather than hung off a baseline. Each link is
 padded, not enlarged, to a 32px tap target, and the facing padding comes back out
 of the row's gap so the space between glyphs still reads 1.75rem.
 
@@ -403,10 +395,11 @@ The copyright stays `#5C5C5C` and is still the only thing using it.
 - **The hover fade is the only hover state on the site:** `opacity: 0.8` over a
   `0.2s ease` transition, declared once as a single grouped rule near the top of
   `styles.css` covering the wordmark, the site nav, the platform links, the
-  episode summary, the per-episode listen links, the credit cards, the about
+  episode summary, the credit cards, the about
   page's prose link, the footer's social links and the quote bars. Add new hoverable things to that rule rather than giving
   them their own. The exceptions are the platform icons, which shift to their
-  brand color instead, and episode-description links, which lift to `--fg`.
+  brand color instead, and episode-description links and the per-episode listen links, which lift from
+  gray to `--fg` (the listen links' icons take their brand color at the same time).
 - **Links carry no underline** except inside prose (episode descriptions, the
   about page closing line), where they are underlined with a 3px / 0.2em offset.
 - **Focus:** because links are unstyled, `:focus-visible` is the only keyboard
@@ -488,7 +481,7 @@ and centers it too, so the three-column grid keeps some air at the edges on a
 wide screen instead of running out to the gutter.
 
 The homepage reads top to bottom: wordmark and nav side by side, platform bar,
-tagline, lead-in, then one two-column flex row: the persistent cover on the left,
+tagline, then one two-column flex row: the persistent cover on the left,
 and on the right a column of seasons, newest first, each a left-aligned heading
 over its own rows, then the rotating quotes before the footer.
 The credits page is a three-column grid with one spacing band. The about page is a
@@ -507,7 +500,7 @@ Two things are still written twice, both deliberately:
   other lives inside the 40rem media query, and plain CSS has no way to scope
   half a selector list. Change one, change the other. Both rules say so.
 - **`.platforms` and `.episode-links`** share an identical block of font-size,
-  letter-spacing, text-transform and gap. Merging them into one tracked-label
+  font-weight, text-transform and gap. Merging them into one small-label
   class is possible but would put the header bar and the per-episode links on one
   rule, which is a design decision (are they the same thing, or two things that
   happen to match?) rather than a cleanup. Left as is until that is settled.
