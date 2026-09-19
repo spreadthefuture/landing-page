@@ -202,22 +202,26 @@ a { color: inherit; text-decoration: none; }
    rather than a list item. .header-top's align-items: flex-start keeps this
    top-aligned with the wordmark. */
 .site-nav {
-  display: flex;
   flex: none;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
   font-weight: 700;
   font-size: clamp(2rem, 5vw, 4rem);
   line-height: 1;
   text-transform: uppercase;
 }
 
-/* Only used below 46rem, where the nav row folds the "Listen on" label in
-   beside About/Credits (see the mobile block near .header-top). Hidden here
-   so desktop keeps the label on its own line above the platform icons. */
-.site-nav-divider,
-.platforms-label--inline { display: none; }
+/* The links sit in their own box so that below 46rem script.js can slide the
+   nav's height while the air above the words (padding here) folds with it. */
+.site-nav-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+/* The plus that folds the nav away. Phones only, and only with script.js
+   (the .js class is set in each page's head, before first paint, so the nav
+   never flashes open and then shuts). */
+.menu-toggle { display: none; }
 
 .logo {
   display: block;
@@ -498,7 +502,8 @@ a { color: inherit; text-decoration: none; }
 
 /* The open/close affordance from the mockup. Sized and weighted in em so it
    scales with the row's own bold text instead of sitting at a fixed size. */
-.episode-toggle {
+.episode-toggle,
+.menu-toggle-icon {
   flex: none;
   position: relative;
   width: 0.85em;
@@ -506,7 +511,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .episode-toggle::before,
-.episode-toggle::after {
+.episode-toggle::after,
+.menu-toggle-icon::before,
+.menu-toggle-icon::after {
   content: "";
   position: absolute;
   inset: 50% 0 auto 0;
@@ -515,8 +522,10 @@ a { color: inherit; text-decoration: none; }
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-.episode-toggle::after { transform: rotate(90deg); }
-.episode[open]:not(.is-closing) .episode-toggle::after { transform: rotate(0deg); opacity: 0; }
+.episode-toggle::after,
+.menu-toggle-icon::after { transform: rotate(90deg); }
+.episode[open]:not(.is-closing) .episode-toggle::after,
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon::after { transform: rotate(0deg); opacity: 0; }
 
 /* One text column: the persistent art panel beside the list already shows the
    open row's cover, so the row itself carries no image (see .episode-art).
@@ -598,52 +607,79 @@ a { color: inherit; text-decoration: none; }
    nav moves under the masthead, and the cover gives way to the mobile feed
    below, where every row is its own cover. */
 @media (max-width: 46rem) {
-  .header-top { flex-wrap: wrap; }
+  /* No row gap: the nav's air is its own padding, so it folds with the nav. */
+  .header-top { flex-wrap: wrap; row-gap: 0; }
 
-  /* Sized off the viewport width (rather than the desktop clamp) so
-     "About ⎮ Credits ⎮ Listen on" keeps fitting one line as the screen
-     narrows, instead of wrapping. */
+  /* About and Credits stack under the plus, right aligned to its edge, at the
+     about statement's mobile size (8vw). Without script.js they simply stay
+     open. */
   .site-nav {
     flex: 1 1 100%;
-    width: 100%;
-    flex-direction: row;
+    font-size: 8vw;
+  }
+
+  .site-nav-links { padding-top: var(--space-s); }
+
+  /* "More" and the episode row's plus, set vertically up the right edge
+     beside the wordmark: a word says what it does where a lone plus left
+     people guessing. At 1.25rem it runs about the wordmark's height, and its
+     top meets the top of "SPREAD". The plus is a box, not
+     text, so it stays upright and still turns to a flat minus while the nav
+     is open. 0.75rem of padding, taken back out by the margins, makes the tap
+     target. */
+  .js .menu-toggle {
+    display: flex;
     align-items: center;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    gap: 1.75vw;
-    margin-top: var(--space-s);
-    font-size: 4.6vw;
-    white-space: nowrap;
+    gap: 0.4em;
+    margin: -0.75rem -0.75rem 0 0;
+    padding: 0.75rem;
+    border: 0;
+    background: none;
+    color: var(--fg);
+    font: inherit;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1;
+    text-transform: uppercase;
+    /* Turned the other way: reads bottom to top, "MORE" rising from the
+       wordmark's baseline side with the plus at the top. vertical-rl plus a
+       half turn, since sideways-lr is not yet everywhere. */
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    cursor: pointer;
   }
 
-  /* The "Listen on" label moves in beside About/Credits, kept at the same
-     size and weight as the nav links, just gray via .platforms-label. The
-     line-level .platforms-label stays hidden below so it isn't shown twice. */
-  .site-nav-divider,
-  .platforms-label--inline { display: inline; }
+  .js .site-nav:not(.is-open) { display: none; }
 
-  /* Gray, not white: white read as a fourth heavy stroke fighting About/Credits
-     for attention, where gray sits back as a quiet separator, in keeping with
-     the "Listen on" label it also sits next to. Bold weight and size are
-     inherited from .site-nav so it matches the surrounding text. */
-  .site-nav-divider {
-    align-self: stretch;
-    color: var(--muted);
+  /* While script.js slides the nav open, the words come in on the site's fade
+     and drift, one after the other, the way the page's blocks enter. */
+  .js .site-nav.is-open a {
+    animation:
+      fade-in 0.6s var(--ease-fade) backwards,
+      drift-in 0.6s var(--ease-drift) backwards;
   }
 
-  .platforms > .platforms-label { display: none; }
+  .js .site-nav.is-open a:nth-child(1) { animation-delay: 0.1s; }
+  .js .site-nav.is-open a:nth-child(2) { animation-delay: 0.18s; }
 
-  /* Icon-only row, left-aligned under About/Credits like a normal line of
-     links rather than spread across the full width. */
+  /* One line: the gray label, then the icons right after it, as on desktop,
+     so the label reads as the start of the row it introduces. The label takes
+     the icons' size (1.5em, below), so the row reads as one line of type. */
   .platforms {
     justify-content: flex-start;
     gap: 1.25rem;
   }
 
+  .platforms > .platforms-label { font-size: 1.5em; }
+
+  /* Gray like their label, so the whole row sits back behind the masthead;
+     hover still lights each one in its brand colour. */
+  .platforms a { color: var(--muted); }
+
   /* The per-episode listen icons match the header's, so every icon-only row of
      platform links on a phone reads at one size. */
   .platforms .platform-icon,
-  .episode-listen .platform-icon { width: 1.75em; height: 1.75em; }
+  .episode-listen .platform-icon { width: 1.5em; height: 1.5em; }
 
   /* align-items reset to stretch: flex-start (the desktop value) only sizes a
      column's cross axis to content, so the list would shrink to its content

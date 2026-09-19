@@ -205,6 +205,52 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   }
 }
 
+// The phone header's menu (below 46rem): the plus beside the wordmark slides
+// About and Credits open under it, on the feed's duration and curve, and folds
+// them away again. A second tap mid-motion turns it from wherever it is.
+// Without this file the nav simply stays open.
+const menuToggle = document.querySelector('.menu-toggle');
+const siteNav = document.querySelector('.site-nav');
+
+if (menuToggle && siteNav) {
+  let menuFrame = null;
+
+  const setMenu = (opening) => {
+    const from = siteNav.classList.contains('is-open') ? siteNav.getBoundingClientRect().height : 0;
+    menuToggle.setAttribute('aria-expanded', opening);
+    siteNav.classList.add('is-open');
+    siteNav.style.height = '';
+    const to = opening ? siteNav.scrollHeight : 0;
+    siteNav.style.overflow = 'hidden';
+    siteNav.style.height = `${from}px`;
+
+    cancelAnimationFrame(menuFrame);
+    let start = null;
+    const tick = (now) => {
+      start ??= now;
+      const t = calm.matches ? 1 : Math.min((now - start) / FEED_DURATION, 1);
+      siteNav.style.height = `${from + (to - from) * feedEase(t)}px`;
+      if (t < 1) {
+        menuFrame = requestAnimationFrame(tick);
+        return;
+      }
+      siteNav.style.height = '';
+      siteNav.style.overflow = '';
+      if (!opening) siteNav.classList.remove('is-open');
+    };
+    menuFrame = requestAnimationFrame(tick);
+  };
+
+  const isOpen = () => menuToggle.getAttribute('aria-expanded') === 'true';
+
+  menuToggle.addEventListener('click', () => setMenu(!isOpen()));
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !isOpen()) return;
+    setMenu(false);
+    menuToggle.focus();
+  });
+}
+
 // Quotes after the episode list. Without this they stack; with it they share one
 // spot and rotate. Each bar's fill animation (styles.css) is the timer: when the
 // active one finishes, the next quote comes up, so hover, focus and reduced motion

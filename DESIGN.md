@@ -37,7 +37,7 @@ near-duplicate.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | Primary text, the wordmark, icons at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, the mobile nav divider, footer social links, "Coming soon." |
+| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social links, the mobile header's platform icons, "Coming soon." |
 | Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row, above 46rem. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only |
@@ -94,7 +94,7 @@ uses the same trick with `Arial-BoldMT`.
 | Role | Size | Weight | Line height | Tracking |
 |------|------|--------|-------------|----------|
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 (reset) | |
-| site nav | `clamp(2rem, 5vw, 4rem)` · `4.6vw` below 46rem | 700 | 1 | |
+| site nav | `clamp(2rem, 5vw, 4rem)` · `8vw` below 46rem | 700 | 1 | |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
@@ -143,8 +143,8 @@ repeated in all three files. Change one, change all three.
 
 `46rem` (736px), shared by every page and by `script.js`'s `matchMedia`. Below it:
 
-- **Header:** platform names collapse to icons; the site nav moves under the masthead
-  as one row.
+- **Header:** platform names collapse to icons, with "Listen on" at their size; the
+  site nav folds behind a plus beside the wordmark.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
 - **About:** principles drop to one column; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
@@ -157,15 +157,22 @@ Inline SVG, filled with `currentColor`, linked to `/` on every page, with the st
 hover fade. `will-change: opacity` stops Safari re-hinting the glyphs mid-hover.
 
 ### Site nav
-About / Credits, bold uppercase, stacked right-aligned beside the wordmark. Below
-46rem, one left-aligned row under the masthead that also holds the "Listen on" label,
-separated by gray `⎮` dividers that exist only at that width.
+About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
+
+**Below 46rem (trial):** the links fold away behind "MORE" and the episode
+row's plus (`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the
+wordmark, reading bottom to top with the plus at the top; the plus stays upright. Tapping it slides About and Credits open under it, right aligned at `8vw`, `--space-s` below
+the wordmark, on the mobile feed's 500ms cubic ease-in-out; the words fade and drift in
+0.1s and 0.18s behind. The plus turns to a minus; Escape closes. A `.js` class set by
+a one-line script in each page's head hides the nav before first paint, so without JS
+the nav simply stays open and the plus never shows.
 
 ### Platform bar
 "LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER". Bold uppercase at the label size,
 normal letter spacing, the label in gray. Icons are CSS masks, so they inherit
 `currentColor` and shift to brand color on hover. Below 46rem the names are visually
-hidden and the icons enlarge. The same `.platform-name` rule drives the per-episode
+hidden, the icons enlarge to 1.5em, and "Listen on" takes the same 1.5em so label
+and icons read as one line. There the icons are `--muted` like the label. The same `.platform-name` rule drives the per-episode
 listen links.
 
 ### Tagline
@@ -228,7 +235,7 @@ The episode list below 46rem. Season headings and "Coming soon." stay. Each summ
 just its cover: full width, square, 6px radius over `--surface`, `--gutter` between
 covers. Number and title stay in the summary for screen readers (visually hidden) and
 are shown at the top of the open text as `.episode-heading` (bold uppercase, 1.15rem,
-number in `--muted`, `aria-hidden`). Then description, meta and platform icons (1.75em,
+number in `--muted`, `aria-hidden`). Then description, meta and platform icons (1.5em,
 the header's mobile size), with
 `--gutter` above and `--space-m` below. Padding sits on `.episode-body`, not the
 panel, so the fold reaches 0.
