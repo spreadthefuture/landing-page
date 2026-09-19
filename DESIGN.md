@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-19
+> Last updated: 2026-09-20
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -146,7 +146,7 @@ repeated in all three files. Change one, change all three.
 - **Header:** platform names collapse to icons, with "Listen on" at their size; the
   site nav folds behind a plus beside the wordmark.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
-- **About:** principles drop to one column; the statement switches to viewport sizing.
+- **About:** each band stacks photo then text, left aligned; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
 - **Footer:** steps down one size.
 
@@ -261,10 +261,17 @@ Removed under reduced motion.
 ### About page
 A manifesto in three beats, the statement landing as the conclusion:
 
-1. **Principles.** `.about-sections`, `--space-xl` below the masthead, three columns
-   with `--space-m` gap, one below 46rem, no rules. Each heading has its number (`01`
-   to `03`, `aria-hidden`, `--muted`) on its own line above, so headings start level.
-   Prose in `--fg`, `--space-s` below.
+1. **Principles.** `.about-sections`, `--space-xl` below the masthead: three
+   alternating bands, `--space-xl` apart. Each band is a square photo
+   (`.about-figure`, the homepage cover's size, `object-fit: cover`, 6px radius over
+   `--surface`) with its credit caption set inside the bottom corner on the outer
+   edge (bottom right on band 02, bottom left on every band below 46rem),
+   `0.75rem` in, in `--muted` at `0.75rem`, and the principle beside it at
+   `--space-m`, bottom aligned to the photo. Band 02 is
+   mirrored with `row-reverse` and its text right aligned against the photo. Each
+   heading has its number (`01` to `03`, `aria-hidden`, `--muted`) on its own line
+   above. Prose in `--fg`, `--space-s` below, max 60ch. Below 46rem every band stacks
+   photo then text, all left aligned, `--space-m` apart.
 2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
    `--space-xl` above and `--space-xl` + `--space-m` below. The sentence is
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
@@ -333,6 +340,8 @@ apart.
 - **Episode covers:** square, from the RSS feed, 6px radius over `--surface`,
   `object-fit: cover`. `build.py` writes an `.episode-art` image into every summary.
   Above 46rem those are hidden and only feed the panel; below 46rem they are the rows.
+- **About photos:** `assets/about-photos/1.jpg` to `3.jpg`, in band order, served as
+  is and squared in CSS with `object-fit: cover`.
 - **Credit portraits:** 720x720, JPEG q68, from `assets/credits-photos/`, cropped to a
   circle.
 - **Icons:** only the three masked platform glyphs and the two masked social glyphs
@@ -369,7 +378,8 @@ Left as is, each waiting on a design call:
 
 - **Off-token values.** Summary gap `1.5rem`, `.episode-links` top `1.75rem`,
   `.episode-body` bottom `clamp(2.5rem, 5vw, 4rem)`, credit name/role margins
-  `1rem` / `0.5rem`, mobile open heading margin `0.75rem`, toggle transition `0.25s`
+  `1rem` / `0.5rem`, about caption `0.75rem` type and inset, mobile open
+  heading margin `0.75rem`, toggle transition `0.25s`
   against the `0.2s` hover.
 
 ## Known duplication

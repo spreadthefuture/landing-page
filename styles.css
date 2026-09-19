@@ -1083,7 +1083,7 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- About ---- */
 
-/* A manifesto in three beats: three numbered principles side by side, one loud
+/* A manifesto in three beats: three numbered principles in photo bands, one loud
    statement that sums them up, one quiet line to close. The statement lands as
    the conclusion rather than the opener, so the page has a shape of its own
    rather than repeating the homepage's stack. */
@@ -1117,14 +1117,77 @@ a { color: inherit; text-decoration: none; }
   font-weight: inherit;
 }
 
-/* Three across, one per row at the site's one breakpoint, the same moment the
-   credits grid drops to one column. --space-xl down from the masthead, the
-   page's first block. */
+/* Alternating bands: a square photo on one side, its principle on the other,
+   the text sitting on the photo's bottom edge. --space-xl down from the
+   masthead and between bands, --space-m between photo and text, the homepage
+   cover-to-list gap. The even band is mirrored with row-reverse rather than
+   reordered markup, so every band reads photo first on phones and to screen
+   readers. */
 .about-sections {
   margin-top: var(--space-xl);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.about-section {
+  display: flex;
   gap: var(--space-m);
+}
+
+.about-section:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* The homepage cover's size, so the two pages share one image scale. */
+.about-figure {
+  position: relative;
+  flex: 0 0 clamp(240px, 47vw, max(620px, 100vw / 3));
+  margin: 0;
+}
+
+/* Squared here, not in the files: the photos keep their own crop and
+   object-fit cuts them to the frame. */
+.about-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+/* The photographer credit, set inside the photo's bottom corner on the page's
+   outer edge (left, or right on the mirrored band), 0.75rem in: smaller than
+   any label, so it reads as a caption and not as part of the text beside it. */
+.about-caption {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.about-section:nth-child(even) .about-caption {
+  left: auto;
+  right: 0.75rem;
+}
+
+/* Bottom aligned against the photo. The mirrored band pushes
+   its text right, against the photo. */
+.about-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.about-section:nth-child(even) .about-copy {
+  align-items: flex-end;
+  text-align: right;
 }
 
 /* The credit name's type. The number sits on its own line above the words in
@@ -1144,14 +1207,33 @@ a { color: inherit; text-decoration: none; }
   color: var(--muted);
 }
 
+/* Capped at the episode description's measure so lines stay readable where
+   the text column gets wide. */
 .about-text {
+  max-width: 60ch;
   margin: var(--space-s) 0 0;
   font-size: clamp(1rem, 1.7vw, 1.25rem);
   line-height: 1.6;
 }
 
+/* One column: every band is photo, caption, then text, all left aligned, like
+   the homepage's mobile feed of covers. */
 @media (max-width: 46rem) {
-  .about-sections { grid-template-columns: minmax(0, 1fr); }
+  .about-section,
+  .about-section:nth-child(even) { flex-direction: column; }
+
+  .about-figure { flex: none; }
+
+  /* Full width photos have no outer edge, so every credit sits left. */
+  .about-section:nth-child(even) .about-caption {
+    left: 0.75rem;
+    right: auto;
+  }
+
+  .about-section:nth-child(even) .about-copy {
+    align-items: flex-start;
+    text-align: left;
+  }
 }
 
 /* The sign off, at the prose's size and in gray, centred under the grid: after
@@ -1194,12 +1276,52 @@ a { color: inherit; text-decoration: none; }
 .about-statement { animation-delay: 1s; }
 .about-closing { animation-delay: 1.35s; }
 
+/* Blocks below the fold at load wait for the reader instead: script.js marks
+   them .is-waiting (never under reduced motion), then swaps in .is-entering as
+   each scrolls into view, which replays the same fade and drift with no delay.
+   Blocks arriving together are staggered 250ms apart by the script. */
+.about-statement.is-waiting,
+.about-section.is-waiting,
+.about-closing.is-waiting {
+  animation: none;
+  opacity: 0;
+}
+
+.about-statement.is-entering,
+.about-section.is-entering,
+.about-closing.is-entering { animation-delay: 0s; }
+
 /* Removed outright rather than left to the global reduced-motion rule: that one
    shortens durations but not delays, so the blocks would still blink in late. */
 @media (prefers-reduced-motion: reduce) {
   .about-statement,
   .about-section,
   .about-closing { animation: none; }
+}
+
+/* One band lit at a time, like a reading light moving down the page: the band
+   nearest the middle of the screen has its photo in colour and its words in
+   --fg; the others rest in black and white with gray words. script.js sets
+   .is-lighting and moves .is-lit as the page scrolls, so without it every band
+   stays in colour. On real hover devices the band under the pointer takes the
+   light instead. Colour and gray fade on the entrance's ease-in-out. */
+.about-photo { transition: filter 0.8s var(--ease-fade); }
+
+.about-heading,
+.about-text { transition: color 0.8s var(--ease-fade); }
+
+.about-sections.is-lighting .about-section:not(.is-lit) .about-photo { filter: grayscale(1); }
+
+.about-sections.is-lighting .about-section:not(.is-lit) :is(.about-heading, .about-text) { color: var(--muted); }
+
+@media (hover: hover) and (pointer: fine) {
+  .about-sections.is-lighting:has(.about-section:hover) .about-section:not(:hover) .about-photo { filter: grayscale(1); }
+
+  .about-sections.is-lighting:has(.about-section:hover) .about-section:not(:hover) :is(.about-heading, .about-text) { color: var(--muted); }
+
+  .about-sections.is-lighting .about-section:hover .about-photo { filter: none; }
+
+  .about-sections.is-lighting .about-section:hover :is(.about-heading, .about-text) { color: var(--fg); }
 }
 
 /* The one link in the prose, underlined to be findable and lifted to --fg so it

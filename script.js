@@ -301,3 +301,62 @@ if (quotes.length > 1) {
     observer.observe(quoteBlock);
   }
 }
+
+// About page. Blocks below the fold at load (styles.css runs the rest on its
+// own) wait hidden and rise in as each scrolls into view, 250ms apart when
+// several arrive together. A block scrolled past too fast to be seen comes in
+// anyway, so none is left hidden above the reader. Under reduced motion every
+// block is simply there.
+const aboutBlocks = document.querySelectorAll('.about-section, .about-statement, .about-closing');
+
+if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    let beat = 0;
+    for (const entry of entries) {
+      if (!entry.isIntersecting && entry.boundingClientRect.top > 0) continue;
+      observer.unobserve(entry.target);
+      setTimeout(() => entry.target.classList.replace('is-waiting', 'is-entering'), beat++ * 250);
+    }
+  }, { rootMargin: '0px 0px -10% 0px' });
+
+  for (const block of aboutBlocks) {
+    if (block.getBoundingClientRect().top < window.innerHeight) continue;
+    block.classList.add('is-waiting');
+    observer.observe(block);
+  }
+}
+
+// The reading light: the band whose middle is nearest the middle of the screen
+// carries .is-lit, checked once per frame while scrolling or resizing, so there
+// is always exactly one.
+const aboutBands = [...document.querySelectorAll('.about-section')];
+
+if (aboutBands.length) {
+  let litBand = null;
+  let lightFrame = null;
+
+  const light = () => {
+    lightFrame = null;
+    const middle = window.innerHeight / 2;
+    let nearest = aboutBands[0];
+    let distance = Infinity;
+    for (const band of aboutBands) {
+      const { top, bottom } = band.getBoundingClientRect();
+      const d = Math.abs((top + bottom) / 2 - middle);
+      if (d < distance) {
+        distance = d;
+        nearest = band;
+      }
+    }
+    if (nearest === litBand) return;
+    litBand?.classList.remove('is-lit');
+    nearest.classList.add('is-lit');
+    litBand = nearest;
+  };
+
+  light();
+  aboutBands[0].parentElement.classList.add('is-lighting');
+  const scheduleLight = () => { lightFrame ??= requestAnimationFrame(light); };
+  window.addEventListener('scroll', scheduleLight, { passive: true });
+  window.addEventListener('resize', scheduleLight);
+}
