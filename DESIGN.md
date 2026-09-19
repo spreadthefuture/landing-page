@@ -25,7 +25,7 @@ near-duplicate.
 | Label size (platform bar, episode listen links, quote source) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text and closing, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
-| Prose link | underlined, `text-underline-offset: 0.2em` |
+| Prose link (episode description) | underlined, `text-underline-offset: 0.2em`; the about closing link is `--fg`, no underline |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
 | Brand name in copy | `SPREAD THE FUTURE`, uppercase in the markup |
@@ -277,13 +277,25 @@ A manifesto in three beats, the statement landing as the conclusion:
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
    reset) is `--fg`.
 3. **Sign off.** `.about-closing`, centred, `--space-xl` above, prose size in
-   `--muted`, its credits link in `--fg` and underlined.
+   `--muted`, its credits link in `--fg`, no underline: the sentence's one link.
 
-**Entrance:** pure CSS, in reading order, 1.8s per block: opacity on `ease-in-out`
-and a 0.375rem drift on `--ease-drift`. Delays: principles 0.15s / 0.4s / 0.65s,
-statement 1s, sign off 1.35s. Whole by about 3s. The brief is calm. Under reduced
-motion the animations are removed, not shortened, because the global rule does not
-shorten delays.
+**Entrance:** in reading order, 1.2s per block (the other pages' tempo; 1.8s made the photos, and so their colour, feel late): opacity on `ease-in-out`
+and a 0.375rem drift on `--ease-drift`. Blocks on screen at load run in pure CSS,
+delays principles 0.15s / 0.4s / 0.65s, statement 1s, sign off 1.35s. Blocks below
+the fold wait hidden (`.is-waiting`, set by `script.js`) and play the same entrance
+with no delay as each scrolls into view (`.is-entering`, 10% up from the bottom
+edge), 250ms apart when several arrive together. Under reduced motion the
+animations are removed, not shortened, because the global rule does not shorten
+delays, and nothing waits.
+
+**Scroll colour:** each band's photo goes from `grayscale(1)` to full colour and
+its heading and prose from `--muted` to `--fg` as it rises into view, holds through
+the middle of the screen, and goes back as it leaves (keyframes `band-photo` and
+`band-words`, gray at 0% and 100%, colour from 30% to 70%). Pure CSS, a view
+timeline per band (`view-timeline: --band`), linear, so the colour is always exactly
+where the scroll is at any speed; neighbouring bands crossfade in the gap. The
+number stays `--muted`. No hover state: a stale hover during scrolling held the
+colour back. Browsers without `animation-timeline` keep every band in colour.
 
 ### Quotes
 The homepage's closing block, `--space-xl` below the list. A `<section class="quotes">`
@@ -324,13 +336,15 @@ apart.
   but not its number, the credit name and role but not the country. Platform icons
   also shift to brand color. The quote bars are the one exception: shapes, not type,
   they keep a dim to `opacity: 0.8`.
-- **No underlines** except on prose links, with a `0.2em` offset.
+- **No underlines** except on episode description prose links, with a `0.2em`
+  offset. The about closing's credits link lifts to `--fg` instead, the sentence's
+  only link.
 - **Focus:** `:focus-visible` is a 2px `--fg` outline at 4px offset.
 - **Motion:** one gesture, a fade plus a small upward drift. Two curves in `:root`:
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
   (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`) for movement. One pair of keyframes,
   `fade-in` and `drift-in` (0.375rem rise). Opacity never goes on an ease-out: it snaps
-  on. Entrances start within 0.3s of load and settle by about 1.5s (about is the 3s
+  on. Entrances start within 0.3s of load and settle by about 1.5s (about is the 2.5s
   exception). No animation library.
 - **Reduced motion:** a global `prefers-reduced-motion` block cuts every transition,
   animation and smooth scroll to 0.01ms.

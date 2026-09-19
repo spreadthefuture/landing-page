@@ -1258,7 +1258,8 @@ a { color: inherit; text-decoration: none; }
    The first principle waits 0.15s so the first paint (and on devices without Arial,
    the font swap) is out of the way before anything moves. The principles follow
    250ms apart, slow enough to read as a sequence, and the page is whole by about
-   3s, though every line is legible well before it reaches full opacity. Only
+   2.5s. 1.2s per block, the other pages' tempo: at 1.8s the photos took so
+   long to appear that their colour (the reading light, below) felt late. Only
    opacity and transform animate, which the browser composites without layout or
    repaint. Pure CSS, so it runs with JS off; fill-mode both keeps each block
    hidden only through its own delay. */
@@ -1266,8 +1267,8 @@ a { color: inherit; text-decoration: none; }
 .about-section,
 .about-closing {
   animation:
-    fade-in 1.8s var(--ease-fade) both,
-    drift-in 1.8s var(--ease-drift) both;
+    fade-in 1.2s var(--ease-fade) both,
+    drift-in 1.2s var(--ease-drift) both;
 }
 
 .about-section:nth-child(1) { animation-delay: 0.15s; }
@@ -1299,37 +1300,44 @@ a { color: inherit; text-decoration: none; }
   .about-closing { animation: none; }
 }
 
-/* One band lit at a time, like a reading light moving down the page: the band
-   nearest the middle of the screen has its photo in colour and its words in
-   --fg; the others rest in black and white with gray words. script.js sets
-   .is-lighting and moves .is-lit as the page scrolls, so without it every band
-   stays in colour. On real hover devices the band under the pointer takes the
-   light instead. Colour and gray fade on the entrance's ease-in-out. */
-.about-photo { transition: filter 0.8s var(--ease-fade); }
-
-.about-heading,
-.about-text { transition: color 0.8s var(--ease-fade); }
-
-.about-sections.is-lighting .about-section:not(.is-lit) .about-photo { filter: grayscale(1); }
-
-.about-sections.is-lighting .about-section:not(.is-lit) :is(.about-heading, .about-text) { color: var(--muted); }
-
-@media (hover: hover) and (pointer: fine) {
-  .about-sections.is-lighting:has(.about-section:hover) .about-section:not(:hover) .about-photo { filter: grayscale(1); }
-
-  .about-sections.is-lighting:has(.about-section:hover) .about-section:not(:hover) :is(.about-heading, .about-text) { color: var(--muted); }
-
-  .about-sections.is-lighting .about-section:hover .about-photo { filter: none; }
-
-  .about-sections.is-lighting .about-section:hover :is(.about-heading, .about-text) { color: var(--fg); }
+/* Colour follows the scroll: each band comes to colour as it rises into view,
+   holds it through the middle of the screen, and goes back to black and white
+   as it leaves, its words fading between --muted and --fg alongside. Tied to
+   the band's own place on screen (a view timeline), not switched by a script,
+   so it is always exactly where the scroll is, at any speed, with nothing to
+   wait for. Neighbouring bands overlap in the gap between them, so one fades
+   down as the next fades up. Browsers without scroll-driven animations keep
+   every band in colour. Linear, since the scroll itself supplies the pace. */
+@keyframes band-photo {
+  0%, 100% { filter: grayscale(1); }
+  30%, 70% { filter: none; }
 }
 
-/* The one link in the prose, underlined to be findable and lifted to --fg so it
-   is the brightest thing in the line. */
+@keyframes band-words {
+  0%, 100% { color: var(--muted); }
+  30%, 70% { color: var(--fg); }
+}
+
+@supports (animation-timeline: view()) {
+  .about-section { view-timeline: --band block; }
+
+  .about-photo {
+    animation: band-photo linear both;
+    animation-timeline: --band;
+  }
+
+  .about-heading,
+  .about-text {
+    animation: band-words linear both;
+    animation-timeline: --band;
+  }
+}
+
+/* The one link in the prose, lifted to --fg so it is the brightest thing in
+   the line. No underline: the site's other links carry one to be findable
+   inline among gray prose, but this one is the whole sentence's only link. */
 .about-closing a {
   color: var(--fg);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 
 .site-footer {

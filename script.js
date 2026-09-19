@@ -325,38 +325,3 @@ if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
     observer.observe(block);
   }
 }
-
-// The reading light: the band whose middle is nearest the middle of the screen
-// carries .is-lit, checked once per frame while scrolling or resizing, so there
-// is always exactly one.
-const aboutBands = [...document.querySelectorAll('.about-section')];
-
-if (aboutBands.length) {
-  let litBand = null;
-  let lightFrame = null;
-
-  const light = () => {
-    lightFrame = null;
-    const middle = window.innerHeight / 2;
-    let nearest = aboutBands[0];
-    let distance = Infinity;
-    for (const band of aboutBands) {
-      const { top, bottom } = band.getBoundingClientRect();
-      const d = Math.abs((top + bottom) / 2 - middle);
-      if (d < distance) {
-        distance = d;
-        nearest = band;
-      }
-    }
-    if (nearest === litBand) return;
-    litBand?.classList.remove('is-lit');
-    nearest.classList.add('is-lit');
-    litBand = nearest;
-  };
-
-  light();
-  aboutBands[0].parentElement.classList.add('is-lighting');
-  const scheduleLight = () => { lightFrame ??= requestAnimationFrame(light); };
-  window.addEventListener('scroll', scheduleLight, { passive: true });
-  window.addEventListener('resize', scheduleLight);
-}
