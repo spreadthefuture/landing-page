@@ -80,9 +80,9 @@ uses the same trick with `Arial-BoldMT`.
 
 - **Weights:** 400 (body, meta, prose) and 700 (everything else). Nothing else.
 - **Case:** uppercase for the site nav, platform labels, episode rows, credit names,
-  the about statement and about headings. Written in sentence
+  and about headings. Written in sentence
   case in the markup and uppercased in CSS, so screen readers read words. Not
-  uppercased: the homepage tagline, the season heading ("Season 1"), the quotes, and the credits headings.
+  uppercased: the homepage tagline, the about statement, the season heading ("Season 1"), the quotes, and the credits headings.
   The brand name is the one thing uppercase in the markup.
 - **Line height:** `1.2` on `body`, `1` on the site nav, `1.6` on prose.
   `line-height: 0` on the wordmark and `1` on the RSS word are box resets.
@@ -96,7 +96,7 @@ uses the same trick with `Arial-BoldMT`.
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 (reset) | |
 | site nav | `clamp(2rem, 5vw, 4rem)` · `4.6vw` below 46rem | 700 | 1 | |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
-| about statement | `clamp(1.35rem, 5vw, 4rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
+| about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
@@ -259,9 +259,10 @@ A manifesto in three beats, the statement landing as the conclusion:
    with `--space-m` gap, one below 46rem, no rules. Each heading has its number (`01`
    to `03`, `aria-hidden`, `--muted`) on its own line above, so headings start level.
    Prose in `--fg`, `--space-s` below.
-2. **Statement.** `.about-statement`, bold uppercase, `--space-xl` above and
-   `--space-xl` + `--space-m` below. The sentence is `--muted`; only "the unexpected
-   and the improbable" (a `<strong>` with weight reset) is `--fg`.
+2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
+   `--space-xl` above and `--space-xl` + `--space-m` below. The sentence is
+   `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
+   reset) is `--fg`.
 3. **Sign off.** `.about-closing`, centred, `--space-xl` above, prose size in
    `--muted`, its credits link in `--fg` and underlined.
 
@@ -361,7 +362,6 @@ apart.
 
 Left as is, each waiting on a design call:
 
-- **Page openers.** Tagline (sentence case, all white) and about statement (uppercase, lit phrases) differ in size and treatment;
 - **Off-token values.** Summary gap `1.5rem`, `.episode-links` top `1.75rem`,
   `.episode-body` bottom `clamp(2.5rem, 5vw, 4rem)`, credit name/role margins
   `1rem` / `0.5rem`, mobile open heading margin `0.75rem`, toggle transition `0.25s`
