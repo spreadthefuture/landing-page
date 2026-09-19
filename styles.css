@@ -83,6 +83,12 @@
      rest. Every entrance and crossfade uses this pair. */
   --ease-fade: ease-in-out;
   --ease-drift: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* The site's one glow, on --fg type only, never gray: a tight core that lifts
+     the letter edges and a wider haze. In em so it scales with each size. The
+     filter form is the same two layers, for things text-shadow cannot reach
+     (the SVG wordmark and the masked footer icons). */
+  --glow: 0 0 0.2em rgb(244 244 242 / 0.2), 0 0 0.8em rgb(244 244 242 / 0.1);
+  --glow-filter: drop-shadow(0 0 0.2em rgb(244 244 242 / 0.2)) drop-shadow(0 0 0.8em rgb(244 244 242 / 0.1));
   color-scheme: dark;
 }
 
@@ -136,28 +142,48 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-/* The only hover state on the site. Every link-like thing dims to 0.8 over the
-   same 0.2s, so hovering reads identically wherever you are on the page. The
-   exceptions are the platform icons, which shift to their brand colour instead
-   (see .platform-icon), and prose links and the per-episode listen links, which
-   lift to --fg. */
-.logo a,
+/* The only hover state on the site: white things glow. Every link-like thing
+   takes --glow over the same 0.2s, so hovering reads identically wherever you
+   are on the page. Gray never glows: where a gray link has a hover, it lifts to
+   --fg first (the per-episode listen links, prose links, the footer icons), and
+   in a row or card only the white text glows, not the gray number or country.
+   The platform icons also shift to their brand colour (see .platform-icon). */
 .site-nav a,
 .platforms a,
-.episode-summary,
-.credit-link,
+.episode-title,
+.credit-name,
+.credit-role,
 .about-closing a,
-.footer-social a,
-.quote-dot { transition: opacity 0.2s ease; }
+.episode-description a,
+.episode-listen { transition: color 0.2s ease, text-shadow 0.2s ease; }
 
-.logo a:hover,
 .site-nav a:hover,
 .platforms a:hover,
-.episode-summary:hover,
-.credit-link:hover,
+.episode-summary:hover .episode-title,
+.credit-link:hover .credit-name,
+.credit-link:hover .credit-role,
 .about-closing a:hover,
-.footer-social a:hover,
+.episode-description a:hover,
+.episode-listen:hover { text-shadow: var(--glow); }
+
+.logo svg,
+.footer-social a { transition: color 0.2s ease, filter 0.2s ease; }
+
+.logo a:hover svg,
+.footer-social a:hover { color: var(--fg); filter: var(--glow-filter); }
+
+/* The quote bars are shapes, not type, so they keep the old dim. */
+.quote-dot { transition: opacity 0.2s ease; }
 .quote-dot:hover { opacity: 0.8; }
+
+/* The same glow, always on, for the page-level lines of type: the tagline, the
+   season headings, the quotes, the credits intro and the about statement's lit
+   words. Episode titles only glow on hover, above. */
+.tagline,
+.season-title,
+.quote-text p,
+.credits-intro,
+.about-statement strong { text-shadow: var(--glow); }
 
 /* The site's one entrance, used by every page: a fade on --ease-fade and a
    0.375rem upward drift on --ease-drift, always applied as a pair. */
@@ -207,16 +233,19 @@ a { color: inherit; text-decoration: none; }
   margin: 0;
   width: clamp(250px, 34vw, 520px);
   line-height: 0;
+  /* So the wordmark's glow can be sized in em off its own letters: 15.9cqw is
+     the SVG text's font size as a share of the logo's width. */
+  container-type: inline-size;
 }
 
 /* will-change keeps the link on its own layer at rest, so hovering (which
-   forces a translucent layer for the opacity transition) doesn't switch the
+   forces a new layer for the glow's filter) doesn't switch the
    SVG text's anti-aliasing mode mid-hover. Safari re-hints glyphs when that
    switch happens, which reads as the wordmark jumping a fraction of a pixel;
    most visible on the credits page, where the logo renders smaller. */
 .logo a { display: block; will-change: opacity; }
 
-.logo svg { width: 100%; height: auto; display: block; fill: currentColor; }
+.logo svg { width: 100%; height: auto; display: block; fill: currentColor; font-size: 15.9cqw; }
 
 .platforms {
   display: flex;
@@ -310,7 +339,7 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 46rem) {
   .tagline {
     margin-top: calc(var(--space-xl) + var(--space-m));
-    font-size: 6vw;
+    font-size: 8vw;
   }
 }
 
@@ -378,49 +407,6 @@ a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   .tagline,
   .episodes-layout { animation: none; }
-}
-
-/* The intro. The head script sets .is-intro: the header stays as it is, the
-   tagline fills the rest of the screen with the sentence centred in it, and
-   everything below is taken out (so its entrance has not been spent). The body
-   is held to the screen's height and cannot scroll; script.js takes the first
-   scroll, key or tap as the cue, swaps .is-intro for .is-revealed, and glides
-   the sentence into its usual place while the list plays its usual entrance.
-   Without JS the class is never set. The reserved scrollbar gutter keeps the
-   text's width, and so its line breaks, the same either side of the swap. */
-html.is-intro { overflow: hidden; scrollbar-gutter: stable; }
-
-html.is-intro body { height: 100vh; height: 100svh; }
-
-html.is-intro main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-html.is-intro main > :not(.tagline),
-html.is-intro .site-footer { display: none; }
-
-html.is-intro .tagline {
-  position: relative;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-/* The scroll cue: a muted arrow at the foot of the screen, after the sentence. */
-html.is-intro .tagline::after {
-  content: "↓";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  translate: -50% 0;
-  color: var(--muted);
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
-  animation:
-    fade-in 1.2s var(--ease-fade) 1.2s both,
-    drift-in 1.2s var(--ease-drift) 1.2s both;
 }
 
 /* ---- Episode list ---- */
@@ -613,7 +599,6 @@ html.is-intro .tagline::after {
   align-items: center;
   gap: 0.5em;
   color: var(--muted);
-  transition: color 0.2s ease;
 }
 
 .episode-listen:hover { color: var(--fg); }
@@ -1289,39 +1274,4 @@ html.is-intro .tagline::after {
     animation-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* ---- Glow trial (TEMPORARY) ----
-   A faint halo on the large --fg type only, never on gray. script.js sets
-   data-glow on <html> from the switch in the corner; remove this block and the
-   switch once a strength is chosen. The blur is in em so it scales with each size. */
-:root { --glow: none; }
-/* Two layers: a tight core that lifts the letter edges, and a wider haze. */
-html[data-glow="1"] { --glow: 0 0 0.2em rgb(244 244 242 / 0.25), 0 0 0.8em rgb(244 244 242 / 0.12); }
-html[data-glow="2"] { --glow: 0 0 0.2em rgb(244 244 242 / 0.4), 0 0 0.8em rgb(244 244 242 / 0.22); }
-html[data-glow="3"] { --glow: 0 0 0.15em rgb(244 244 242 / 0.6), 0 0 0.6em rgb(244 244 242 / 0.35), 0 0 1.5em rgb(244 244 242 / 0.2); }
-
-.tagline,
-.season-title,
-.episode-title,
-.quote-text p,
-.credits-intro,
-.about-statement strong { text-shadow: var(--glow); }
-
-html.is-intro .tagline::after { text-shadow: none; }
-
-.glow-switch {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 10;
-  padding: 0.5em 0.8em;
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  background: var(--bg);
-  color: var(--muted);
-  font: 700 0.75rem/1 'STF Sans', Arial, Helvetica, sans-serif;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
 }

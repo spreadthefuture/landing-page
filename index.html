@@ -20,22 +20,6 @@
 <link rel="canonical" href="https://spreadthefuture.com/">
 <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
 <link rel="stylesheet" href="/styles.css">
-<!-- The intro (styles.css, script.js): the tagline alone, full screen, until the
-     first scroll. Set here, before first paint, so the page never flashes in
-     whole. On every visit and reload, but not on back/forward or a #link, and
-     never under reduced motion. -->
-<script>
-  try {
-    if (performance.getEntriesByType('navigation')[0]?.type !== 'back_forward' && !location.hash
-      && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.documentElement.classList.add('is-intro');
-      // Should script.js fail to arm the intro, it never traps the page.
-      addEventListener('load', () => {
-        if (!document.documentElement.classList.contains('is-intro-armed')) document.documentElement.classList.remove('is-intro');
-      });
-    }
-  } catch {}
-</script>
 </head>
 <body>
   <header>

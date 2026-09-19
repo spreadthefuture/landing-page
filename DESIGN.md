@@ -6,8 +6,8 @@
 > Last updated: 2026-09-19
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
-shadows, no borders except hairline rules, no chromatic color except three platform
-brand colors on hover. Hierarchy comes from scale and weight alone, on one family in
+shadows (one faint text glow aside), no borders except hairline rules, no chromatic
+color except three platform brand colors on hover. Hierarchy comes from scale and weight alone, on one family in
 two weights. Every size is a `clamp()`, so the page is fluid, and the one breakpoint
 is structural. The signature moves: the wordmark set wide, the thin `--rule` under
 every episode, and one persistent square cover that crossfades beside the list.
@@ -26,6 +26,7 @@ near-duplicate.
 | Row size (episode row, "Coming soon.", credit name, about heading) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text and closing, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
 | Prose link | underlined, `text-underline-offset: 0.2em` |
+| Glow (big white type at rest, white text on hover) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
 | Brand name in copy | `SPREAD THE FUTURE`, uppercase in the markup |
 | Page description (meta and Open Graph) | The same sentence on all three pages, matching the tagline |
@@ -178,17 +179,6 @@ plus `--space-m`, plus `.episodes-layout`'s `--space-m` padding, so the sentence
 0.1s, then the whole `.episodes-layout` at 0.2s. The header stays still. Settled by
 about 1.5s. Pure CSS, removed under reduced motion.
 
-**Intro (trial):** on every visit and reload, the page opens on the header and the
-tagline only: the sentence, at its usual size, is centred in the space left below
-the header, with a muted `↓` at the foot of the screen fading in at 1.2s. Everything
-below is taken out and the page does not scroll. The first scroll, key or tap swaps
-`.is-intro` for `.is-revealed`: the sentence glides into its usual place over 1.2s
-on `--ease-drift`, and `.episodes-layout` plays the entrance above at 0.2s. The
-header stays still. `.is-intro` is set by an inline script in the head (before first
-paint) and never on back/forward navigation, a `#` link or under reduced motion; if
-`script.js` does not arm it by `load`, it is dropped. Without JS the page is
-unchanged.
-
 ### Season section
 A `<section class="season">` per season, newest first, stacked in `.seasons` to the
 right of the cover. The first heading starts level with the top of the cover. The
@@ -309,25 +299,26 @@ apart.
 
 ## Interaction
 
-- **One hover state:** `opacity: 0.8` over `0.2s ease`, declared once as a grouped rule
-  near the top of `styles.css`. Add new hoverable things to that rule. Exceptions:
-  platform icons shift to brand color; episode description links and per-episode
-  listen links lift from gray to `--fg` (listen link icons take their brand color).
+- **One glow:** `--glow` (in `:root`), two `text-shadow` layers in `--fg`: a 0.2em
+  core at 20% and a 0.8em haze at 10%, in em so it scales with the type.
+  `--glow-filter` is the same two layers as `drop-shadow()`, for the SVG wordmark and
+  the masked footer icons. Always on for the page-level lines (tagline, season
+  headings, quotes, credits intro, the about statement's lit words). Gray never glows.
+- **One hover state:** white things glow, over `0.2s ease`, declared once as a grouped
+  rule near the top of `styles.css`. Add new hoverable things to that rule. Gray links
+  lift to `--fg` first and then glow (episode description links, per-episode listen
+  links, footer icons). In a row or card only the white text glows: the episode title
+  but not its number, the credit name and role but not the country. Platform icons
+  also shift to brand color. The quote bars are the one exception: shapes, not type,
+  they keep a dim to `opacity: 0.8`.
 - **No underlines** except on prose links, with a `0.2em` offset.
 - **Focus:** `:focus-visible` is a 2px `--fg` outline at 4px offset.
 - **Motion:** one gesture, a fade plus a small upward drift. Two curves in `:root`:
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
   (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`) for movement. One pair of keyframes,
   `fade-in` and `drift-in` (0.375rem rise). Opacity never goes on an ease-out: it snaps
-  on. Entrances start within 0.3s (of load, or of the first scroll after the homepage intro) and settle by about 1.5s (about is the 3s
+  on. Entrances start within 0.3s of load and settle by about 1.5s (about is the 3s
   exception). No animation library.
-- **Glow, on trial (temporary).** A soft `text-shadow` halo on the large `--fg` type
-  only (tagline, season headings, episode titles, quotes, credits intro, the about
-  statement's lit words), never on gray. A corner switch or the G key cycles Off,
-  Subtle, Soft, Visible via `data-glow` on `<html>`; `?glow=0` to `3` in the URL sets
-  it. Lives in marked `TEMPORARY` blocks at the end of `styles.css` and `script.js`,
-  plus a script tag in the about and credits pages. Once a strength is chosen, keep
-  one `--glow` value, drop the switch and those tags, and revise the no-shadows rule.
 - **Reduced motion:** a global `prefers-reduced-motion` block cuts every transition,
   animation and smooth scroll to 0.01ms.
 
@@ -355,8 +346,8 @@ apart.
 ### Don't
 - Add a chromatic color. Brand colors are for platform icon hover only.
 - Use pure `#000` or `#FFF`.
-- Add shadows, gradients or any elevation. The system is flat. (The glow trial under
-  Interaction is the one exception being tested.)
+- Add shadows, gradients or any elevation. The system is flat. The one exception is
+  `--glow`: use it as is, never a second glow or a glow on gray.
 - Add border radius beyond the 6px covers and circular portraits.
 - Add a font, a weight, or a fourth spacing size without asking.
 - Add a JavaScript dependency. The site must work fully with JS off; `script.js` is
