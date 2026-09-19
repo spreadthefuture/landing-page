@@ -219,8 +219,7 @@ then growing at a third of the viewport from 1860px up.
 It shows the newest cover at rest, the hovered row's cover (on
 `(hover: hover) and (pointer: fine)` devices), and the open row's cover while one is
 expanded. Two stacked `<img>` layers: `script.js` loads the incoming cover into the
-hidden layer, then swaps `.is-active` for a 0.4s crossfade. The incoming cover also
-settles from `scale(1.015)` over 0.8s (`cover-settle`), clipped by the frame. At most
+hidden layer, then swaps `.is-active` for a 0.4s crossfade, with no scale. At most
 one swap per frame, because leave and enter fire together when moving between rows
 and swapping on both skipped the crossfade. Hidden below 46rem.
 

@@ -163,7 +163,7 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   // Applied once per frame, with the last cover asked for. Moving from one row
   // to the next fires leave and enter together; swapping on both would flip the
   // layers back before the browser draws, so the new cover would replace the old
-  // one in place, with no crossfade and no settle.
+  // one in place, with no crossfade.
   let pendingSrc = null;
   let swapFrame = null;
 
