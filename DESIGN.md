@@ -6,7 +6,7 @@
 > Last updated: 2026-09-19
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
-shadows (one faint text glow aside), no borders except hairline rules, no chromatic
+shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
 color except three platform brand colors on hover. Hierarchy comes from scale and weight alone, on one family in
 two weights. Every size is a `clamp()`, so the page is fluid, and the one breakpoint
 is structural. The signature moves: the wordmark set wide, the thin `--rule` under
@@ -26,7 +26,7 @@ near-duplicate.
 | Row size (episode row, "Coming soon.", credit name, about heading) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text and closing, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
 | Prose link | underlined, `text-underline-offset: 0.2em` |
-| Glow (big white type at rest, white text on hover) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
+| Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
 | Brand name in copy | `SPREAD THE FUTURE`, uppercase in the markup |
 | Page description (meta and Open Graph) | The same sentence on all three pages, matching the tagline |
@@ -302,8 +302,7 @@ apart.
 - **One glow:** `--glow` (in `:root`), two `text-shadow` layers in `--fg`: a 0.2em
   core at 20% and a 0.8em haze at 10%, in em so it scales with the type.
   `--glow-filter` is the same two layers as `drop-shadow()`, for the SVG wordmark and
-  the masked footer icons. Always on for the page-level lines (tagline, season
-  headings, quotes, credits intro, the about statement's lit words). Gray never glows.
+  the masked footer icons. Hover only: nothing glows at rest. Gray never glows.
 - **One hover state:** white things glow, over `0.2s ease`, declared once as a grouped
   rule near the top of `styles.css`. Add new hoverable things to that rule. Gray links
   lift to `--fg` first and then glow (episode description links, per-episode listen
