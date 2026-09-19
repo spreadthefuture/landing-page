@@ -281,3 +281,29 @@ if (quotes.length > 1) {
     observer.observe(quoteBlock);
   }
 }
+
+// Glow trial (TEMPORARY, see the end of styles.css). A corner switch, or the G
+// key, cycles the strength; the choice is remembered across pages.
+{
+  const levels = ['Off', 'Subtle', 'Soft', 'Visible'];
+  const root = document.documentElement;
+  let level = 0;
+  try { level = Number(localStorage.getItem('stf-glow')) || 0; } catch {}
+  const asked = new URLSearchParams(location.search).get('glow');
+  if (asked in levels) level = Number(asked);
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'glow-switch';
+  const apply = () => {
+    root.dataset.glow = level;
+    button.textContent = `Glow: ${levels[level]}`;
+    try { localStorage.setItem('stf-glow', level); } catch {}
+  };
+  const cycle = () => { level = (level + 1) % levels.length; apply(); };
+  button.addEventListener('click', cycle);
+  window.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'g' && !event.metaKey && !event.ctrlKey) cycle();
+  });
+  document.body.append(button);
+  apply();
+}

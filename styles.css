@@ -1290,3 +1290,38 @@ html.is-intro .tagline::after {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---- Glow trial (TEMPORARY) ----
+   A faint halo on the large --fg type only, never on gray. script.js sets
+   data-glow on <html> from the switch in the corner; remove this block and the
+   switch once a strength is chosen. The blur is in em so it scales with each size. */
+:root { --glow: none; }
+/* Two layers: a tight core that lifts the letter edges, and a wider haze. */
+html[data-glow="1"] { --glow: 0 0 0.2em rgb(244 244 242 / 0.25), 0 0 0.8em rgb(244 244 242 / 0.12); }
+html[data-glow="2"] { --glow: 0 0 0.2em rgb(244 244 242 / 0.4), 0 0 0.8em rgb(244 244 242 / 0.22); }
+html[data-glow="3"] { --glow: 0 0 0.15em rgb(244 244 242 / 0.6), 0 0 0.6em rgb(244 244 242 / 0.35), 0 0 1.5em rgb(244 244 242 / 0.2); }
+
+.tagline,
+.season-title,
+.episode-title,
+.quote-text p,
+.credits-intro,
+.about-statement strong { text-shadow: var(--glow); }
+
+html.is-intro .tagline::after { text-shadow: none; }
+
+.glow-switch {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 10;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--muted);
+  font: 700 0.75rem/1 'STF Sans', Arial, Helvetica, sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}

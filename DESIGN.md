@@ -321,6 +321,13 @@ apart.
   `fade-in` and `drift-in` (0.375rem rise). Opacity never goes on an ease-out: it snaps
   on. Entrances start within 0.3s (of load, or of the first scroll after the homepage intro) and settle by about 1.5s (about is the 3s
   exception). No animation library.
+- **Glow, on trial (temporary).** A soft `text-shadow` halo on the large `--fg` type
+  only (tagline, season headings, episode titles, quotes, credits intro, the about
+  statement's lit words), never on gray. A corner switch or the G key cycles Off,
+  Subtle, Soft, Visible via `data-glow` on `<html>`; `?glow=0` to `3` in the URL sets
+  it. Lives in marked `TEMPORARY` blocks at the end of `styles.css` and `script.js`,
+  plus a script tag in the about and credits pages. Once a strength is chosen, keep
+  one `--glow` value, drop the switch and those tags, and revise the no-shadows rule.
 - **Reduced motion:** a global `prefers-reduced-motion` block cuts every transition,
   animation and smooth scroll to 0.01ms.
 
@@ -348,7 +355,8 @@ apart.
 ### Don't
 - Add a chromatic color. Brand colors are for platform icon hover only.
 - Use pure `#000` or `#FFF`.
-- Add shadows, gradients or any elevation. The system is flat.
+- Add shadows, gradients or any elevation. The system is flat. (The glow trial under
+  Interaction is the one exception being tested.)
 - Add border radius beyond the 6px covers and circular portraits.
 - Add a font, a weight, or a fourth spacing size without asking.
 - Add a JavaScript dependency. The site must work fully with JS off; `script.js` is
