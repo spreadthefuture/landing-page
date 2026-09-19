@@ -293,11 +293,10 @@ a { color: inherit; text-decoration: none; }
    the page's left edge under it, wrapping naturally edge to edge like the
    wordmark above it. */
 .tagline {
-  /* Well under the break below: --space-xl less --space-m down
-     from the platform links, so the sentence leans toward the masthead, and
-     --space-xl here plus the --space-m that .episodes-layout pads in above the
-     list, the same total as under the about statement. */
-  margin: calc(var(--space-xl) - var(--space-m)) 0 var(--space-xl);
+  /* A full --space-xl down from the platform links, and --space-xl plus
+     --space-m here, plus the --space-m that .episodes-layout pads in above the
+     list, so the sentence stands clear of both the masthead and the cover. */
+  margin: var(--space-xl) 0 calc(var(--space-xl) + var(--space-m));
   font-size: clamp(1.35rem, 3vw, 3.75rem);
   font-weight: 700;
   line-height: 1.2;
@@ -305,9 +304,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Below this width the sentence is sized off the viewport instead of the clamp
-   above, so its lines keep filling edge to edge the way the wordmark does. */
+   above, so its lines keep filling edge to edge the way the wordmark does. The
+   gap above grows by --space-m too: --space-xl sits at its floor on a phone and
+   read as too tight under the stacked header. */
 @media (max-width: 46rem) {
   .tagline {
+    margin-top: calc(var(--space-xl) + var(--space-m));
     font-size: 6vw;
   }
 }
@@ -427,7 +429,7 @@ html.is-intro .tagline::after {
    for the page. The panel is a fixed width, the seasons column takes what's
    left. Sticky is bounded by this container, so the cover travels the whole list
    and releases at the end of the last season. No rule over the list: the
-   tagline's --space-xl is the break, plus --space-m down to the cover and the
+   tagline's --space-xl + --space-m is the break, plus --space-m down to the cover and the
    first heading. */
 .episodes-layout {
   position: relative;
@@ -674,7 +676,10 @@ html.is-intro .tagline::after {
     gap: 1.25rem;
   }
 
-  .platforms .platform-icon { width: 1.75em; height: 1.75em; }
+  /* The per-episode listen icons match the header's, so every icon-only row of
+     platform links on a phone reads at one size. */
+  .platforms .platform-icon,
+  .episode-listen .platform-icon { width: 1.75em; height: 1.75em; }
 
   /* align-items reset to stretch: flex-start (the desktop value) only sizes a
      column's cross axis to content, so the list would shrink to its content

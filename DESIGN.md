@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-18
+> Last updated: 2026-09-19
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows, no borders except hairline rules, no chromatic color except three platform
@@ -171,9 +171,8 @@ listen links.
 The homepage's one sentence, bold, in sentence case and all `--fg`, wrapping edge
 to edge. No lit phrases.
 
-`--space-xl` minus `--space-m` above, tighter than the about statement, so it
-leans toward the masthead. Below, the same as the about statement: `--space-xl` plus
-`.episodes-layout`'s `--space-m` padding.
+Above: `--space-xl`, or `--space-xl` plus `--space-m` under 46rem. Below: `--space-xl`
+plus `--space-m`, plus `.episodes-layout`'s `--space-m` padding, so the sentence stands clear of both the masthead and the cover.
 
 **Homepage entrance:** `fade-in` and `drift-in` over 1.2s, in two beats: tagline at
 0.1s, then the whole `.episodes-layout` at 0.2s. The header stays still. Settled by
@@ -240,7 +239,8 @@ The episode list below 46rem. Season headings and "Coming soon." stay. Each summ
 just its cover: full width, square, 6px radius over `--surface`, `--gutter` between
 covers. Number and title stay in the summary for screen readers (visually hidden) and
 are shown at the top of the open text as `.episode-heading` (bold uppercase, 1.15rem,
-number in `--muted`, `aria-hidden`). Then description, meta and platform icons, with
+number in `--muted`, `aria-hidden`). Then description, meta and platform icons (1.75em,
+the header's mobile size), with
 `--gutter` above and `--space-m` below. Padding sits on `.episode-body`, not the
 panel, so the fold reaches 0.
 
