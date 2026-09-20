@@ -116,7 +116,7 @@
         </p>
         <p class="contact-field">
           <label class="contact-label" for="contact-email">Email</label>
-          <input class="contact-input" id="contact-email" type="email" name="email" autocomplete="email" required aria-describedby="contact-email-error">
+          <input class="contact-input" id="contact-email" type="email" name="email" autocomplete="email" required pattern="[^@\s]+@[^@\s]+\.[^@\s]+" aria-describedby="contact-email-error">
           <span class="contact-error" id="contact-email-error">Please fill out this field with a valid email address.</span>
         </p>
         <p class="contact-field">

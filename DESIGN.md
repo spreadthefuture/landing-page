@@ -3,7 +3,8 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-20 (about contact line, contact overlay, form validation)
+> Last updated: 2026-09-20 (about contact line, contact overlay, form validation,
+> email format check)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -336,6 +337,13 @@ cannot style, so with JS the form is `novalidate` and `script.js` marks the
 empty fields itself (`.is-invalid`, styled with `:user-invalid`) and focuses the
 first one; a corrected field clears on input. The `required` attributes stay, so
 with JS off the browser does the checking its own way.
+
+The email field carries `pattern="[^@\s]+@[^@\s]+\.[^@\s]+"` on top of
+`type="email"`, because the type alone accepts an address with no dot in the
+domain (`tom@gmail` passes it). The pattern asks for one `@` and a dot after it,
+and nothing beyond that: no TLD list, no rules on the part before the `@`. Plus
+signs, dots, apostrophes and new TLDs all go through. `checkValidity()` covers
+it, so both the JS and the JS-off paths pick it up with no other change.
 
 `:target` opens it, so the link is a plain `<a href="#contact">`
 and the form works with JS off (it posts to Web3Forms and the "close" links are
