@@ -3,8 +3,8 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-20 (contact line and form moved from the about page to
-> the end of the credits page)
+> Last updated: 2026-09-20 (header nav back to About / Credits: stacked beside the
+> wordmark on desktop, behind the "MORE" plus below 46rem)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -96,7 +96,7 @@ uses the same trick with `Arial-BoldMT`.
 | Role | Size | Weight | Line height | Tracking |
 |------|------|--------|-------------|----------|
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 (reset) | |
-| site nav (vertical) | `clamp(1.543rem, 3.359vw, 3.21rem)`, tied to the wordmark's height | 700 | 2 (see Site nav) | |
+| site nav | `clamp(2rem, 5vw, 4rem)` · `8vw` below 46rem | 700 | 1 | |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
@@ -145,8 +145,8 @@ repeated in all three files. Change one, change all three.
 
 `46rem` (736px), shared by every page and by `script.js`'s `matchMedia`. Below it:
 
-- **Header:** platform names collapse to icons, with "Listen on" at their size. The
-  site nav needs no rule here: it is vertical at every width.
+- **Header:** platform names collapse to icons, with "Listen on" at their size; the
+  site nav folds behind a plus beside the wordmark.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
 - **About:** each band stacks photo then text, left aligned; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
@@ -159,42 +159,15 @@ Inline SVG, filled with `currentColor`, linked to `/` on every page, with the st
 hover fade. `will-change: opacity` stops Safari re-hinting the glyphs mid-hover.
 
 ### Site nav
-One link, "ABOUT", bold uppercase, set on its side up the right edge of `.header-top`,
-reading bottom to top. Top-aligned with the wordmark. No menu and no script: the header
-is a wordmark and one destination. Credits is reached from the about page's closing
-line, not from the header.
+About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
 
-**Rotated, not set in a vertical writing mode.** `writing-mode: vertical-rl` leaves it
-to the engine where a rotated glyph sits across the line box (Chromium centres it in the
-em box, WebKit does not), so the word landed on a different line in each: inside the
-`--gutter` on one, past it on the other. `.site-nav` is instead a box the size of the
-word's own ink, with the link laid out horizontally inside it and turned a quarter
-anticlockwise:
-
-```css
-transform-origin: 0 0;
-transform: rotate(-90deg) translate(-100%, -0.632em);
-```
-
-read in the turned frame: `-100%` carries the word's length back down the right edge, so
-"A" ends at the bottom, and `-0.632em` takes off the leading above the caps (half of the
-`2em` line box less the `0.919 + 0.200` the glyphs take, plus the `0.191` from the
-ascent down to the cap line). The `2em` line box is the tap target: `2em` thick to the
-finger, `0.74em` of ink on screen. The caps then land exactly on the `--gutter` the
-photos, the tagline and the platform row are measured from, and the word's top on the
-top of "SPREAD".
-
-**Every number is STF Sans in em** (Arial's metrics, which Liberation Sans matches), so
-it holds at any size: cap band `0.740em` (cap height `0.728` plus the O's `0.012`
-overshoot), word `3.555em`, ascent / descent `0.919` / `0.200`. A different typeface
-means remeasuring all four.
-
-**The size is tied to the wordmark, not to the type scale.** The logo SVG is
-`1355 / 3859` = `0.3511` as tall as it is wide, so `0.3511 / 3.555` = `0.0988` of the
-logo's width runs the word exactly the wordmark's height. Against `.logo`'s
-`clamp(250px, 34vw, 520px)` that is `3.359vw` between `1.543rem` (the 250px floor) and
-`3.21rem` (the 520px ceiling): one rule, the same height as the wordmark from phone to
-desktop, no breakpoint. Rescaling the wordmark means redoing that arithmetic.
+**Below 46rem (trial):** the links fold away behind "MORE" and the episode
+row's plus (`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the
+wordmark, reading bottom to top with the plus at the top; the plus stays upright. Tapping it slides About and Credits open under it, right aligned at `8vw`, `--space-s` below
+the wordmark, on the mobile feed's 500ms cubic ease-in-out; the words fade and drift in
+0.1s and 0.18s behind. The plus turns to a minus; Escape closes. A `.js` class set by
+a one-line script in each page's head hides the nav before first paint, so without JS
+the nav simply stays open and the plus never shows.
 
 ### Platform bar
 "LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER". Bold uppercase at the label size,
