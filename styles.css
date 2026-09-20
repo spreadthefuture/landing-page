@@ -1556,8 +1556,9 @@ body.is-locked { overflow: hidden; }
 /* The page's one button. Kept as type on a hairline box rather than a filled
    shape: the border is the same --rule as the fields, and hover lifts it to
    --fg with the site's glow, like every other white thing. */
+/* No top margin of its own: the last field's --space-s already sits above it,
+   and two of them stacked pushed the button off the bottom of a phone screen. */
 .contact-submit {
-  margin-top: var(--space-s);
   padding: 0.75rem 1.75rem;
   border: 1px solid var(--rule);
   border-radius: 0;
