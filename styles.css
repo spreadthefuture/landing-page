@@ -154,7 +154,7 @@ a { color: inherit; text-decoration: none; }
 .credit-name,
 .credit-role,
 .about-closing a,
-.about-contact a,
+.contact-line a,
 .episode-description a,
 .episode-listen { transition: color 0.2s ease, text-shadow 0.2s ease; }
 
@@ -164,7 +164,7 @@ a { color: inherit; text-decoration: none; }
 .credit-link:hover .credit-name,
 .credit-link:hover .credit-role,
 .about-closing a:hover,
-.about-contact a:hover,
+.contact-line a:hover,
 .episode-description a:hover,
 .episode-listen:hover { text-shadow: var(--glow); }
 
@@ -1022,14 +1022,35 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+/* The page's closing line: the one thing on the site that asks something of the
+   reader, under the names it thanks. Gray prose, centred, --space-xl below the
+   list so it reads as a close rather than a third grouping, with only
+   "Contact us." as the link. */
+.contact-line {
+  margin: var(--space-xl) 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Lifted to --fg so it is the brightest thing in the line, with the same
+   underline as the about closing's credits link. */
+.contact-line a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 /* Entrance, the about page's two animations and curves, applied per block, but
    quicker: 1.2s instead of 1.8s and 100ms between beats, since this page is
    mostly faces to reach. The heading at 0.1s, each row of cards as one block at
-   0.2s and 0.3s, then the videographers, heading and names together, at 0.4s.
-   The page is whole by about 1.6s. */
+   0.2s and 0.3s, then the videographers, heading and names together, at 0.4s,
+   and the contact line last at 0.5s. The page is whole by about 1.7s. */
 .page-credits .credits-intro,
 .credit,
-.thanks-list {
+.thanks-list,
+.contact-line {
   animation:
     fade-in 1.2s var(--ease-fade) both,
     drift-in 1.2s var(--ease-drift) both;
@@ -1040,13 +1061,15 @@ a { color: inherit; text-decoration: none; }
 .credit:nth-child(n + 4) { animation-delay: 0.3s; }
 .page-credits .credits-intro:nth-of-type(2),
 .thanks-list { animation-delay: 0.4s; }
+.contact-line { animation-delay: 0.5s; }
 
 /* Removed outright, as on the about page: the global rule shortens durations
    but not delays. */
 @media (prefers-reduced-motion: reduce) {
   .page-credits .credits-intro,
   .credit,
-  .thanks-list { animation: none; }
+  .thanks-list,
+  .contact-line { animation: none; }
 }
 
 /* ---- About ---- */
@@ -1236,8 +1259,7 @@ a { color: inherit; text-decoration: none; }
    hidden only through its own delay. */
 .about-statement,
 .about-section,
-.about-closing,
-.about-contact {
+.about-closing {
   animation:
     fade-in 1.2s var(--ease-fade) both,
     drift-in 1.2s var(--ease-drift) both;
@@ -1248,7 +1270,6 @@ a { color: inherit; text-decoration: none; }
 .about-section:nth-child(3) { animation-delay: 0.65s; }
 .about-statement { animation-delay: 1s; }
 .about-closing { animation-delay: 1.35s; }
-.about-contact { animation-delay: 1.6s; }
 
 /* Blocks below the fold at load wait for the reader instead: script.js marks
    them .is-waiting (never under reduced motion), then swaps in .is-entering as
@@ -1256,24 +1277,21 @@ a { color: inherit; text-decoration: none; }
    Blocks arriving together are staggered 250ms apart by the script. */
 .about-statement.is-waiting,
 .about-section.is-waiting,
-.about-closing.is-waiting,
-.about-contact.is-waiting {
+.about-closing.is-waiting {
   animation: none;
   opacity: 0;
 }
 
 .about-statement.is-entering,
 .about-section.is-entering,
-.about-closing.is-entering,
-.about-contact.is-entering { animation-delay: 0s; }
+.about-closing.is-entering { animation-delay: 0s; }
 
 /* Removed outright rather than left to the global reduced-motion rule: that one
    shortens durations but not delays, so the blocks would still blink in late. */
 @media (prefers-reduced-motion: reduce) {
   .about-statement,
   .about-section,
-  .about-closing,
-  .about-contact { animation: none; }
+  .about-closing { animation: none; }
 }
 
 /* Colour follows the scroll: each band comes to colour as it rises into view,
@@ -1313,24 +1331,6 @@ a { color: inherit; text-decoration: none; }
    the line, with the same underline as the episode description's prose link
    so it still reads as a link at a glance. */
 .about-closing a {
-  color: var(--fg);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-/* The sign off's second line: the one thing on the page that asks something of
-   the reader. Same gray prose as the sign off above it, --space-m below it so
-   the two read as one closing block, with only "Contact us." as the link, same
-   treatment as the "international team" link above it. */
-.about-contact {
-  margin: var(--space-m) 0 0;
-  color: var(--muted);
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
-  line-height: 1.6;
-  text-align: center;
-}
-
-.about-contact a {
   color: var(--fg);
   text-decoration: underline;
   text-underline-offset: 0.2em;

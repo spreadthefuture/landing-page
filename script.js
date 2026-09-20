@@ -261,7 +261,7 @@ if (quotes.length > 1) {
 // several arrive together. A block scrolled past too fast to be seen comes in
 // anyway, so none is left hidden above the reader. Under reduced motion every
 // block is simply there.
-const aboutBlocks = document.querySelectorAll('.about-section, .about-statement, .about-closing, .about-contact');
+const aboutBlocks = document.querySelectorAll('.about-section, .about-statement, .about-closing');
 
 if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
@@ -287,7 +287,7 @@ if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
 // hand focus back to the link it came from. The scroll behind is locked while
 // it is open, so the page under the scrim does not drift.
 //
-// The form lives on the about page, opened by the closing line's own link. An
+// The form lives on the credits page, opened by the closing line's own link. An
 // opener pointing at another page is still left to navigate, and a page arrived
 // at with #contact already set (an old link, or a
 // shared one) turns that into the class state and drops the hash, so it behaves

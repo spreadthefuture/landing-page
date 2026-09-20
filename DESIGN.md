@@ -3,8 +3,8 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-20 (header nav reduced to About, contact form back to the
-> about page only, footer mail icon removed)
+> Last updated: 2026-09-20 (contact line and form moved from the about page to
+> the end of the credits page)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -25,8 +25,8 @@ near-duplicate.
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
 | Label size (platform bar, episode listen links, quote source, contact field labels and submit) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
-| Prose size (about text, closing and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
-| Prose link (episode description, about closing, about contact) | underlined, `text-underline-offset: 0.2em`; the two about links are also `--fg` |
+| Prose size (about text and closing, credits contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
+| Prose link (episode description, about closing, credits contact line) | underlined, `text-underline-offset: 0.2em`; the last two are also `--fg` |
 | Measure (max line length) | `48ch` about principles, `60ch` episode description, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
@@ -283,9 +283,14 @@ The whole card links to that person's LinkedIn: circular portrait
 (`clamp(150px, 24vw, 360px)`, `object-fit: cover`), bold uppercase name, role in
 `--fg` and country in `--muted`. Three across, one below 46rem.
 
+**Contact line.** `.contact-line` closes the page, `--space-xl` under the
+videographers: centred gray prose at the prose size, "The future is a
+conversation." with only "Contact us." as a `--fg` underlined link that opens the
+contact overlay. It is the site's one way into the form.
+
 **Entrance:** `fade-in` and `drift-in` over 1.2s, 100ms apart: "Our Team" at 0.1s,
-each row of cards at 0.2s and 0.3s, the videographers at 0.4s. Whole by about 1.6s.
-Removed under reduced motion.
+each row of cards at 0.2s and 0.3s, the videographers at 0.4s, the contact line at
+0.5s. Whole by about 1.7s. Removed under reduced motion.
 
 ### About page
 A manifesto in three beats, the statement landing as the conclusion:
@@ -308,16 +313,12 @@ A manifesto in three beats, the statement landing as the conclusion:
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
    reset) is `--fg`.
 3. **Sign off.** `.about-closing`, centred, `--space-xl` above, prose size in
-   `--muted`, its credits link in `--fg`, underlined at `0.2em`.
-4. **Contact line.** `.about-contact`, `--space-m` below the sign off so the two
-   read as one closing block: the same centred gray prose, with only "Contact us."
-   as a `--fg` underlined link that opens the contact overlay, same treatment as
-   the sign off's credits link.
+   `--muted`, its credits link in `--fg`, underlined at `0.2em`. It is the page's
+   last line: the contact line lives at the end of the credits page instead.
 
 **Entrance:** in reading order, 1.2s per block (the other pages' tempo; 1.8s made the photos, and so their colour, feel late): opacity on `ease-in-out`
 and a 0.375rem drift on `--ease-drift`. Blocks on screen at load run in pure CSS,
-delays principles 0.15s / 0.4s / 0.65s, statement 1s, sign off 1.35s, contact
-line 1.6s. Blocks below
+delays principles 0.15s / 0.4s / 0.65s, statement 1s, sign off 1.35s. Blocks below
 the fold wait hidden (`.is-waiting`, set by `script.js`) and play the same entrance
 with no delay as each scrolls into view (`.is-entering`, 10% up from the bottom
 edge), 250ms apart when several arrive together. Under reduced motion the
@@ -334,7 +335,7 @@ number stays `--muted`. No hover state: a stale hover during scrolling held the
 colour back. Browsers without `animation-timeline` keep every band in colour.
 
 ### Contact overlay
-The contact form, on the about page only, opened from that page's contact line.
+The contact form, on the credits page only, opened from that page's contact line.
 No card and no
 elevation: a `min(34rem, 100%)` panel on `--bg` inside a 1px `--rule` border,
 centred over a `rgb(10 10 10 / 0.92)` scrim, `--space-m` padding. The close
@@ -381,9 +382,9 @@ so the page keeps its scroll position; it also focuses the first field, closes o
 Escape or a click on the scrim, returns focus to the link it came from, and locks
 the page scroll with `body.is-locked`. Both selectors drive the same rules.
 
-**One form, on the about page.** The markup sits before that page's footer and
+**One form, on the credits page.** The markup sits before that page's footer and
 nowhere else, so the contact line's `#contact` is a local anchor and the overlay
-opens where the reader already is. Home and credits carry no form and no opener.
+opens where the reader already is. Home and about carry no form and no opener.
 
 A page arrived at with `#contact` already in the URL (an old `/about/#contact`
 link, or a shared one) still opens on arrival: `script.js` swaps the hash for
@@ -402,9 +403,9 @@ Two ways in, like the overlay itself. With JS, `script.js` posts the form with
 `fetch` and adds `.is-sent`, so the reader never leaves the page and the hash is
 never touched; the button reads "Sending" while the request is out, and focus
 moves to the close cross. With JS off, a hidden `redirect` field sends the reader
-back to the about page at `#sent`, where `:has(.contact-sent:target)`
+back to the credits page at `#sent`, where `:has(.contact-sent:target)`
 both opens the overlay and shows the confirmation. The hidden field carries the
-absolute `https://spreadthefuture.com/about/#sent`; Web3Forms requires a
+absolute `https://spreadthefuture.com/credits/#sent`; Web3Forms requires a
 full URL on the same domain. A failed `fetch` falls back to that ordinary post,
 so a written message is never lost to a network error. Closing the panel clears
 `.is-sent` and resets the form, so the next message starts clean.
@@ -439,8 +440,9 @@ arithmetic.
 Each link is padded to a 32px tap target, with the padding taken back out of the row
 gap so glyphs still read 1.75rem apart.
 
-There is no contact glyph here: the form is reached from the about page's closing
-line (see **Contact overlay**). `assets/social/mail.svg` stays in the repo, unused.
+There is no contact glyph here: the form is reached from the credits page's
+closing line (see **Contact overlay**). `assets/social/mail.svg` stays in the
+repo, unused.
 
 ## Interaction
 
@@ -456,7 +458,7 @@ line (see **Contact overlay**). `assets/social/mail.svg` stays in the repo, unus
   also shift to brand color. The quote bars are the one exception: shapes, not type,
   they keep a dim to `opacity: 0.8`.
 - **No underlines** except on prose links, with a `0.2em` offset: the episode
-  description's links, the about closing's credits link and the about contact
+  description's links, the about closing's credits link and the credits contact
   line's "Contact us." link, the last two also lifted to `--fg`.
 - **Focus:** `:focus-visible` is a 2px `--fg` outline at 4px offset.
 - **Motion:** one gesture, a fade plus a small upward drift. Two curves in `:root`:
