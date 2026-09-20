@@ -1354,7 +1354,8 @@ a { color: inherit; text-decoration: none; }
 
 /* The sign off's second line: the one thing on the page that asks something of
    the reader. Same gray prose as the sign off above it, --space-m below it so
-   the two read as one closing block, with the whole sentence as the link. */
+   the two read as one closing block, with only "Contact us." as the link, same
+   treatment as the "international team" link above it. */
 .about-contact {
   margin: var(--space-m) 0 0;
   color: var(--muted);
@@ -1627,9 +1628,9 @@ body.is-locked { overflow: hidden; }
   padding: 0.375rem;
 }
 
-/* Both glyphs are drawn edge to edge inside a 24x24 box, so one fixed square
-   here lands their outer edges on the same four lines. Fixed rather than em:
-   the row must not resize with the copyright type below it. */
+/* The square glyphs are drawn edge to edge inside a 24x24 box, so one fixed
+   square here lands their outer edges on the same four lines. Fixed rather than
+   em: the row must not resize with the copyright type below it. */
 .social-icon {
   display: block;
   width: 1.25rem;
@@ -1645,6 +1646,15 @@ body.is-locked { overflow: hidden; }
 
 .social-icon--linkedin { -webkit-mask-image: url(/assets/social/linkedin.svg); mask-image: url(/assets/social/linkedin.svg); }
 .social-icon--instagram { -webkit-mask-image: url(/assets/social/instagram.svg); mask-image: url(/assets/social/instagram.svg); }
+/* The envelope keeps its own 21:16.5 drawing rather than being squeezed into the
+   square, and is matched to the others by height: 1.25rem tall like them, so the
+   three sit between the same two lines, and 1.591rem wide, which is that height
+   at the envelope's ratio. Wider than its neighbours on purpose. */
+.social-icon--mail {
+  width: 1.584rem;
+  -webkit-mask-image: url(/assets/social/mail.svg);
+  mask-image: url(/assets/social/mail.svg);
+}
 
 /* Bold and tracked, the site's one small tracked word. line-height: 1 drops the word's box to its own type size, which leaves the
    cap height within a fraction of a pixel of that box's centre, so the row's

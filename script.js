@@ -326,18 +326,25 @@ if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
   }
 }
 
-// Contact overlay. The link is a plain anchor to #contact, so with JS off the
+// Contact overlay. The links are plain anchors to #contact, so with JS off the
 // :target rules open it and the "close" links take it away again. With JS the
 // hash never changes: the class does the same job, the page keeps its scroll
 // position, and the overlay can put focus in the first field, hold Escape, and
 // hand focus back to the link it came from. The scroll behind is locked while
 // it is open, so the page under the scrim does not drift.
+//
+// The form is on every page, so the footer's mail icon opens it in place
+// wherever the reader is. An opener pointing at another page is still left to
+// navigate, and a page arrived at with #contact already set (an old link, or a
+// shared one) turns that into the class state and drops the hash, so it behaves
+// exactly like opening it here. Without JS :target handles both by itself.
 const contactOverlay = document.querySelector('.contact-overlay');
-const contactOpen = document.querySelector('.contact-open');
+const contactOpeners = document.querySelectorAll('.contact-open');
 
-if (contactOverlay && contactOpen) {
+if (contactOverlay && contactOpeners.length) {
   const closers = contactOverlay.querySelectorAll('.contact-scrim, .contact-close');
   const firstField = contactOverlay.querySelector('.contact-input');
+  let lastOpener = contactOpeners[0];
 
   const setContact = (open) => {
     contactOverlay.classList.toggle('is-open', open);
@@ -345,13 +352,25 @@ if (contactOverlay && contactOpen) {
     // Not on a phone: focusing a field there opens the keyboard at once, which
     // covers the form the reader has not yet read. They tap the field they want.
     if (open && !feed.matches) firstField?.focus({ preventScroll: true });
-    else contactOpen.focus({ preventScroll: true });
+    else lastOpener.focus({ preventScroll: true });
   };
 
-  contactOpen.addEventListener('click', (event) => {
-    event.preventDefault();
+  for (const opener of contactOpeners) {
+    opener.addEventListener('click', (event) => {
+      // Only the openers on this page open it in place; one pointing at another
+      // page is left to navigate.
+      if (opener.getAttribute('href') !== '#contact' &&
+          opener.pathname !== window.location.pathname) return;
+      event.preventDefault();
+      lastOpener = opener;
+      setContact(true);
+    });
+  }
+
+  if (window.location.hash === '#contact') {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
     setContact(true);
-  });
+  }
 
   for (const closer of closers) {
     closer.addEventListener('click', (event) => {
