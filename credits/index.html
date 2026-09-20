@@ -32,13 +32,8 @@
         </a>
       </h1>
 
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="menu-toggle-label">More</span><span class="menu-toggle-icon" aria-hidden="true"></span></button>
-
-      <nav class="site-nav" id="site-nav">
-        <div class="site-nav-links">
-          <a href="/about/">About</a>
-          <a href="/credits/" aria-current="page">Credits</a>
-        </div>
+      <nav class="site-nav">
+        <a href="/about/">About</a>
       </nav>
     </div>
 
@@ -113,59 +108,10 @@
     </ul>
   </main>
 
-  <!-- The contact form, as an overlay. It opens on :target, so the link works
-       with JS off; script.js takes over from there (see .contact-overlay).
-       The same block is on every page, so the footer envelope opens it in
-       place instead of sending the reader to the about page. -->
-  <div class="contact-overlay" id="contact" role="dialog" aria-modal="true" aria-labelledby="contact-title">
-    <a class="contact-scrim" href="#" tabindex="-1" aria-hidden="true"></a>
-    <div class="contact-panel">
-      <a class="contact-close" href="#"><span class="visually-hidden">Close the contact form</span><span class="contact-close-icon" aria-hidden="true"></span></a>
-      <h2 class="contact-title" id="contact-title">Contact us</h2>
-      <p class="contact-intro">A question, an idea, a guest we should hear from. Write to us.</p>
-      <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="a99b76b7-20ec-438f-bbff-1834727dd5b8">
-        <input type="hidden" name="subject" value="New message from spreadthefuture.com">
-        <input type="hidden" name="from_name" value="SPREAD THE FUTURE">
-        <!-- Where Web3Forms sends the reader when the form is posted the
-             ordinary way, with JS off or if the background send fails: back to
-             this page at #sent, which the :target rules turn into the panel's
-             confirmation. Without it the reader lands on Web3Forms' own page.
-             It has to be the full URL, so it names the live domain. -->
-        <input type="hidden" name="redirect" value="https://spreadthefuture.com/credits/#sent">
-        <!-- Web3Forms' honeypot: bots fill it, people never see it. -->
-        <input class="visually-hidden" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off">
-        <p class="contact-field">
-          <label class="contact-label" for="contact-name">Name</label>
-          <input class="contact-input" id="contact-name" type="text" name="name" autocomplete="name" required aria-describedby="contact-name-error">
-          <span class="contact-error" id="contact-name-error">Please fill out this field.</span>
-        </p>
-        <p class="contact-field">
-          <label class="contact-label" for="contact-email">Email</label>
-          <input class="contact-input" id="contact-email" type="email" name="email" autocomplete="email" required pattern="[^@\s]+@[^@\s]+\.[^@\s]+" aria-describedby="contact-email-error">
-          <span class="contact-error" id="contact-email-error">Please fill out this field with a valid email address.</span>
-        </p>
-        <p class="contact-field">
-          <label class="contact-label" for="contact-message">Message</label>
-          <textarea class="contact-input contact-textarea" id="contact-message" name="message" rows="5" required aria-describedby="contact-message-error"></textarea>
-          <span class="contact-error" id="contact-message-error">Please fill out this field.</span>
-        </p>
-        <button class="contact-submit" type="submit">Send</button>
-      </form>
-      <!-- The confirmation, in the panel the message was written in rather than
-           on a page of its own. -->
-      <div class="contact-sent" id="sent">
-        <h2 class="contact-title">Message sent</h2>
-        <p class="contact-intro">Thank you.</p>
-      </div>
-    </div>
-  </div>
-
   <footer class="site-footer">
     <nav class="footer-social" aria-label="SPREAD THE FUTURE elsewhere">
       <a href="https://www.linkedin.com/company/spreadthefuture" target="_blank" rel="noopener noreferrer"><span class="social-icon social-icon--linkedin" aria-hidden="true"></span><span class="visually-hidden">LinkedIn</span></a>
       <a href="https://www.instagram.com/spreadthefuture" target="_blank" rel="noopener noreferrer"><span class="social-icon social-icon--instagram" aria-hidden="true"></span><span class="visually-hidden">Instagram</span></a>
-      <a class="contact-open" href="#contact"><span class="social-icon social-icon--mail" aria-hidden="true"></span><span class="visually-hidden">Contact us</span></a>
       <a class="social-rss" href="https://anchor.fm/s/469ddf8c/podcast/rss" target="_blank" rel="noopener noreferrer">RSS</a>
     </nav>
     <p>Hosted and produced by Tom Thiercelin.<br><br>All rights reserved &copy; SPREAD THE FUTURE 2026.</p>

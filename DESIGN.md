@@ -3,8 +3,8 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-20 (about contact line, contact overlay, form validation,
-> email format check, footer mail icon, overlay on every page, sent state)
+> Last updated: 2026-09-20 (header nav reduced to About, contact form back to the
+> about page only, footer mail icon removed)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -96,7 +96,7 @@ uses the same trick with `Arial-BoldMT`.
 | Role | Size | Weight | Line height | Tracking |
 |------|------|--------|-------------|----------|
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 (reset) | |
-| site nav | `clamp(2rem, 5vw, 4rem)` · `8vw` below 46rem | 700 | 1 | |
+| site nav (vertical) | `clamp(1.543rem, 3.359vw, 3.21rem)`, tied to the wordmark's height | 700 | 2 (see Site nav) | |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
@@ -145,8 +145,8 @@ repeated in all three files. Change one, change all three.
 
 `46rem` (736px), shared by every page and by `script.js`'s `matchMedia`. Below it:
 
-- **Header:** platform names collapse to icons, with "Listen on" at their size; the
-  site nav folds behind a plus beside the wordmark.
+- **Header:** platform names collapse to icons, with "Listen on" at their size. The
+  site nav needs no rule here: it is vertical at every width.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
 - **About:** each band stacks photo then text, left aligned; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
@@ -159,15 +159,42 @@ Inline SVG, filled with `currentColor`, linked to `/` on every page, with the st
 hover fade. `will-change: opacity` stops Safari re-hinting the glyphs mid-hover.
 
 ### Site nav
-About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
+One link, "ABOUT", bold uppercase, set on its side up the right edge of `.header-top`,
+reading bottom to top. Top-aligned with the wordmark. No menu and no script: the header
+is a wordmark and one destination. Credits is reached from the about page's closing
+line, not from the header.
 
-**Below 46rem (trial):** the links fold away behind "MORE" and the episode
-row's plus (`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the
-wordmark, reading bottom to top with the plus at the top; the plus stays upright. Tapping it slides About and Credits open under it, right aligned at `8vw`, `--space-s` below
-the wordmark, on the mobile feed's 500ms cubic ease-in-out; the words fade and drift in
-0.1s and 0.18s behind. The plus turns to a minus; Escape closes. A `.js` class set by
-a one-line script in each page's head hides the nav before first paint, so without JS
-the nav simply stays open and the plus never shows.
+**Rotated, not set in a vertical writing mode.** `writing-mode: vertical-rl` leaves it
+to the engine where a rotated glyph sits across the line box (Chromium centres it in the
+em box, WebKit does not), so the word landed on a different line in each: inside the
+`--gutter` on one, past it on the other. `.site-nav` is instead a box the size of the
+word's own ink, with the link laid out horizontally inside it and turned a quarter
+anticlockwise:
+
+```css
+transform-origin: 0 0;
+transform: rotate(-90deg) translate(-100%, -0.632em);
+```
+
+read in the turned frame: `-100%` carries the word's length back down the right edge, so
+"A" ends at the bottom, and `-0.632em` takes off the leading above the caps (half of the
+`2em` line box less the `0.919 + 0.200` the glyphs take, plus the `0.191` from the
+ascent down to the cap line). The `2em` line box is the tap target: `2em` thick to the
+finger, `0.74em` of ink on screen. The caps then land exactly on the `--gutter` the
+photos, the tagline and the platform row are measured from, and the word's top on the
+top of "SPREAD".
+
+**Every number is STF Sans in em** (Arial's metrics, which Liberation Sans matches), so
+it holds at any size: cap band `0.740em` (cap height `0.728` plus the O's `0.012`
+overshoot), word `3.555em`, ascent / descent `0.919` / `0.200`. A different typeface
+means remeasuring all four.
+
+**The size is tied to the wordmark, not to the type scale.** The logo SVG is
+`1355 / 3859` = `0.3511` as tall as it is wide, so `0.3511 / 3.555` = `0.0988` of the
+logo's width runs the word exactly the wordmark's height. Against `.logo`'s
+`clamp(250px, 34vw, 520px)` that is `3.359vw` between `1.543rem` (the 250px floor) and
+`3.21rem` (the 520px ceiling): one rule, the same height as the wordmark from phone to
+desktop, no breakpoint. Rescaling the wordmark means redoing that arithmetic.
 
 ### Platform bar
 "LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER". Bold uppercase at the label size,
@@ -307,8 +334,8 @@ number stays `--muted`. No hover state: a stale hover during scrolling held the
 colour back. Browsers without `animation-timeline` keep every band in colour.
 
 ### Contact overlay
-The contact form, opened from the about page's contact line and from the footer
-envelope on any page. No card and no
+The contact form, on the about page only, opened from that page's contact line.
+No card and no
 elevation: a `min(34rem, 100%)` panel on `--bg` inside a 1px `--rule` border,
 centred over a `rgb(10 10 10 / 0.92)` scrim, `--space-m` padding. The close
 control is the episode row's plus turned 45 degrees, `--muted` lifting to `--fg`.
@@ -354,12 +381,9 @@ so the page keeps its scroll position; it also focuses the first field, closes o
 Escape or a click on the scrim, returns focus to the link it came from, and locks
 the page scroll with `body.is-locked`. Both selectors drive the same rules.
 
-**One form per page.** The same markup sits before the footer on all three
-pages, so every envelope is a local `#contact` anchor and the form opens where
-the reader already is. It posts to Web3Forms from any of them: the endpoint and
-the access key are the same and neither is tied to a path. The three copies are
-identical but for the hidden `redirect` value, which names the page it sits on
-(see **Sent state**); a change to one field is a change to all three.
+**One form, on the about page.** The markup sits before that page's footer and
+nowhere else, so the contact line's `#contact` is a local anchor and the overlay
+opens where the reader already is. Home and credits carry no form and no opener.
 
 A page arrived at with `#contact` already in the URL (an old `/about/#contact`
 link, or a shared one) still opens on arrival: `script.js` swaps the hash for
@@ -378,10 +402,9 @@ Two ways in, like the overlay itself. With JS, `script.js` posts the form with
 `fetch` and adds `.is-sent`, so the reader never leaves the page and the hash is
 never touched; the button reads "Sending" while the request is out, and focus
 moves to the close cross. With JS off, a hidden `redirect` field sends the reader
-back to the page they wrote from at `#sent`, where `:has(.contact-sent:target)`
-both opens the overlay and shows the confirmation. Each page's copy carries its
-own absolute URL (`https://spreadthefuture.com/#sent`, `/about/#sent`,
-`/credits/#sent`), the one place the three forms differ; Web3Forms requires a
+back to the about page at `#sent`, where `:has(.contact-sent:target)`
+both opens the overlay and shows the confirmation. The hidden field carries the
+absolute `https://spreadthefuture.com/about/#sent`; Web3Forms requires a
 full URL on the same domain. A failed `fetch` falls back to that ordinary post,
 so a written message is never lost to a network error. Closing the panel clears
 `.is-sent` and resets the form, so the next message starts clean.
@@ -404,31 +427,20 @@ fill is removed, so rotation stops and the bars are manual controls.
 `.is-entering` runs the fade and drift, bars 0.2s behind. The 9s timer starts there.
 
 ### Footer
-Centered, two lines, `max(6rem, var(--space-xl))` above. First, LinkedIn, Instagram,
-a filled envelope that opens the contact overlay, and a bold tracked "RSS" word, in
-`--muted`, `--space-s` above the copyright line in `--muted-dim`. Instagram and the
-envelope are drawn as outlines, LinkedIn is solid (**open question**, see
-`PROJECT-CONTEXT.md`). The line weights are matched across the row at the rendered
-size, not in each drawing's own units, because the two sit in boxes of different
-heights: the Instagram frame and lens ring are 2.6 of its 24 units, the envelope's
-stroke 1.854 of its 16.854, and both land near 2.2px on a 20px glyph. Rescaling
-either icon means redoing that arithmetic. The glyphs are CSS
-masks sized in `rem` (not `em`) so they do not scale with the copyright type. The two
+Centered, two lines, `max(6rem, var(--space-xl))` above. First, LinkedIn, Instagram
+and a bold tracked "RSS" word, in `--muted`, `--space-s` above the copyright line in
+`--muted-dim`. Instagram is drawn as an outline, LinkedIn is solid (**open question**,
+see `PROJECT-CONTEXT.md`). The glyphs are CSS
+masks sized in `rem` (not `em`) so they do not scale with the copyright type. Both
 square glyphs fill a 24x24 box, so one 1.25rem square aligns their edges; the RSS
-word centers on the same axis. The envelope keeps its own 21.354:16.854 drawing
-instead of being squeezed square, and is matched by height: 1.25rem tall like the
-others, so all three sit between the same two lines, and 1.584rem wide, that height
-at its ratio. It is the one glyph wider than its neighbours, on purpose.
-
-The envelope is the one icon drawn with `stroke` rather than filled paths, which a
-CSS mask renders like any other paint. Its `viewBox` is inset by half the stroke so
-the line is not clipped, which is why its numbers are not round.
+word centers on the same axis. Instagram's frame and lens ring are 2.6 of its 24
+units, which lands near 2.2px on a 20px glyph; rescaling it means redoing that
+arithmetic.
 Each link is padded to a 32px tap target, with the padding taken back out of the row
 gap so glyphs still read 1.75rem apart.
 
-The envelope is the same `.contact-open` anchor as the about page's contact line. The
-form is on every page, so the anchor is a local `#contact` everywhere and the overlay
-opens in place without leaving the page (see **Contact overlay**).
+There is no contact glyph here: the form is reached from the about page's closing
+line (see **Contact overlay**). `assets/social/mail.svg` stays in the repo, unused.
 
 ## Interaction
 
@@ -465,11 +477,10 @@ opens in place without leaving the page (see **Contact overlay**).
   is and squared in CSS with `object-fit: cover`.
 - **Credit portraits:** 720x720, JPEG q68, from `assets/credits-photos/`, cropped to a
   circle.
-- **Icons:** only the three masked platform glyphs and the three masked social glyphs
-  (`assets/social/`, single path, single color; the two square ones full-bleed in a
-  24x24 box, the envelope in its own wider box). Instagram and the envelope are
-  outlines, LinkedIn is solid. No
-  illustration or decorative graphics.
+- **Icons:** only the three masked platform glyphs and the two masked social glyphs
+  (`assets/social/`, single path, single color, full-bleed in a 24x24 box).
+  Instagram is an outline, LinkedIn is solid. `mail.svg` sits beside them, no longer
+  used by any page. No illustration or decorative graphics.
 
 ## Do's and don'ts
 

@@ -199,31 +199,57 @@ a { color: inherit; text-decoration: none; }
   gap: var(--space-m);
 }
 
-/* Sized like the about page's own section headings (§4.2 in PROJECT-CONTEXT), a step
-   up from the episode rows, since this nav is the same weight as a page heading
-   rather than a list item. .header-top's align-items: flex-start keeps this
-   top-aligned with the wordmark. */
+/* One link, ABOUT, set on its side up the right edge beside the wordmark, at every
+   width, reading bottom to top.
+
+   The box below is the word's own ink, so the caps land exactly on the --gutter
+   the photos, the tagline and the platform row are measured from, and its top on
+   the top of "SPREAD". Everything here is STF Sans (Arial's metrics, which
+   Liberation Sans matches) in em, so it holds at any size:
+
+     cap band  0.740em  (cap height 0.728 plus the O's 0.012 overshoot)
+     word      3.555em  ("ABOUT" uppercase, bold)
+     ascent / descent 0.919 / 0.200
+
+   The size is tied to the wordmark rather than picked from the type scale: the
+   logo's SVG is 1355/3859 = 0.3511 as tall as it is wide, so 0.3511 / 3.555 =
+   0.0988 of the logo's width runs the word exactly the wordmark's height. Against
+   .logo's clamp(250px, 34vw, 520px) that is 3.359vw between 1.543rem (where the
+   logo hits its 250px floor) and 3.21rem (its 520px ceiling): the two stay the
+   same height from phone to desktop, with no second rule at the breakpoint. */
 .site-nav {
   flex: none;
+  position: relative;
+  width: 0.74em;
+  height: 3.555em;
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 1;
+  font-size: clamp(1.543rem, 3.359vw, 3.21rem);
   text-transform: uppercase;
 }
 
-/* The links sit in their own box so that below 46rem script.js can slide the
-   nav's height while the air above the words (padding here) folds with it. */
-.site-nav-links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
+/* Laid out horizontally and turned a quarter anticlockwise, not set in a vertical
+   writing mode: where a rotated glyph sits across a vertical line box is up to the
+   engine (Chromium centres it in the em box, WebKit does not), so the word landed
+   on a different line on each, once inside the gutter and once past it. A rotation
+   has no such say in it: the box is an ordinary line box, and the offsets below
+   come from the font.
 
-/* The plus that folds the nav away. Phones only, and only with script.js
-   (the .js class is set in each page's head, before first paint, so the nav
-   never flashes open and then shuts). */
-.menu-toggle { display: none; }
+   rotate() then translate() reads in the turned frame: -100% carries the word's
+   length back down the right edge (so "A" ends at the bottom), and -0.632em takes
+   off the leading above the caps, which is half of the 2em line box less the
+   0.919 + 0.200 the glyphs themselves take, plus the 0.191 from the ascent down to
+   the cap line. The 2em line box is the tap target: it makes the word 2em thick
+   to the finger while only its 0.74em of ink shows. */
+.site-nav a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  height: 2em;
+  line-height: 2em;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) translate(-100%, -0.632em);
+}
 
 .logo {
   display: block;
@@ -504,8 +530,7 @@ a { color: inherit; text-decoration: none; }
 
 /* The open/close affordance from the mockup. Sized and weighted in em so it
    scales with the row's own bold text instead of sitting at a fixed size. */
-.episode-toggle,
-.menu-toggle-icon {
+.episode-toggle {
   flex: none;
   position: relative;
   width: 0.85em;
@@ -513,9 +538,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .episode-toggle::before,
-.episode-toggle::after,
-.menu-toggle-icon::before,
-.menu-toggle-icon::after {
+.episode-toggle::after {
   content: "";
   position: absolute;
   inset: 50% 0 auto 0;
@@ -524,10 +547,8 @@ a { color: inherit; text-decoration: none; }
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-.episode-toggle::after,
-.menu-toggle-icon::after { transform: rotate(90deg); }
-.episode[open]:not(.is-closing) .episode-toggle::after,
-.menu-toggle[aria-expanded="true"] .menu-toggle-icon::after { transform: rotate(0deg); opacity: 0; }
+.episode-toggle::after { transform: rotate(90deg); }
+.episode[open]:not(.is-closing) .episode-toggle::after { transform: rotate(0deg); opacity: 0; }
 
 /* One text column: the persistent art panel beside the list already shows the
    open row's cover, so the row itself carries no image (see .episode-art).
@@ -604,66 +625,11 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* Below the point where the platform names already drop to icons, the top-right
-   nav and the persistent cover no longer have room to sit beside anything: the
-   nav moves under the masthead, and the cover gives way to the mobile feed
-   below, where every row is its own cover. */
+/* Below the point where the platform names already drop to icons, the persistent
+   cover no longer has room to sit beside anything and gives way to the mobile feed
+   below, where every row is its own cover. The header nav needs nothing here: it is
+   already vertical, and its size follows the wordmark across the breakpoint. */
 @media (max-width: 46rem) {
-  /* No row gap: the nav's air is its own padding, so it folds with the nav. */
-  .header-top { flex-wrap: wrap; row-gap: 0; }
-
-  /* About and Credits stack under the plus, right aligned to its edge, at the
-     about statement's mobile size (8vw). Without script.js they simply stay
-     open. */
-  .site-nav {
-    flex: 1 1 100%;
-    font-size: 8vw;
-  }
-
-  .site-nav-links { padding-top: var(--space-s); }
-
-  /* "More" and the episode row's plus, set vertically up the right edge
-     beside the wordmark: a word says what it does where a lone plus left
-     people guessing. At 1.25rem it runs about the wordmark's height, and its
-     top meets the top of "SPREAD". The plus is a box, not
-     text, so it stays upright and still turns to a flat minus while the nav
-     is open. 0.75rem of padding, taken back out by the margins, makes the tap
-     target. */
-  .js .menu-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.4em;
-    margin: -0.75rem -0.75rem 0 0;
-    padding: 0.75rem;
-    border: 0;
-    background: none;
-    color: var(--fg);
-    font: inherit;
-    font-weight: 700;
-    font-size: 1.25rem;
-    line-height: 1;
-    text-transform: uppercase;
-    /* Turned the other way: reads bottom to top, "MORE" rising from the
-       wordmark's baseline side with the plus at the top. vertical-rl plus a
-       half turn, since sideways-lr is not yet everywhere. */
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    cursor: pointer;
-  }
-
-  .js .site-nav:not(.is-open) { display: none; }
-
-  /* While script.js slides the nav open, the words come in on the site's fade
-     and drift, one after the other, the way the page's blocks enter. */
-  .js .site-nav.is-open a {
-    animation:
-      fade-in 0.6s var(--ease-fade) backwards,
-      drift-in 0.6s var(--ease-drift) backwards;
-  }
-
-  .js .site-nav.is-open a:nth-child(1) { animation-delay: 0.1s; }
-  .js .site-nav.is-open a:nth-child(2) { animation-delay: 0.18s; }
-
   /* One line: the gray label, then the icons right after it, as on desktop,
      so the label reads as the start of the row it introduces. The label takes
      the icons' size (1.5em, below), so the row reads as one line of type. */
@@ -1674,15 +1640,6 @@ body.is-locked { overflow: hidden; }
 
 .social-icon--linkedin { -webkit-mask-image: url(/assets/social/linkedin.svg); mask-image: url(/assets/social/linkedin.svg); }
 .social-icon--instagram { -webkit-mask-image: url(/assets/social/instagram.svg); mask-image: url(/assets/social/instagram.svg); }
-/* The envelope keeps its own 21:16.5 drawing rather than being squeezed into the
-   square, and is matched to the others by height: 1.25rem tall like them, so the
-   three sit between the same two lines, and 1.591rem wide, which is that height
-   at the envelope's ratio. Wider than its neighbours on purpose. */
-.social-icon--mail {
-  width: 1.584rem;
-  -webkit-mask-image: url(/assets/social/mail.svg);
-  mask-image: url(/assets/social/mail.svg);
-}
 
 /* Bold and tracked, the site's one small tracked word. line-height: 1 drops the word's box to its own type size, which leaves the
    cap height within a fraction of a pixel of that box's centre, so the row's
