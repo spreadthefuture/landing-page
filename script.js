@@ -307,7 +307,7 @@ if (quotes.length > 1) {
 // several arrive together. A block scrolled past too fast to be seen comes in
 // anyway, so none is left hidden above the reader. Under reduced motion every
 // block is simply there.
-const aboutBlocks = document.querySelectorAll('.about-section, .about-statement, .about-closing');
+const aboutBlocks = document.querySelectorAll('.about-section, .about-statement, .about-closing, .about-contact');
 
 if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
@@ -323,5 +323,76 @@ if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
     if (block.getBoundingClientRect().top < window.innerHeight) continue;
     block.classList.add('is-waiting');
     observer.observe(block);
+  }
+}
+
+// Contact overlay. The link is a plain anchor to #contact, so with JS off the
+// :target rules open it and the "close" links take it away again. With JS the
+// hash never changes: the class does the same job, the page keeps its scroll
+// position, and the overlay can put focus in the first field, hold Escape, and
+// hand focus back to the link it came from. The scroll behind is locked while
+// it is open, so the page under the scrim does not drift.
+const contactOverlay = document.querySelector('.contact-overlay');
+const contactOpen = document.querySelector('.contact-open');
+
+if (contactOverlay && contactOpen) {
+  const closers = contactOverlay.querySelectorAll('.contact-scrim, .contact-close');
+  const firstField = contactOverlay.querySelector('.contact-input');
+
+  const setContact = (open) => {
+    contactOverlay.classList.toggle('is-open', open);
+    document.body.classList.toggle('is-locked', open);
+    // Not on a phone: focusing a field there opens the keyboard at once, which
+    // covers the form the reader has not yet read. They tap the field they want.
+    if (open && !feed.matches) firstField?.focus({ preventScroll: true });
+    else contactOpen.focus({ preventScroll: true });
+  };
+
+  contactOpen.addEventListener('click', (event) => {
+    event.preventDefault();
+    setContact(true);
+  });
+
+  for (const closer of closers) {
+    closer.addEventListener('click', (event) => {
+      event.preventDefault();
+      setContact(false);
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !contactOverlay.classList.contains('is-open')) return;
+    event.preventDefault();
+    setContact(false);
+  });
+
+  // Validation, in the page's own type rather than the browser's bubble: a
+  // light popup over the dark panel, positioned by the browser, is the one
+  // thing here we cannot style. So with JS the form is set novalidate and a
+  // blocked send marks every empty field itself (.is-invalid, which styles.css
+  // pairs with :user-invalid), then puts the cursor in the first one. The
+  // required attributes stay on the fields, so with JS off the browser still
+  // does the checking its own way and nothing is submitted empty.
+  const contactForm = contactOverlay.querySelector('.contact-form');
+
+  if (contactForm) {
+    contactForm.noValidate = true;
+
+    contactForm.addEventListener('submit', (event) => {
+      const invalid = contactForm.querySelectorAll('.contact-input:invalid');
+      for (const field of contactForm.querySelectorAll('.contact-input')) {
+        field.classList.toggle('is-invalid', !field.checkValidity());
+      }
+      if (!invalid.length) return;
+      event.preventDefault();
+      invalid[0].focus();
+    });
+
+    // A field that has been corrected stops being marked as soon as it is
+    // valid again, rather than waiting for the next send.
+    contactForm.addEventListener('input', (event) => {
+      if (!event.target.classList.contains('is-invalid')) return;
+      if (event.target.checkValidity()) event.target.classList.remove('is-invalid');
+    });
   }
 }

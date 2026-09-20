@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-20 (about closing link underlined)
+> Last updated: 2026-09-20 (about contact line, contact overlay, form validation)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -22,10 +22,10 @@ near-duplicate.
 | Breakpoint | `46rem`, always written `max-width: 46rem` |
 | Vertical gaps | `--space-s` / `--space-m` / `--space-xl`, on every page |
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
-| Label size (platform bar, episode listen links, quote source) | `clamp(0.875rem, 1.2vw, 1rem)` |
-| Row size (episode row, "Coming soon.", credit name, about heading) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
-| Prose size (about text and closing, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
-| Prose link (episode description, about closing) | underlined, `text-underline-offset: 0.2em`; the about closing link is also `--fg` |
+| Label size (platform bar, episode listen links, quote source, contact field labels and submit) | `clamp(0.875rem, 1.2vw, 1rem)` |
+| Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
+| Prose size (about text, closing and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
+| Prose link (episode description, about closing, about contact) | underlined, `text-underline-offset: 0.2em`; the two about links are also `--fg` |
 | Measure (max line length) | `48ch` about principles, `60ch` episode description, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
@@ -280,11 +280,15 @@ A manifesto in three beats, the statement landing as the conclusion:
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
    reset) is `--fg`.
 3. **Sign off.** `.about-closing`, centred, `--space-xl` above, prose size in
-   `--muted`, its credits link in `--fg`, no underline: the sentence's one link.
+   `--muted`, its credits link in `--fg`, underlined at `0.2em`.
+4. **Contact line.** `.about-contact`, `--space-m` below the sign off so the two
+   read as one closing block: the same centred gray prose, with the whole
+   sentence as one `--fg` underlined link that opens the contact overlay.
 
 **Entrance:** in reading order, 1.2s per block (the other pages' tempo; 1.8s made the photos, and so their colour, feel late): opacity on `ease-in-out`
 and a 0.375rem drift on `--ease-drift`. Blocks on screen at load run in pure CSS,
-delays principles 0.15s / 0.4s / 0.65s, statement 1s, sign off 1.35s. Blocks below
+delays principles 0.15s / 0.4s / 0.65s, statement 1s, sign off 1.35s, contact
+line 1.6s. Blocks below
 the fold wait hidden (`.is-waiting`, set by `script.js`) and play the same entrance
 with no delay as each scrolls into view (`.is-entering`, 10% up from the bottom
 edge), 250ms apart when several arrive together. Under reduced motion the
@@ -299,6 +303,46 @@ timeline per band (`view-timeline: --band`), linear, so the colour is always exa
 where the scroll is at any speed; neighbouring bands crossfade in the gap. The
 number stays `--muted`. No hover state: a stale hover during scrolling held the
 colour back. Browsers without `animation-timeline` keep every band in colour.
+
+### Contact overlay
+The contact form, opened from the about page's contact line. No card and no
+elevation: a `min(34rem, 100%)` panel on `--bg` inside a 1px `--rule` border,
+centred over a `rgb(10 10 10 / 0.92)` scrim, `--space-m` padding. The close
+control is the episode row's plus turned 45 degrees, `--muted` lifting to `--fg`.
+Title at the row size, bold uppercase; intro in `--muted` prose capped at 48ch;
+fields are a bold uppercase `--muted` label over an input with no box, just a
+1px `--rule` underline that goes `--muted` on hover and `--fg` on focus.
+The submit button is bold uppercase at the label size on the same hairline
+border, which lifts to `--fg` with `--glow` on hover.
+
+**Error state, monochrome.** A field the reader has left empty (or an address
+that is not one) takes a 2px `--fg` underline, the heaviest line in the panel,
+and shows its message under it at the label size in `--fg`: "Please fill out
+this field." The message's line is always reserved (`min-height: 1.6em`), so the
+form never jumps. No colour: the cue is weight and brightness. The state is
+`:user-invalid`, so nothing is marked wrong before it has been written in. Below 46rem the panel is full width and
+sits low, near the thumb, but stays a closed box: all four borders, `--gutter`
+all round, with `env(safe-area-inset-bottom)` added at the bottom so it clears
+the home indicator instead of reading as cut off. It does not take focus on
+opening, so the keyboard stays down until a field is tapped. The close control is a 2.75rem box for the thumb, with the cross centred
+in it.
+
+Opening is 0.3s: opacity on `--ease-fade`, the panel's 0.375rem rise on
+`--ease-drift`, the site's one gesture. Closed state is `visibility: hidden`, so
+nothing inside it takes keyboard focus.
+
+**Mechanism.** The browser's own validation bubble is a light popup the page
+cannot style, so with JS the form is `novalidate` and `script.js` marks the
+empty fields itself (`.is-invalid`, styled with `:user-invalid`) and focuses the
+first one; a corrected field clears on input. The `required` attributes stay, so
+with JS off the browser does the checking its own way.
+
+`:target` opens it, so the link is a plain `<a href="#contact">`
+and the form works with JS off (it posts to Web3Forms and the "close" links are
+anchors to `#`). `script.js` adds `.is-open` instead and never touches the hash,
+so the page keeps its scroll position; it also focuses the first field, closes on
+Escape or a click on the scrim, returns focus to the link, and locks the page
+scroll with `body.is-locked`. Both selectors drive the same rules.
 
 ### Quotes
 The homepage's closing block, `--space-xl` below the list. A `<section class="quotes">`
@@ -339,9 +383,9 @@ apart.
   but not its number, the credit name and role but not the country. Platform icons
   also shift to brand color. The quote bars are the one exception: shapes, not type,
   they keep a dim to `opacity: 0.8`.
-- **No underlines** except on episode description prose links, with a `0.2em`
-  offset. The about closing's credits link lifts to `--fg` instead, the sentence's
-  only link.
+- **No underlines** except on prose links, with a `0.2em` offset: the episode
+  description's links, the about closing's credits link and the about contact
+  line, the last two also lifted to `--fg`.
 - **Focus:** `:focus-visible` is a 2px `--fg` outline at 4px offset.
 - **Motion:** one gesture, a fade plus a small upward drift. Two curves in `:root`:
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
@@ -395,7 +439,9 @@ Left as is, each waiting on a design call:
 
 - **Off-token values.** Summary gap `1.5rem`, `.episode-links` top `1.75rem`,
   `.episode-body` bottom `clamp(2.5rem, 5vw, 4rem)`, credit name/role margins
-  `1rem` / `0.5rem`, about caption `0.75rem` type and inset, mobile open
+  `1rem` / `0.5rem`, about caption `0.75rem` type and inset, contact field
+  label gap `0.5rem`, error message pull-up `-0.25rem`, close control
+  `2.75rem` / `0.9rem`, submit padding `0.75rem 1.75rem`, mobile open
   heading margin `0.75rem`, toggle transition `0.25s`
   against the `0.2s` hover.
 

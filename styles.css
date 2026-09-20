@@ -154,6 +154,7 @@ a { color: inherit; text-decoration: none; }
 .credit-name,
 .credit-role,
 .about-closing a,
+.about-contact a,
 .episode-description a,
 .episode-listen { transition: color 0.2s ease, text-shadow 0.2s ease; }
 
@@ -163,6 +164,7 @@ a { color: inherit; text-decoration: none; }
 .credit-link:hover .credit-name,
 .credit-link:hover .credit-role,
 .about-closing a:hover,
+.about-contact a:hover,
 .episode-description a:hover,
 .episode-listen:hover { text-shadow: var(--glow); }
 
@@ -1268,7 +1270,8 @@ a { color: inherit; text-decoration: none; }
    hidden only through its own delay. */
 .about-statement,
 .about-section,
-.about-closing {
+.about-closing,
+.about-contact {
   animation:
     fade-in 1.2s var(--ease-fade) both,
     drift-in 1.2s var(--ease-drift) both;
@@ -1279,6 +1282,7 @@ a { color: inherit; text-decoration: none; }
 .about-section:nth-child(3) { animation-delay: 0.65s; }
 .about-statement { animation-delay: 1s; }
 .about-closing { animation-delay: 1.35s; }
+.about-contact { animation-delay: 1.6s; }
 
 /* Blocks below the fold at load wait for the reader instead: script.js marks
    them .is-waiting (never under reduced motion), then swaps in .is-entering as
@@ -1286,21 +1290,24 @@ a { color: inherit; text-decoration: none; }
    Blocks arriving together are staggered 250ms apart by the script. */
 .about-statement.is-waiting,
 .about-section.is-waiting,
-.about-closing.is-waiting {
+.about-closing.is-waiting,
+.about-contact.is-waiting {
   animation: none;
   opacity: 0;
 }
 
 .about-statement.is-entering,
 .about-section.is-entering,
-.about-closing.is-entering { animation-delay: 0s; }
+.about-closing.is-entering,
+.about-contact.is-entering { animation-delay: 0s; }
 
 /* Removed outright rather than left to the global reduced-motion rule: that one
    shortens durations but not delays, so the blocks would still blink in late. */
 @media (prefers-reduced-motion: reduce) {
   .about-statement,
   .about-section,
-  .about-closing { animation: none; }
+  .about-closing,
+  .about-contact { animation: none; }
 }
 
 /* Colour follows the scroll: each band comes to colour as it rises into view,
@@ -1343,6 +1350,248 @@ a { color: inherit; text-decoration: none; }
   color: var(--fg);
   text-decoration: underline;
   text-underline-offset: 0.2em;
+}
+
+/* The sign off's second line: the one thing on the page that asks something of
+   the reader. Same gray prose as the sign off above it, --space-m below it so
+   the two read as one closing block, with the whole sentence as the link. */
+.about-contact {
+  margin: var(--space-m) 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.about-contact a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* The contact overlay.
+
+   It is opened by :target, so the link is a plain anchor and the form works
+   with JS off; script.js adds .is-open instead (and never touches the hash), so
+   both selectors drive the same rules. Hidden by visibility, not display, so
+   the panel can fade and so nothing inside it is reachable by keyboard while
+   it is closed. Fixed and full height in svh, so the browser bars showing and
+   hiding on a phone do not change the box. */
+.contact-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-fade), visibility 0s linear 0.3s;
+}
+
+/* Set by script.js while the overlay is open, so the page behind it does not
+   scroll under the scrim. */
+body.is-locked { overflow: hidden; }
+
+.contact-overlay:target,
+.contact-overlay.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/* The page behind, dimmed rather than covered: near black at 92%, so the
+   wordmark is still faintly there. It is a link back to #, which is how the
+   overlay closes with JS off. */
+.contact-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(10 10 10 / 0.92);
+}
+
+/* No card: a hairline --rule box on the page's own background, the same border
+   the episode rows use, and the only flat surface the system allows. */
+.contact-panel {
+  position: relative;
+  width: min(34rem, 100%);
+  max-height: calc(100svh - var(--gutter) * 2);
+  overflow-y: auto;
+  padding: var(--space-m);
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  transform: translateY(0.375rem);
+  transition: transform 0.3s var(--ease-drift);
+}
+
+.contact-overlay:target .contact-panel,
+.contact-overlay.is-open .contact-panel { transform: translateY(0); }
+
+/* The episode row's plus, turned 45 degrees into a close cross, so the page has
+   one toggle glyph rather than two. */
+/* A 2.75rem box for the thumb, with the glyph centred in it. The offsets take
+   half the box back off --space-s, so the cross itself still sits where the
+   panel's own padding puts it. */
+.contact-close {
+  position: absolute;
+  top: calc(var(--space-s) - 0.5rem);
+  right: calc(var(--space-s) - 0.5rem);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.contact-close:hover { color: var(--fg); }
+
+.contact-close-icon {
+  position: relative;
+  width: 0.9rem;
+  height: 0.9rem;
+  transform: rotate(45deg);
+}
+
+.contact-close-icon::before,
+.contact-close-icon::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 2px;
+  background: currentColor;
+}
+
+.contact-close-icon::after { transform: rotate(90deg); }
+
+.contact-title {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.contact-intro {
+  margin: var(--space-s) 0 0;
+  max-width: 48ch;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  line-height: 1.6;
+}
+
+.contact-form { margin: var(--space-m) 0 0; }
+
+/* Each field is its label over its input, --space-s apart like any label and
+   the thing it names. */
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 0 var(--space-s);
+}
+
+/* The message rides tight under its input, not a third item spaced like the
+   label above it. */
+.contact-field > .contact-error { margin-top: -0.25rem; }
+
+.contact-label {
+  color: var(--muted);
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* No boxes: the input is a line of type sitting on a --rule hairline, which
+   lifts to --fg while it is being written in. font: inherit, because form
+   controls do not take the page's family on their own. */
+.contact-input {
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: none;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  line-height: 1.6;
+  transition: border-color 0.2s ease;
+}
+
+.contact-input:hover { border-color: var(--muted); }
+.contact-input:focus { border-color: var(--fg); outline: none; }
+.contact-input:focus-visible { outline: none; }
+
+/* The error state, monochrome like everything else: the field's hairline
+   thickens to 2px in --fg and its message appears under it, so the empty field
+   is the brightest and heaviest thing in the form. No colour enters the page,
+   the cue is weight.
+
+   :user-invalid, not :invalid, so a field is never marked wrong before it has
+   been written in: it applies only after the reader has left the field or tried
+   to send. script.js adds .is-invalid alongside it, because it turns the
+   browser's own validation off (see the contact overlay in script.js) and
+   .is-invalid is then what marks the fields a blocked send found empty. */
+.contact-input:user-invalid,
+.contact-input.is-invalid { border-width: 2px; border-color: var(--fg); }
+
+/* Reserved by the message's own line height rather than left to appear: the
+   fields must not jump down the panel when one turns out to be empty. */
+.contact-error {
+  min-height: 1.6em;
+  color: var(--fg);
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  line-height: 1.6;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-fade);
+}
+
+.contact-input:user-invalid + .contact-error,
+.contact-input.is-invalid + .contact-error { opacity: 1; }
+
+.contact-textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+/* The page's one button. Kept as type on a hairline box rather than a filled
+   shape: the border is the same --rule as the fields, and hover lifts it to
+   --fg with the site's glow, like every other white thing. */
+.contact-submit {
+  margin-top: var(--space-s);
+  padding: 0.75rem 1.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  background: none;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.contact-submit:hover {
+  border-color: var(--fg);
+  text-shadow: var(--glow);
+}
+
+@media (max-width: 46rem) {
+  /* The home indicator and the browser's own bottom bar sit inside the
+     viewport, so the overlay keeps its gutter clear of them: the panel must
+     never look as though it runs off the bottom of the screen. */
+  .contact-overlay {
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + env(safe-area-inset-bottom));
+  }
+
+  /* Low on a phone, so it opens near the thumb rather than floating in the
+     middle, but still a closed box: all four sides, gutter all round. */
+  .contact-panel {
+    align-self: end;
+    max-height: calc(100svh - var(--gutter) * 2 - env(safe-area-inset-bottom));
+  }
 }
 
 .site-footer {
