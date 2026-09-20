@@ -1174,14 +1174,14 @@ a { color: inherit; text-decoration: none; }
   right: 0.75rem;
 }
 
-/* Bottom aligned against the photo. The mirrored band pushes
+/* Centred on the photo's height. The mirrored band pushes
    its text right, against the photo. */
 .about-copy {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: flex-start;
 }
 
@@ -1207,10 +1207,13 @@ a { color: inherit; text-decoration: none; }
   color: var(--muted);
 }
 
-/* Capped at the episode description's measure so lines stay readable where
-   the text column gets wide. */
+/* Capped at 48ch, roughly 55 to 60 rendered characters a line: the readable
+   measure, and narrower than the episode description's 60ch because these
+   paragraphs sit beside a large photo and a wide column read as a wall. The
+   cap is on the paragraph, not the column, so ch is measured in the prose
+   size and all three bands come out the same width. */
 .about-text {
-  max-width: 60ch;
+  max-width: 48ch;
   margin: var(--space-s) 0 0;
   font-size: clamp(1rem, 1.7vw, 1.25rem);
   line-height: 1.6;
@@ -1334,10 +1337,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* The one link in the prose, lifted to --fg so it is the brightest thing in
-   the line. No underline: the site's other links carry one to be findable
-   inline among gray prose, but this one is the whole sentence's only link. */
+   the line, with the same underline as the episode description's prose link
+   so it still reads as a link at a glance. */
 .about-closing a {
   color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .site-footer {

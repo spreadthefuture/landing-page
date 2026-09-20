@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-20
+> Last updated: 2026-09-20 (about closing link underlined)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -25,7 +25,8 @@ near-duplicate.
 | Label size (platform bar, episode listen links, quote source) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text and closing, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
-| Prose link (episode description) | underlined, `text-underline-offset: 0.2em`; the about closing link is `--fg`, no underline |
+| Prose link (episode description, about closing) | underlined, `text-underline-offset: 0.2em`; the about closing link is also `--fg` |
+| Measure (max line length) | `48ch` about principles, `60ch` episode description, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
 | Brand name in copy | `SPREAD THE FUTURE`, uppercase in the markup |
@@ -267,10 +268,12 @@ A manifesto in three beats, the statement landing as the conclusion:
    `--surface`) with its credit caption set inside the bottom corner on the outer
    edge (bottom right on band 02, bottom left on every band below 46rem),
    `0.75rem` in, in `--muted` at `0.75rem`, and the principle beside it at
-   `--space-m`, bottom aligned to the photo. Band 02 is
+   `--space-m`, centred on the photo's height. Band 02 is
    mirrored with `row-reverse` and its text right aligned against the photo. Each
    heading has its number (`01` to `03`, `aria-hidden`, `--muted`) on its own line
-   above. Prose in `--fg`, `--space-s` below, max 60ch. Below 46rem every band stacks
+   above. Prose in `--fg`, `--space-s` below, max **48ch**: the cap sits on the
+   paragraph, so it is measured in the prose size and every band reads the same
+   width. Below 46rem every band stacks
    photo then text, all left aligned, `--space-m` apart.
 2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
    `--space-xl` above and `--space-xl` + `--space-m` below. The sentence is
