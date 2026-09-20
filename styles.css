@@ -1579,6 +1579,34 @@ body.is-locked { overflow: hidden; }
   text-shadow: var(--glow);
 }
 
+/* A sent message is answered in the panel it was written in: the same box, the
+   same close cross, the title and the form swapped for two lines. Nowhere else
+   to go, so no page of our own and never Web3Forms' page.
+
+   Two ways in, like the overlay itself. With JS off the form posts and its
+   hidden redirect brings the reader back to this page at #sent, so :target on
+   the block both opens the overlay and shows it; with JS the send happens in
+   the background, the hash is never touched, and script.js sets .is-sent. */
+.contact-sent { display: none; }
+
+.contact-overlay:has(.contact-sent:target),
+.contact-overlay.is-sent {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.contact-overlay:has(.contact-sent:target) .contact-panel,
+.contact-overlay.is-sent .contact-panel { transform: translateY(0); }
+
+/* The panel's own title, intro and form, not the ones inside the block being
+   shown in their place: hence the child selectors. */
+.contact-overlay:has(.contact-sent:target) :is(.contact-panel > .contact-title, .contact-panel > .contact-intro, .contact-form),
+.contact-overlay.is-sent :is(.contact-panel > .contact-title, .contact-panel > .contact-intro, .contact-form) { display: none; }
+
+.contact-overlay:has(.contact-sent:target) .contact-sent,
+.contact-overlay.is-sent .contact-sent { display: block; }
+
 @media (max-width: 46rem) {
   /* The home indicator and the browser's own bottom bar sit inside the
      viewport, so the overlay keeps its gutter clear of them: the panel must

@@ -4,7 +4,7 @@
 > design change, along with `PROJECT-CONTEXT.md`.
 >
 > Last updated: 2026-09-20 (about contact line, contact overlay, form validation,
-> email format check, footer mail icon, overlay on every page)
+> email format check, footer mail icon, overlay on every page, sent state)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -358,13 +358,33 @@ the page scroll with `body.is-locked`. Both selectors drive the same rules.
 pages, so every envelope is a local `#contact` anchor and the form opens where
 the reader already is. It posts to Web3Forms from any of them: the endpoint and
 the access key are the same and neither is tied to a path. The three copies are
-identical and stay that way; a change to one field is a change to all three.
+identical but for the hidden `redirect` value, which names the page it sits on
+(see **Sent state**); a change to one field is a change to all three.
 
 A page arrived at with `#contact` already in the URL (an old `/about/#contact`
 link, or a shared one) still opens on arrival: `script.js` swaps the hash for
 the class state and drops it from the URL, and with JS off `:target` does the
 same on its own. An opener whose `href` points at another page is left to
 navigate.
+
+**Sent state.** A sent message is answered in the panel it was written in: same
+box, same close cross, the title, intro and form swapped for a "Message sent"
+title and one word of `--muted` prose, "Thank you." No confirmation page of our own, and
+never Web3Forms' own success page. The swap is `display`, on child selectors
+(`.contact-panel > .contact-title`, `> .contact-intro`, `.contact-form`), so the
+confirmation's own title and line, one level deeper, are untouched.
+
+Two ways in, like the overlay itself. With JS, `script.js` posts the form with
+`fetch` and adds `.is-sent`, so the reader never leaves the page and the hash is
+never touched; the button reads "Sending" while the request is out, and focus
+moves to the close cross. With JS off, a hidden `redirect` field sends the reader
+back to the page they wrote from at `#sent`, where `:has(.contact-sent:target)`
+both opens the overlay and shows the confirmation. Each page's copy carries its
+own absolute URL (`https://spreadthefuture.com/#sent`, `/about/#sent`,
+`/credits/#sent`), the one place the three forms differ; Web3Forms requires a
+full URL on the same domain. A failed `fetch` falls back to that ordinary post,
+so a written message is never lost to a network error. Closing the panel clears
+`.is-sent` and resets the form, so the next message starts clean.
 
 ### Quotes
 The homepage's closing block, `--space-xl` below the list. A `<section class="quotes">`

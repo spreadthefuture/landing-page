@@ -344,14 +344,26 @@ const contactOpeners = document.querySelectorAll('.contact-open');
 if (contactOverlay && contactOpeners.length) {
   const closers = contactOverlay.querySelectorAll('.contact-scrim, .contact-close');
   const firstField = contactOverlay.querySelector('.contact-input');
+  const contactForm = contactOverlay.querySelector('.contact-form');
   let lastOpener = contactOpeners[0];
 
   const setContact = (open) => {
     contactOverlay.classList.toggle('is-open', open);
     document.body.classList.toggle('is-locked', open);
+    // A panel closed on the confirmation goes back to an empty form, so the
+    // next message is written on a clean one.
+    if (!open) {
+      contactOverlay.classList.remove('is-sent');
+      contactForm?.reset();
+    }
     // Not on a phone: focusing a field there opens the keyboard at once, which
     // covers the form the reader has not yet read. They tap the field they want.
-    if (open && !feed.matches) firstField?.focus({ preventScroll: true });
+    // The first field, unless the panel is showing the confirmation, where
+    // there is no form to write in and the close cross takes the focus.
+    const opening = contactOverlay.classList.contains('is-sent')
+      ? contactOverlay.querySelector('.contact-close')
+      : firstField;
+    if (open && !feed.matches) opening?.focus({ preventScroll: true });
     else lastOpener.focus({ preventScroll: true });
   };
 
@@ -369,6 +381,15 @@ if (contactOverlay && contactOpeners.length) {
 
   if (window.location.hash === '#contact') {
     history.replaceState(null, '', window.location.pathname + window.location.search);
+    setContact(true);
+  }
+
+  // Arriving at #sent means the form was posted without JS, or the background
+  // send failed and the form went the ordinary way. Same treatment: the hash is
+  // turned into the class state and dropped, so the confirmation shows here.
+  if (window.location.hash === '#sent') {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    contactOverlay.classList.add('is-sent');
     setContact(true);
   }
 
@@ -392,8 +413,6 @@ if (contactOverlay && contactOpeners.length) {
   // pairs with :user-invalid), then puts the cursor in the first one. The
   // required attributes stay on the fields, so with JS off the browser still
   // does the checking its own way and nothing is submitted empty.
-  const contactForm = contactOverlay.querySelector('.contact-form');
-
   if (contactForm) {
     contactForm.noValidate = true;
 
@@ -402,9 +421,36 @@ if (contactOverlay && contactOpeners.length) {
       for (const field of contactForm.querySelectorAll('.contact-input')) {
         field.classList.toggle('is-invalid', !field.checkValidity());
       }
-      if (!invalid.length) return;
       event.preventDefault();
-      invalid[0].focus();
+      if (invalid.length) {
+        invalid[0].focus();
+        return;
+      }
+
+      // The send itself, in the background, so the reader is never taken off
+      // the page: the panel turns into the confirmation where it stands. If the
+      // request does not go through, the form is left to post the ordinary way
+      // and its hidden redirect brings the reader back here at #sent, so a
+      // message is never lost to a failed fetch.
+      const submit = contactForm.querySelector('.contact-submit');
+      submit.disabled = true;
+      submit.textContent = 'Sending';
+
+      fetch(contactForm.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(contactForm)
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error(response.status);
+          contactOverlay.classList.add('is-sent');
+          contactOverlay.querySelector('.contact-close').focus({ preventScroll: true });
+        })
+        .catch(() => contactForm.submit())
+        .finally(() => {
+          submit.disabled = false;
+          submit.textContent = 'Send';
+        });
     });
 
     // A field that has been corrected stops being marked as soon as it is

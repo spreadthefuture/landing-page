@@ -109,6 +109,12 @@
         <input type="hidden" name="access_key" value="a99b76b7-20ec-438f-bbff-1834727dd5b8">
         <input type="hidden" name="subject" value="New message from spreadthefuture.com">
         <input type="hidden" name="from_name" value="SPREAD THE FUTURE">
+        <!-- Where Web3Forms sends the reader when the form is posted the
+             ordinary way, with JS off or if the background send fails: back to
+             this page at #sent, which the :target rules turn into the panel's
+             confirmation. Without it the reader lands on Web3Forms' own page.
+             It has to be the full URL, so it names the live domain. -->
+        <input type="hidden" name="redirect" value="https://spreadthefuture.com/about/#sent">
         <!-- Web3Forms' honeypot: bots fill it, people never see it. -->
         <input class="visually-hidden" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off">
         <p class="contact-field">
@@ -128,6 +134,12 @@
         </p>
         <button class="contact-submit" type="submit">Send</button>
       </form>
+      <!-- The confirmation, in the panel the message was written in rather than
+           on a page of its own. -->
+      <div class="contact-sent" id="sent">
+        <h2 class="contact-title">Message sent</h2>
+        <p class="contact-intro">Thank you.</p>
+      </div>
     </div>
   </div>
 
