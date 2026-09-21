@@ -3,8 +3,8 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-20 (header nav back to About / Credits: stacked beside the
-> wordmark on desktop, behind the "MORE" plus below 46rem)
+> Last updated: 2026-09-21 (art panel shows its `--surface` square while a cover
+> loads, instead of the previous cover; covers warmed on idle)
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
@@ -231,6 +231,14 @@ expanded. Two stacked `<img>` layers: `script.js` loads the incoming cover into 
 hidden layer, then swaps `.is-active` for a 0.4s crossfade, with no scale. At most
 one swap per frame, because leave and enter fire together when moving between rows
 and swapping on both skipped the crossfade. Hidden below 46rem.
+
+While an incoming cover is still downloading its layer carries `.is-loading` and stays
+at opacity 0, so the frame's own `--surface` square is what shows: an `<img>` keeps
+painting its previous image until the new `src` decodes, which used to fade in a cover
+from two hovers ago. The placeholder is the frame, not an image, so it is on screen
+instantly and costs no request. `script.js` also warms all eight covers on
+`requestIdleCallback` after load (they sit on a remote CDN and every row's own `<img>`
+is `display: none` on desktop), so the dark square is a blink at most.
 
 ### Mobile feed
 The episode list below 46rem. Season headings and "Coming soon." stay. Each summary is

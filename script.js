@@ -175,7 +175,17 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       if (pendingSrc === currentSrc) return;
       currentSrc = pendingSrc;
       const next = layers[1 - activeLayer];
+      // An <img> keeps painting its old image until the new src decodes, so the
+      // incoming layer would fade in carrying the cover from two hovers ago.
+      // .is-loading hides its pixels until then, leaving the frame's own dark
+      // square visible, and the load handler brings the real cover back.
+      next.classList.add('is-loading');
       next.src = currentSrc;
+      const reveal = () => {
+        if (next.src === currentSrc) next.classList.remove('is-loading');
+      };
+      if (next.complete && next.naturalWidth) reveal();
+      else next.addEventListener('load', reveal, { once: true });
       next.classList.add('is-active');
       layers[activeLayer].classList.remove('is-active');
       activeLayer = 1 - activeLayer;
@@ -183,6 +193,18 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   };
 
   showArt(defaultSrc);
+
+  // The covers live on a remote CDN and every row's own <img> is display: none
+  // on desktop, so nothing is in cache when the pointer arrives. Once the page
+  // is idle, fetch them all so the dark square is a blink at most.
+  const warmCovers = () => {
+    for (const cover of layout.querySelectorAll('.episode-art')) {
+      const img = new Image();
+      img.src = cover.src;
+    }
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(warmCovers, { timeout: 3000 });
+  else setTimeout(warmCovers, 1200);
 
   for (const details of layout.querySelectorAll('.episode')) {
     const cover = details.querySelector('.episode-art');

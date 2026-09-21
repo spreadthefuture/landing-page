@@ -460,6 +460,15 @@ a { color: inherit; text-decoration: none; }
   opacity: 1;
 }
 
+/* While a layer's new cover is still downloading it holds the previous image in
+   its pixels, so script.js marks it .is-loading and it stays at zero: the frame's
+   --surface square shows through instead, and the cover fades up over it the
+   moment it lands. The placeholder is the frame itself, so it costs no request
+   and is on screen before anything else. */
+.episode-art-layer.is-loading {
+  opacity: 0;
+}
+
 /* The column beside the cover: every season heading and every row. min-width: 0
    so a long episode title wraps inside it rather than widening the flex item and
    squeezing the cover. */
