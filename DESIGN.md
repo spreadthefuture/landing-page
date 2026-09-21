@@ -3,15 +3,15 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-21 (art panel shows its `--surface` square while a cover
-> loads, instead of the previous cover; covers warmed on idle)
+> Last updated: 2026-09-21
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
-shadows (one faint text glow on hover aside), no borders except hairline rules, no chromatic
-color except three platform brand colors on hover. Hierarchy comes from scale and weight alone, on one family in
-two weights. Every size is a `clamp()`, so the page is fluid, and the one breakpoint
-is structural. The signature moves: the wordmark set wide, the thin `--rule` under
-every episode, and one persistent square cover that crossfades beside the list.
+shadows (one faint text glow on hover aside), no borders except hairline rules, no
+chromatic color except three platform brand colors on hover. Hierarchy comes from
+scale and weight alone, on one family in two weights. Every size is a `clamp()`, so
+the page is fluid, and the one breakpoint is structural. The signature moves: the
+wordmark set wide, the thin `--rule` under every episode, and one persistent square
+cover that crossfades beside the list.
 
 ## The system at a glance
 
@@ -81,11 +81,11 @@ uses the same trick with `Arial-BoldMT`.
 ### Rules
 
 - **Weights:** 400 (body, meta, prose) and 700 (everything else). Nothing else.
-- **Case:** uppercase for the site nav, platform labels, episode rows, credit names,
-  and about headings. Written in sentence
-  case in the markup and uppercased in CSS, so screen readers read words. Not
-  uppercased: the homepage tagline, the about statement, the season heading ("Season 1"), the quotes, and the credits headings.
-  The brand name is the one thing uppercase in the markup.
+- **Case:** uppercase for the site nav, platform labels, episode rows, credit names and
+  about headings, written in sentence case in the markup and uppercased in CSS so
+  screen readers read words. Not uppercased: the homepage tagline, the about statement,
+  the season heading ("Season 1"), the quotes and the credits headings. The brand name
+  is the one thing uppercase in the markup.
 - **Line height:** `1.2` on `body`, `1` on the site nav, `1.6` on prose.
   `line-height: 0` on the wordmark and `1` on the RSS word are box resets.
 - **Letter spacing:** `0.01em` to `0.02em` on large bold type, normal on small labels,
@@ -161,13 +161,14 @@ hover fade. `will-change: opacity` stops Safari re-hinting the glyphs mid-hover.
 ### Site nav
 About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
 
-**Below 46rem (trial):** the links fold away behind "MORE" and the episode
-row's plus (`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the
-wordmark, reading bottom to top with the plus at the top; the plus stays upright. Tapping it slides About and Credits open under it, right aligned at `8vw`, `--space-s` below
-the wordmark, on the mobile feed's 500ms cubic ease-in-out; the words fade and drift in
-0.1s and 0.18s behind. The plus turns to a minus; Escape closes. A `.js` class set by
-a one-line script in each page's head hides the nav before first paint, so without JS
-the nav simply stays open and the plus never shows.
+**Below 46rem:** the links fold behind "MORE" and the episode row's plus
+(`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the wordmark,
+reading bottom to top with the plus at the top and upright. Tapping it slides About and
+Credits open under it, right aligned at `8vw`, `--space-s` below the wordmark, on the
+mobile feed's 500ms cubic ease-in-out; the words fade and drift in 0.1s and 0.18s
+behind. The plus turns to a minus; Escape closes. A `.js` class set by a one-line
+script in each page's head hides the nav before first paint, so without JS the nav
+stays open and the plus never shows.
 
 ### Platform bar
 "LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER". Bold uppercase at the label size,
@@ -233,12 +234,12 @@ one swap per frame, because leave and enter fire together when moving between ro
 and swapping on both skipped the crossfade. Hidden below 46rem.
 
 While an incoming cover is still downloading its layer carries `.is-loading` and stays
-at opacity 0, so the frame's own `--surface` square is what shows: an `<img>` keeps
+at opacity 0, so the frame's own `--surface` square shows instead: an `<img>` keeps
 painting its previous image until the new `src` decodes, which used to fade in a cover
-from two hovers ago. The placeholder is the frame, not an image, so it is on screen
-instantly and costs no request. `script.js` also warms all eight covers on
-`requestIdleCallback` after load (they sit on a remote CDN and every row's own `<img>`
-is `display: none` on desktop), so the dark square is a blink at most.
+from two hovers ago. The placeholder is the frame, not an image, so it costs no
+request. `script.js` also warms all eight covers on `requestIdleCallback` after load
+(they sit on a remote CDN and every row's own `<img>` is `display: none` on desktop),
+so the dark square is a blink at most.
 
 ### Mobile feed
 The episode list below 46rem. Season headings and "Coming soon." stay. Each summary is
@@ -282,13 +283,12 @@ A manifesto in three beats, the statement landing as the conclusion:
    `--surface`) with its credit caption set inside the bottom corner on the outer
    edge (bottom right on band 02, bottom left on every band below 46rem),
    `0.75rem` in, in `--muted` at `0.75rem`, and the principle beside it at
-   `--space-m`, centred on the photo's height. Band 02 is
-   mirrored with `row-reverse` and its text right aligned against the photo. Each
-   heading has its number (`01` to `03`, `aria-hidden`, `--muted`) on its own line
-   above. Prose in `--fg`, `--space-s` below, max **48ch**: the cap sits on the
-   paragraph, so it is measured in the prose size and every band reads the same
-   width. Below 46rem every band stacks
-   photo then text, all left aligned, `--space-m` apart.
+   `--space-m`, centred on the photo's height. Band 02 is mirrored with `row-reverse`
+   and its text right aligned against the photo. Each heading has its number (`01` to
+   `03`, `aria-hidden`, `--muted`) on its own line above. Prose in `--fg`, `--space-s`
+   below, max **48ch**: the cap sits on the paragraph, so it is measured in the prose
+   size and every band reads the same width. Below 46rem every band stacks photo then
+   text, all left aligned, `--space-m` apart.
 2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
    `--space-xl` above and `--space-xl` + `--space-m` below. The sentence is
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
@@ -297,7 +297,8 @@ A manifesto in three beats, the statement landing as the conclusion:
    `--muted`, its credits link in `--fg`, underlined at `0.2em`. It is the page's
    last line: the contact line lives at the end of the credits page instead.
 
-**Entrance:** in reading order, 1.2s per block (the other pages' tempo; 1.8s made the photos, and so their colour, feel late): opacity on `ease-in-out`
+**Entrance:** in reading order, 1.2s per block (the other pages' tempo; 1.8s made the
+photos, and so their colour, feel late): opacity on `ease-in-out`
 and a 0.375rem drift on `--ease-drift`. Blocks on screen at load run in pure CSS,
 delays principles 0.15s / 0.4s / 0.65s, statement 1s, sign off 1.35s. Blocks below
 the fold wait hidden (`.is-waiting`, set by `script.js`) and play the same entrance
@@ -316,9 +317,9 @@ number stays `--muted`. No hover state: a stale hover during scrolling held the
 colour back. Browsers without `animation-timeline` keep every band in colour.
 
 ### Contact overlay
-The contact form, on the credits page only, opened from that page's contact line.
-No card and no
-elevation: a `min(34rem, 100%)` panel on `--bg` inside a 1px `--rule` border,
+The contact form, on the credits page only, opened from that page's contact line. No
+card and no elevation: a `min(34rem, 100%)` panel on `--bg` inside a 1px `--rule`
+border,
 centred over a `rgb(10 10 10 / 0.92)` scrim, `--space-m` padding. The close
 control is the episode row's plus turned 45 degrees, `--muted` lifting to `--fg`.
 Title at the row size, bold uppercase; intro in `--muted` prose capped at 48ch;
@@ -332,12 +333,13 @@ that is not one) takes a 2px `--fg` underline, the heaviest line in the panel,
 and shows its message under it at the label size in `--fg`: "Please fill out
 this field." The message's line is always reserved (`min-height: 1.6em`), so the
 form never jumps. No colour: the cue is weight and brightness. The state is
-`:user-invalid`, so nothing is marked wrong before it has been written in. Below 46rem the panel is full width and
-sits low, near the thumb, but stays a closed box: all four borders, `--gutter`
-all round, with `env(safe-area-inset-bottom)` added at the bottom so it clears
-the home indicator instead of reading as cut off. It does not take focus on
-opening, so the keyboard stays down until a field is tapped. The close control is a 2.75rem box for the thumb, with the cross centred
-in it.
+`:user-invalid`, so nothing is marked wrong before it has been written in.
+
+**Below 46rem** the panel is full width and sits low, near the thumb, but stays a
+closed box: all four borders, `--gutter` all round, with `env(safe-area-inset-bottom)`
+added at the bottom so it clears the home indicator instead of reading as cut off. It
+does not take focus on opening, so the keyboard stays down until a field is tapped.
+The close control is a 2.75rem box for the thumb, cross centred.
 
 Opening is 0.3s: opacity on `--ease-fade`, the panel's 0.375rem rise on
 `--ease-drift`, the site's one gesture. Closed state is `visibility: hidden`, so
@@ -375,8 +377,8 @@ navigate.
 
 **Sent state.** A sent message is answered in the panel it was written in: same
 box, same close cross, the title, intro and form swapped for a "Message sent"
-title and one word of `--muted` prose, "Thank you." No confirmation page of our own, and
-never Web3Forms' own success page. The swap is `display`, on child selectors
+title and one line of `--muted` prose, "Thank you." No confirmation page of our own,
+and never Web3Forms' own success page. The swap is `display`, on child selectors
 (`.contact-panel > .contact-title`, `> .contact-intro`, `.contact-form`), so the
 confirmation's own title and line, one level deeper, are untouched.
 
@@ -409,15 +411,18 @@ fill is removed, so rotation stops and the bars are manual controls.
 `.is-entering` runs the fade and drift, bars 0.2s behind. The 9s timer starts there.
 
 ### Footer
-Centered, two lines, `max(6rem, var(--space-xl))` above. First, LinkedIn, Instagram
-and a bold tracked "RSS" word, in `--muted`, `--space-s` above the copyright line in
-`--muted-dim`. Instagram is drawn as an outline, LinkedIn is solid (**open question**,
-see `PROJECT-CONTEXT.md`). The glyphs are CSS
-masks sized in `rem` (not `em`) so they do not scale with the copyright type. Both
-square glyphs fill a 24x24 box, so one 1.25rem square aligns their edges; the RSS
-word centers on the same axis. Instagram's frame and lens ring are 2.6 of its 24
-units, which lands near 2.2px on a 20px glyph; rescaling it means redoing that
-arithmetic.
+Centered, two lines, `max(6rem, var(--space-xl))` above. First, LinkedIn, Instagram,
+TikTok and a bold tracked "RSS" word, in `--muted`, `--space-s` above the copyright
+line in `--muted-dim`. None of the three sits in a badge or a container: LinkedIn is
+the bare "in", not the filled square it ships as, because a filled square reads as a
+block of light next to an outline and pulls the row off center. The glyphs are CSS
+masks sized in `rem` (not `em`) so they do not scale with the copyright type. All
+three are drawn in a 24x24 box, so one 1.25rem square aligns them; the RSS word
+centers on the same axis. Instagram is the only one full-bleed in that box.
+The LinkedIn "in" and the TikTok note are bare marks, so each file scales its glyph
+to 21 of the 24 units and centers it, which holds them a hair inside Instagram's
+frame. Instagram's frame and lens ring are 2.6 of its 24 units, which lands near
+2.2px on a 20px glyph; rescaling it means redoing that arithmetic.
 Each link is padded to a 32px tap target, with the padding taken back out of the row
 gap so glyphs still read 1.75rem apart.
 
@@ -460,9 +465,10 @@ repo, unused.
   is and squared in CSS with `object-fit: cover`.
 - **Credit portraits:** 720x720, JPEG q68, from `assets/credits-photos/`, cropped to a
   circle.
-- **Icons:** only the three masked platform glyphs and the two masked social glyphs
-  (`assets/social/`, single path, single color, full-bleed in a 24x24 box).
-  Instagram is an outline, LinkedIn is solid. `mail.svg` sits beside them, no longer
+- **Icons:** only the three masked platform glyphs and the three masked social glyphs
+  (`assets/social/`, single path, single color, in a 24x24 box; Instagram full-bleed,
+  LinkedIn and TikTok scaled to 21 units and centered).
+  No badges or containers. `mail.svg` sits beside them, no longer
   used by any page. No illustration or decorative graphics.
 
 ## Do's and don'ts
