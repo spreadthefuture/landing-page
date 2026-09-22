@@ -133,10 +133,17 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       return;
     }
 
-    // Desktop: the clicked row holds still while a row above it folds, so it
-    // stays under the pointer, but never sits above the window's top edge.
-    const { top } = summary.getBoundingClientRect();
-    run(changes, summary, Math.max(top, 0));
+    // Desktop: the opening row eases up until its top rule lines up with the top
+    // of the cover, which is the panel's sticky offset. The first row already sits
+    // level with the cover, so that offset is exactly where the panel pins, and
+    // every row below it lands on the same line. Without a panel there is nothing
+    // to line up with, so the row just holds still under the pointer.
+    if (!artPanel) {
+      const { top } = summary.getBoundingClientRect();
+      run(changes, summary, Math.max(top, 0));
+      return;
+    }
+    run(changes, summary, parseFloat(getComputedStyle(artPanel).top) || 0);
   });
 
   if (!artPanel) continue;
@@ -145,9 +152,9 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   // touch would otherwise leave the wrong cover showing after a tap.
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-  // The persistent cover to the left of the list: the newest episode's art at
-  // rest, the hovered row's while the pointer is over it, the open row's whenever
-  // one is expanded. Two stacked <img> layers so a change crossfades instead of
+  // The persistent cover to the left of the list: the newest episode's art until
+  // the pointer visits a row, then that row's, held after the pointer leaves, and
+  // the open row's whenever one is expanded. Two stacked <img> layers so a change crossfades instead of
   // popping: the incoming cover loads into the hidden layer, then swap which one
   // carries .is-active and CSS transitions the opacity.
   const layers = artPanel.querySelectorAll('.episode-art-layer');
@@ -221,8 +228,9 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   if (finePointer.matches) {
     for (const summary of layout.querySelectorAll('.episode-summary')) {
       const cover = summary.closest('.episode').querySelector('.episode-art');
+      // No leave handler: the panel holds the last cover the pointer visited
+      // rather than snapping back to the newest episode between rows.
       summary.addEventListener('mouseenter', () => showArt(cover.src));
-      summary.addEventListener('mouseleave', () => showArt(openSrc || defaultSrc));
     }
   }
 }

@@ -216,8 +216,10 @@ truncates), and a plus/minus toggle built from `::before`/`::after` bars sized i
 Opening reveals the description (justified, hyphenated, max 60ch), the meta line
 (date - duration), then platform links. With `script.js`, rows slide open and closed
 on the mobile feed's engine (500ms cubic ease-in-out), and opening one folds the
-other at the same time. The clicked row holds its place while a row above it folds
-(never past the window's top edge). Above 46rem the text also fades and drifts in over
+other at the same time. Above 46rem the page eases the clicked row up until its top
+rule sits level with the top of the cover, which is the panel's sticky offset
+(`--gutter`); the first row already sits on that line, so every row lands on the same
+one. Without a cover panel the clicked row simply holds its place under the pointer. Above 46rem the text also fades and drifts in over
 0.6s. The toggle turns back to plus on the closing click via `.is-closing`. Padding
 sits on `.episode-body` so the fold reaches 0.
 
@@ -226,9 +228,10 @@ One square cover for the page, sticky at `--gutter` from the top, released at th
 of the last season. Size `clamp(240px, 47vw, max(620px, 100vw / 3))`: capped at 620px,
 then growing at a third of the viewport from 1860px up.
 
-It shows the newest cover at rest, the hovered row's cover (on
+It shows the newest cover until the pointer visits a row, then that row's cover (on
 `(hover: hover) and (pointer: fine)` devices), and the open row's cover while one is
-expanded. Two stacked `<img>` layers: `script.js` loads the incoming cover into the
+expanded. Hover is sticky: leaving a row holds its cover rather than snapping back to
+the newest, so the panel reads as a record of where the reader has been. Two stacked `<img>` layers: `script.js` loads the incoming cover into the
 hidden layer, then swaps `.is-active` for a 0.4s crossfade, with no scale. At most
 one swap per frame, because leave and enter fire together when moving between rows
 and swapping on both skipped the crossfade. Hidden below 46rem.
