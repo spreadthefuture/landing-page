@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-21
+> Last updated: 2026-09-22
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -281,8 +281,8 @@ A manifesto in three beats, the statement landing as the conclusion:
    alternating bands, `--space-xl` apart. Each band is a square photo
    (`.about-figure`, the homepage cover's size, `object-fit: cover`, 6px radius over
    `--surface`) with its credit caption set inside the bottom corner on the outer
-   edge (bottom right on band 02, bottom left on every band below 46rem),
-   `0.75rem` in, in `--muted` at `0.75rem`, and the principle beside it at
+   edge (bottom right on band 02; bottom right on every band below 46rem),
+   `0.75rem` in, in `--muted` at `0.75rem` (`0.625rem` at 70% opacity below 46rem), and the principle beside it at
    `--space-m`, centred on the photo's height. Band 02 is mirrored with `row-reverse`
    and its text right aligned against the photo. Each heading has its number (`01` to
    `03`, `aria-hidden`, `--muted`) on its own line above. Prose in `--fg`, `--space-s`
@@ -501,7 +501,8 @@ Left as is, each waiting on a design call:
 
 - **Off-token values.** Summary gap `1.5rem`, `.episode-links` top `1.75rem`,
   `.episode-body` bottom `clamp(2.5rem, 5vw, 4rem)`, credit name/role margins
-  `1rem` / `0.5rem`, about caption `0.75rem` type and inset, contact field
+  `1rem` / `0.5rem`, about caption `0.75rem` type (`0.625rem` at `opacity: 0.7` on mobile) and
+  `0.75rem` inset, contact field
   label gap `0.5rem`, error message pull-up `-0.25rem`, close control
   `2.75rem` / `0.9rem`, submit padding `0.75rem 1.75rem`, mobile open
   heading margin `0.75rem`, toggle transition `0.25s`
