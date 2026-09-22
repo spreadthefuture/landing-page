@@ -23,7 +23,7 @@ near-duplicate.
 | Breakpoint | `46rem`, always written `max-width: 46rem` |
 | Vertical gaps | `--space-s` / `--space-m` / `--space-xl`, on every page |
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
-| Label size (platform bar, episode listen links, quote source, contact field labels and submit) | `clamp(0.875rem, 1.2vw, 1rem)` |
+| Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text and closing, credits contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
 | Prose link (episode description, about closing, credits contact line) | underlined, `text-underline-offset: 0.2em`; the last two are also `--fg` |
@@ -39,8 +39,8 @@ near-duplicate.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | Primary text, the wordmark, icons at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social links, the mobile header's platform icons, "Coming soon." |
-| Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row, above 46rem. The only border |
+| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social and column links, the mobile header's platform icons, "Coming soon." |
+| Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row above 46rem, and the one across the footer. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only |
 
@@ -137,7 +137,8 @@ height so the last element sits the same distance off the bottom on every page.
 **Page structure.** `body` is a flex column at `min-height: 100svh`, padded by
 `--gutter`. No max-width container, except credits, whose `main` is capped at 85rem
 and centered. Every page is standalone: the head block, wordmark SVG and footer are
-repeated in all three files. Change one, change all three.
+repeated in all three files, and since the footer carries the wordmark too, that SVG
+now sits twice in each. Change one, change all six.
 
 **Border radius:** 6px on cover art, 50% on credit portraits, 0 everywhere else.
 
@@ -150,7 +151,7 @@ repeated in all three files. Change one, change all three.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
 - **About:** each band stacks photo then text, left aligned; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
-- **Footer:** steps down one size.
+- **Footer:** steps down one size, the columns close up, and the bottom band stacks.
 
 ## Components
 
@@ -414,9 +415,36 @@ fill is removed, so rotation stops and the bars are manual controls.
 `.is-entering` runs the fade and drift, bars 0.2s behind. The 9s timer starts there.
 
 ### Footer
-Centered, two lines, `max(6rem, var(--space-xl))` above. First, LinkedIn, Instagram,
-TikTok and a bold tracked "RSS" word, in `--muted`, `--space-s` above the copyright
-line in `--muted-dim`. None of the three sits in a badge or a container: LinkedIn is
+Two bands, left aligned, `max(6rem, var(--space-xl))` **plus `--space-m`** above: the
+footer is a block of its own now rather than two lines, so a page break's worth of air
+was not enough to make it read as the end.
+
+**Top band (`.footer-top`).** The wordmark on the left, linked to `/` with the
+masthead's hover, at `clamp(150px, 16vw, 210px)` wide: well under half the masthead's
+smallest size, so it signs the page off rather than starting it again. It is the only
+thing in the footer in `--fg` by inheritance, set on `.footer-wordmark` because the
+footer's own colour is gray. The band is `align-items: flex-start`, so the mark
+starts level with the column headings, dropped `0.25rem` to line its caps up with
+theirs rather than its box with their line box: the SVG carries no leading and a
+heading does. A bottom-aligned version was tried and read as hanging in the space.
+
+Pushed to the right edge, `.footer-cols`, two columns `clamp(2.5rem, 7vw, 7rem)`
+apart: **LISTEN** (Spotify, Apple Podcasts, Deezer) and **THE PODCAST** (About,
+Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
+above their list. The links are the same size and weight in `--muted`, `0.75rem`
+apart, lifting to `--fg` and then glowing like every other gray link. Both bands wrap
+to a stack when they no longer fit side by side.
+
+Two columns, not three or four. The site has about ten destinations and two of them
+already sit in the header, so a wider grid would need invented links. No contact
+column: the form is reached from the credits page's closing line (see **Contact
+overlay**). No season links, which would mean new markup inside the generated block.
+
+**Bottom band (`.footer-bottom`).** A 1px `--rule` line, `--space-m` under the
+columns and `--space-s` above this row, then the social links on the left and the
+copyright on the right, right aligned against them. LinkedIn, Instagram, TikTok and a
+bold tracked "RSS" word, in `--muted`; the credit and the copyright on one line in
+`--muted-dim`, which still belongs to that line alone. None of the three sits in a badge or a container: LinkedIn is
 the bare "in", not the filled square it ships as, because a filled square reads as a
 block of light next to an outline and pulls the row off center. The glyphs are CSS
 masks sized in `rem` (not `em`) so they do not scale with the copyright type. All
@@ -429,9 +457,12 @@ frame. Instagram's frame and lens ring are 2.6 of its 24 units, which lands near
 Each link is padded to a 32px tap target, with the padding taken back out of the row
 gap so glyphs still read 1.75rem apart.
 
-There is no contact glyph here: the form is reached from the credits page's
-closing line (see **Contact overlay**). `assets/social/mail.svg` stays in the
+There is no contact glyph here either: `assets/social/mail.svg` stays in the
 repo, unused.
+
+**Below 46rem** the type steps down to `0.8rem`, the columns close to `2.5rem` apart
+but stay two abreast (they are two or three short words each), and the bottom band
+stacks left aligned.
 
 ## Interaction
 
@@ -508,8 +539,12 @@ Left as is, each waiting on a design call:
   `0.75rem` inset, contact field
   label gap `0.5rem`, error message pull-up `-0.25rem`, close control
   `2.75rem` / `0.9rem`, submit padding `0.75rem 1.75rem`, mobile open
-  heading margin `0.75rem`, toggle transition `0.25s`
+  heading margin `0.75rem`, footer link list gap `0.75rem`, column gap
+  `clamp(2.5rem, 7vw, 7rem)` and wordmark cap-height drop `0.25rem`, toggle transition `0.25s`
   against the `0.2s` hover.
+- **The footer wordmark's own size**, `clamp(150px, 16vw, 210px)`, which is not
+  derived from the masthead's `clamp(250px, 34vw, 520px)` by any ratio. It was
+  picked by eye to read as a sign-off.
 
 ## Known duplication
 

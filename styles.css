@@ -156,6 +156,7 @@ a { color: inherit; text-decoration: none; }
 .about-closing a,
 .contact-line a,
 .episode-description a,
+.footer-links a,
 .episode-listen { transition: color 0.2s ease, text-shadow 0.2s ease; }
 
 .site-nav a:hover,
@@ -166,12 +167,15 @@ a { color: inherit; text-decoration: none; }
 .about-closing a:hover,
 .contact-line a:hover,
 .episode-description a:hover,
+.footer-links a:hover,
 .episode-listen:hover { text-shadow: var(--glow); }
 
 .logo svg,
+.footer-wordmark svg,
 .footer-social a { transition: color 0.2s ease, filter 0.2s ease; }
 
 .logo a:hover svg,
+.footer-wordmark:hover svg,
 .footer-social a:hover { color: var(--fg); filter: var(--glow-filter); }
 
 /* The quote bars are shapes, not type, so they keep the old dim. */
@@ -1640,23 +1644,110 @@ body.is-locked { overflow: hidden; }
 
 .site-footer {
   /* The drop from the last thing on the page to the footer: the break between
-     blocks, --space-xl, so it never reads as less than the page's own breaks,
-     with a 6rem floor on phones where --space-xl alone felt too close. */
-  padding: max(6rem, var(--space-xl)) var(--gutter) 0.75rem;
-  text-align: center;
+     blocks, --space-xl, with a 6rem floor on phones where --space-xl alone felt
+     too close, and --space-m on top of it. The footer is no longer two lines but
+     a block of its own, so it needs more than a page break's worth of air above
+     it to read as the end rather than as one more section. */
+  padding: calc(max(6rem, var(--space-xl)) + var(--space-m)) var(--gutter) 0.75rem;
   color: var(--muted-dim);
   font-size: 0.875rem;
 }
 
-/* A step brighter than the copyright under it: --muted-dim belongs to that line
-   alone, and these are links. The row carries the gap down to the copyright, so
-   the footer's 6rem of space above still measures to the first thing in it. */
+/* The top band: the wordmark on the left, the link columns pushed to the right
+   edge. It wraps to a stack rather than letting the columns crowd the mark.
+   The mark starts at the band's top edge, level with the column headings, so
+   both sides begin on the same line. */
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-m);
+}
+
+/* Well under half the masthead's smallest size, so it signs the page off rather
+   than starting it again. It sets --fg on itself because the footer's own text
+   colour is gray: the mark is the one thing down here that holds light. */
+/* The margin is an optical correction, not a gap: the SVG carries no leading, so
+   its top edge is the top of the letters, while a heading's is about a quarter
+   of a rem above its caps. Dropping the mark by that much lines the two sets of
+   caps up rather than the two boxes. */
+.footer-wordmark {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--fg);
+}
+
+.footer-wordmark svg {
+  display: block;
+  width: clamp(150px, 16vw, 210px);
+  height: auto;
+  fill: currentColor;
+  /* Same reason as the masthead: stops Safari re-hinting the glyphs mid-hover. */
+  will-change: opacity;
+}
+
+.footer-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m) clamp(2.5rem, 7vw, 7rem);
+}
+
+/* The label size and the site's uppercase-in-CSS rule, in --fg over gray links:
+   the headings and the wordmark are the only lit things down here. */
+.footer-col-title {
+  margin: 0 0 var(--space-s);
+  color: var(--fg);
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Gray links that lift to --fg and then glow, the same two-step the per-episode
+   listen links and the footer icons already use. */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.footer-links a:hover { color: var(--fg); }
+
+/* The one hairline in the footer, closing the columns off from the line that
+   ends the page. --space-m above it and --space-s under keeps the rule nearer
+   the thing it introduces, as every other heading on the site is. */
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-s);
+  margin-top: var(--space-m);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--rule);
+}
+
+/* Right aligned against the icon row, so the band reads as two anchored ends
+   rather than two things adrift in the middle. */
+.footer-bottom p {
+  margin: 0;
+  text-align: right;
+}
+
+/* A step brighter than the copyright beside it: --muted-dim belongs to that
+   line alone, and these are links. */
 .footer-social {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin-bottom: var(--space-s);
   color: var(--muted);
 }
 
@@ -1711,6 +1802,22 @@ body.is-locked { overflow: hidden; }
 @media (max-width: 46rem) {
   .site-footer {
     font-size: 0.8rem;
+  }
+
+  /* Everything stacks and goes left, the way every other band on the site does
+     below the breakpoint. The columns keep two abreast: they are two or three
+     short words each, and one column per line would run the footer long. */
+  .footer-cols {
+    gap: var(--space-m) 2.5rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-bottom p {
+    text-align: left;
   }
 }
 
