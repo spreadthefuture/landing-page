@@ -26,7 +26,7 @@ near-duplicate.
 | Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
-| Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg`. The footer tagline's link underlines on hover and focus only |
+| Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
 | Measure (max line length) | `48ch` about principles, `60ch` episode description, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
@@ -42,7 +42,7 @@ near-duplicate.
 | Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social and column links, the mobile header's platform icons, "Coming soon." |
 | Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row above 46rem, and the one across the footer. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
-| Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the tagline under the wordmark and the copyright line |
+| Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the credit and copyright line |
 
 Brand colors appear on hover only, on platform icons: Spotify `#1ED760`, Apple
 Podcasts `#A945E3`, Deezer `#A238FF`.
@@ -433,16 +433,8 @@ starts level with the column headings, dropped `0.25rem` to line its caps up wit
 theirs rather than its box with their line box: the SVG carries no leading and a
 heading does. A bottom-aligned version was tried and read as hanging in the space.
 
-Under the mark, `.footer-tagline`: "Produced by an international team with love ♥︎",
-the footer's own size and `--muted-dim` by inheritance, `--space-s` below the mark
-(the mark carries no leading, so less read as crowding it) and `line-height: 1.6` as
-prose. "international team" links to the credits page and is the site's one hidden
-link: no underline and no colour of its own at rest, so the line reads as a sentence
-and the wordmark stays the lit thing in the band. Hover and `:focus-visible` lift it
-to `--fg`, glow it and draw the prose underline at `0.2em`. The mark and the line are wrapped in `.footer-brand`
-(`max-width: 24rem`) so the pair moves as one item in the band and the columns stay
-against the right edge. It is the site's only sign off, and it sits on all three
-pages.
+The mark is wrapped in `.footer-brand` (`max-width: 24rem`) so it stays a distinct
+item in the band and the columns stay against the right edge.
 Pushed to the right edge, `.footer-cols`, two columns `clamp(2.5rem, 7vw, 7rem)`
 apart: **LISTEN** (Spotify, Apple Podcasts, Deezer) and **THE PODCAST** (About,
 Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
@@ -459,7 +451,7 @@ overlay**). No season links, which would mean new markup inside the generated bl
 columns and `--space-s` above this row, then the social links on the left and the
 copyright on the right, right aligned against them. LinkedIn, Instagram, TikTok and a
 bold tracked "RSS" word, in `--muted`; the credit and the copyright on one line in
-`--muted-dim`, the same quiet gray as the tagline in the band above. None of the three sits in a badge or a container: LinkedIn is
+`--muted-dim`. None of the three sits in a badge or a container: LinkedIn is
 the bare "in", not the filled square it ships as, because a filled square reads as a
 block of light next to an outline and pulls the row off center. The glyphs are CSS
 masks sized in `rem` (not `em`) so they do not scale with the copyright type. All
@@ -479,8 +471,8 @@ repo, unused.
 centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links side by
 side as one row, then the social row, then the copyright. `--space-s` between them and
 `--space-xl` above, since three lines of type do not need a block's worth of air to
-read as the end. The wordmark, the tagline under it, the two column headings and the
-whole LISTEN column are hidden, and the bottom band's rule with them: a second
+read as the end. The wordmark, the two column headings and the whole LISTEN column
+are hidden, and the bottom band's rule with them: a second
 wordmark and a repeat of the header's platform bar read as a wall of small type on a
 phone. Nothing is lost that the page does not already carry, since the header's
 platform icons sit on every page. The links' row gap is the social row's `1.75rem`, so
@@ -508,8 +500,7 @@ footing, where a white thing only glows on hover instead of lifting first.
   they keep a dim to `opacity: 0.8`.
 - **No underlines** except on prose links, with a `0.2em` offset: the episode
   description's links and the credits contact line's "Contact us." link, both also
-  lifted to `--fg`. The footer tagline's credits link is the one exception: it
-  draws its underline on hover and focus only.
+  lifted to `--fg`.
 - **Focus:** `:focus-visible` is a 2px `--fg` outline at 4px offset.
 - **Motion:** one gesture, a fade plus a small upward drift. Two curves in `:root`:
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
