@@ -151,7 +151,7 @@ now sits twice in each. Change one, change all six.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
 - **About:** each band stacks photo then text, left aligned; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
-- **Footer:** steps down one size, the columns close up, and the bottom band stacks.
+- **Footer:** reduced to three centred lines (page links, social row, copyright).
 
 ## Components
 
@@ -474,9 +474,23 @@ gap so glyphs still read 1.75rem apart.
 There is no contact glyph here either: `assets/social/mail.svg` stays in the
 repo, unused.
 
-**Below 46rem** the type steps down to `0.8rem`, the columns close to `2.5rem` apart
-but stay two abreast (they are two or three short words each), and the bottom band
-stacks left aligned.
+**Below 46rem the footer is a different object.** Not a columned block but three
+centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links side by
+side as one row, then the social row, then the copyright. `--space-s` between them and
+`--space-xl` above, since three lines of type do not need a block's worth of air to
+read as the end. The wordmark, the tagline under it, the two column headings and the
+whole LISTEN column are hidden, and the bottom band's rule with them: a second
+wordmark and a repeat of the header's platform bar read as a wall of small type on a
+phone. Nothing is lost that the page does not already carry, since the header's
+platform icons sit on every page. The links' row gap is the social row's `1.75rem`, so
+the three lines run on one rhythm. Hiding is `display: none` on `.footer-brand`,
+`.footer-col--listen` and `.footer-col-title`; the two columns carry a `.footer-col`
+class for that one selector.
+
+The two links are `--fg` here rather than `--muted`, the one place they differ from
+the desktop footer: with the wordmark hidden the band would otherwise hold nothing
+lit and read as unfinished. White at rest also puts them back on the site's usual
+footing, where a white thing only glows on hover instead of lifting first.
 
 ## Interaction
 

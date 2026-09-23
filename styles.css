@@ -1813,25 +1813,60 @@ body.is-locked { overflow: hidden; }
   letter-spacing: 0.12em;
 }
 
+/* Below the breakpoint the footer is a different object: not a columned block
+   but three centred lines, the site's quiet last word. A second wordmark, the
+   tagline under it and a LISTEN column that repeats the header's platform bar
+   all read as a wall of small type on a phone, where the page has already been
+   signed off by the covers above. What survives is what the header cannot
+   reach: the two page links, the social row, the copyright. */
 @media (max-width: 46rem) {
   .site-footer {
+    /* Less air above than the desktop footer needs: three centred lines are a
+       line of type, not a block, so --space-xl alone marks the end. */
+    padding-top: var(--space-xl);
     font-size: 0.8rem;
+    text-align: center;
   }
 
-  /* Everything stacks and goes left, the way every other band on the site does
-     below the breakpoint. The columns keep two abreast: they are two or three
-     short words each, and one column per line would run the footer long. */
-  .footer-cols {
-    gap: var(--space-m) 2.5rem;
+  /* The wordmark, its tagline, and the platform links the header already
+     carries as icons on every page. */
+  .footer-brand,
+  .footer-col--listen,
+  .footer-col-title {
+    display: none;
   }
 
+  .footer-top,
+  .footer-cols,
+  .footer-social {
+    justify-content: center;
+  }
+
+  /* One line of two links, so the column becomes a row and the gap is the
+     social row's own 1.75rem: the three lines then read on one rhythm.
+     They are --fg here, not --muted: with the wordmark gone this band would
+     otherwise hold no lit thing at all and read as unfinished rather than as
+     quiet. Being white at rest also puts them back on the site's usual footing,
+     where a white thing only glows on hover. */
+  .footer-links {
+    flex-direction: row;
+    gap: 1.75rem;
+    color: var(--fg);
+  }
+
+  /* No rule down here. It is the separator between a block and the line that
+     ends the page, and with the block gone there is nothing on its far side to
+     divide off; --space-s carries the three lines on its own. */
   .footer-bottom {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    margin-top: var(--space-s);
+    padding-top: 0;
+    border-top: 0;
   }
 
   .footer-bottom p {
-    text-align: left;
+    text-align: center;
   }
 }
 
