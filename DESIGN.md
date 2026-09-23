@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-22
+> Last updated: 2026-09-23
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -25,8 +25,8 @@ near-duplicate.
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
 | Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
-| Prose size (about text and closing, credits contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
-| Prose link (episode description, about closing, credits contact line) | underlined, `text-underline-offset: 0.2em`; the last two are also `--fg` |
+| Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
+| Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg`. The footer tagline's link underlines on hover and focus only |
 | Measure (max line length) | `48ch` about principles, `60ch` episode description, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
@@ -42,7 +42,7 @@ near-duplicate.
 | Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social and column links, the mobile header's platform icons, "Coming soon." |
 | Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row above 46rem, and the one across the footer. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
-| Footer gray | `--muted-dim` | `#5C5C5C` | The copyright line only |
+| Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the tagline under the wordmark and the copyright line |
 
 Brand colors appear on hover only, on platform icons: Spotify `#1ED760`, Apple
 Podcasts `#A945E3`, Deezer `#A238FF`.
@@ -123,7 +123,7 @@ block, **xl** is the break between blocks. Needing a fourth means the stack is w
 | Gap | Home | About | Credits |
 |-----|------|-------|---------|
 | Platform links to first block | `--space-xl` | `--space-xl` | `--space-xl` |
-| Heading to what it names | `--space-s` | `--space-s` | `--space-xl` |
+| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` |
 | Items inside a block | `--space-m` between seasons | `--space-m` between principles | `--space-xl` between card rows, `--space-m` between videographers |
 | Block to block | `--space-xl` | `--space-xl` | `--space-xl` |
 
@@ -269,12 +269,18 @@ The whole card links to that person's LinkedIn: circular portrait
 (`clamp(150px, 24vw, 360px)`, `object-fit: cover`), bold uppercase name, role in
 `--fg` and country in `--muted`. Three across, one below 46rem.
 
+**Team line.** `.credits-lede` introduces the grid: "Meet the people behind the
+episodes.", centred gray prose at the prose size, `--space-s` under "Our team" so it
+belongs to the heading rather than floating between it and the portraits. The one
+place on this page that uses `--space-s`.
+
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
 videographers: centred gray prose at the prose size, "The future is a
 conversation." with only "Contact us." as a `--fg` underlined link that opens the
 contact overlay. It is the site's one way into the form.
 
 **Entrance:** `fade-in` and `drift-in` over 1.2s, 100ms apart: "Our Team" at 0.1s,
+"Our Team" and the line under it at 0.1s,
 each row of cards at 0.2s and 0.3s, the videographers at 0.4s, the contact line at
 0.5s. Whole by about 1.7s. Removed under reduced motion.
 
@@ -294,17 +300,15 @@ A manifesto in three beats, the statement landing as the conclusion:
    size and every band reads the same width. Below 46rem every band stacks photo then
    text, all left aligned, `--space-m` apart.
 2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
-   `--space-xl` above and `--space-xl` + `--space-m` below. The sentence is
+   `--space-xl` above and nothing below: it closes the page. The sentence is
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
-   reset) is `--fg`.
-3. **Sign off.** `.about-closing`, centred, `--space-xl` above, prose size in
-   `--muted`, its credits link in `--fg`, underlined at `0.2em`. It is the page's
-   last line: the contact line lives at the end of the credits page instead.
+   reset) is `--fg`. Credits are reached from the nav, not from the prose, and the
+   contact line lives at the end of the credits page.
 
 **Entrance:** in reading order, 1.2s per block (the other pages' tempo; 1.8s made the
 photos, and so their colour, feel late): opacity on `ease-in-out`
 and a 0.375rem drift on `--ease-drift`. Blocks on screen at load run in pure CSS,
-delays principles 0.15s / 0.4s / 0.65s, statement 1s, sign off 1.35s. Blocks below
+delays principles 0.15s / 0.4s / 0.65s, statement 1s. Blocks below
 the fold wait hidden (`.is-waiting`, set by `script.js`) and play the same entrance
 with no delay as each scrolls into view (`.is-entering`, 10% up from the bottom
 edge), 250ms apart when several arrive together. Under reduced motion the
@@ -428,6 +432,16 @@ starts level with the column headings, dropped `0.25rem` to line its caps up wit
 theirs rather than its box with their line box: the SVG carries no leading and a
 heading does. A bottom-aligned version was tried and read as hanging in the space.
 
+Under the mark, `.footer-tagline`: "Produced by an international team with love ♥︎",
+the footer's own size and `--muted-dim` by inheritance, `--space-s` below the mark
+(the mark carries no leading, so less read as crowding it) and `line-height: 1.6` as
+prose. "international team" links to the credits page and is the site's one hidden
+link: no underline and no colour of its own at rest, so the line reads as a sentence
+and the wordmark stays the lit thing in the band. Hover and `:focus-visible` lift it
+to `--fg`, glow it and draw the prose underline at `0.2em`. The mark and the line are wrapped in `.footer-brand`
+(`max-width: 24rem`) so the pair moves as one item in the band and the columns stay
+against the right edge. It is the site's only sign off, and it sits on all three
+pages.
 Pushed to the right edge, `.footer-cols`, two columns `clamp(2.5rem, 7vw, 7rem)`
 apart: **LISTEN** (Spotify, Apple Podcasts, Deezer) and **THE PODCAST** (About,
 Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
@@ -444,7 +458,7 @@ overlay**). No season links, which would mean new markup inside the generated bl
 columns and `--space-s` above this row, then the social links on the left and the
 copyright on the right, right aligned against them. LinkedIn, Instagram, TikTok and a
 bold tracked "RSS" word, in `--muted`; the credit and the copyright on one line in
-`--muted-dim`, which still belongs to that line alone. None of the three sits in a badge or a container: LinkedIn is
+`--muted-dim`, the same quiet gray as the tagline in the band above. None of the three sits in a badge or a container: LinkedIn is
 the bare "in", not the filled square it ships as, because a filled square reads as a
 block of light next to an outline and pulls the row off center. The glyphs are CSS
 masks sized in `rem` (not `em`) so they do not scale with the copyright type. All
@@ -478,8 +492,9 @@ stacks left aligned.
   also shift to brand color. The quote bars are the one exception: shapes, not type,
   they keep a dim to `opacity: 0.8`.
 - **No underlines** except on prose links, with a `0.2em` offset: the episode
-  description's links, the about closing's credits link and the credits contact
-  line's "Contact us." link, the last two also lifted to `--fg`.
+  description's links and the credits contact line's "Contact us." link, both also
+  lifted to `--fg`. The footer tagline's credits link is the one exception: it
+  draws its underline on hover and focus only.
 - **Focus:** `:focus-visible` is a 2px `--fg` outline at 4px offset.
 - **Motion:** one gesture, a fade plus a small upward drift. Two curves in `:root`:
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
@@ -539,7 +554,8 @@ Left as is, each waiting on a design call:
   `0.75rem` inset, contact field
   label gap `0.5rem`, error message pull-up `-0.25rem`, close control
   `2.75rem` / `0.9rem`, submit padding `0.75rem 1.75rem`, mobile open
-  heading margin `0.75rem`, footer link list gap `0.75rem`, column gap
+  heading margin `0.75rem`, footer link list gap `0.75rem`, brand column `24rem`,
+  column gap
   `clamp(2.5rem, 7vw, 7rem)` and wordmark cap-height drop `0.25rem`, toggle transition `0.25s`
   against the `0.2s` hover.
 - **The footer wordmark's own size**, `clamp(150px, 16vw, 210px)`, which is not

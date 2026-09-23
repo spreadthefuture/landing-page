@@ -337,7 +337,7 @@ if (quotes.length > 1) {
 // several arrive together. A block scrolled past too fast to be seen comes in
 // anyway, so none is left hidden above the reader. Under reduced motion every
 // block is simply there.
-const aboutBlocks = document.querySelectorAll('.about-section, .about-statement, .about-closing');
+const aboutBlocks = document.querySelectorAll('.about-section, .about-statement');
 
 if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {

@@ -153,8 +153,8 @@ a { color: inherit; text-decoration: none; }
 .episode-title,
 .credit-name,
 .credit-role,
-.about-closing a,
 .contact-line a,
+.footer-tagline a,
 .episode-description a,
 .footer-links a,
 .episode-listen { transition: color 0.2s ease, text-shadow 0.2s ease; }
@@ -164,7 +164,7 @@ a { color: inherit; text-decoration: none; }
 .episode-summary:hover .episode-title,
 .credit-link:hover .credit-name,
 .credit-link:hover .credit-role,
-.about-closing a:hover,
+.footer-tagline a:hover,
 .contact-line a:hover,
 .episode-description a:hover,
 .footer-links a:hover,
@@ -1069,10 +1069,11 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* The page's closing line: the one thing on the site that asks something of the
-   reader, under the names it thanks. Gray prose, centred, --space-xl below the
-   list so it reads as a close rather than a third grouping, with only
-   "Contact us." as the link. */
+/* Two quiet lines in the same gray prose: the one that introduces the team
+   under "Our team" and the page's closing line, the one thing on the site that
+   asks something of the reader, under the names it thanks. Both centred at the
+   prose size. */
+.credits-lede,
 .contact-line {
   margin: var(--space-xl) 0 0;
   color: var(--muted);
@@ -1081,8 +1082,14 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
+/* The one place on this page where --space-s does the work --space-xl does
+   everywhere else: this line belongs to the heading above it, not to the grid,
+   and an xl gap on both sides would leave it floating between the two. The
+   grid keeps its own --space-xl below. */
+.credits-lede { margin-top: var(--space-s); }
+
 /* Lifted to --fg so it is the brightest thing in the line, with the same
-   underline as the about closing's credits link. */
+   underline as the episode description's prose links. */
 .contact-line a {
   color: var(--fg);
   text-decoration: underline;
@@ -1091,11 +1098,13 @@ a { color: inherit; text-decoration: none; }
 
 /* Entrance, the about page's two animations and curves, applied per block, but
    quicker: 1.2s instead of 1.8s and 100ms between beats, since this page is
-   mostly faces to reach. The heading at 0.1s, each row of cards as one block at
-   0.2s and 0.3s, then the videographers, heading and names together, at 0.4s,
-   and the contact line last at 0.5s. The page is whole by about 1.7s. */
+   mostly faces to reach. The heading and the line under it at 0.1s, each row of
+   cards as one block at 0.2s and 0.3s, then the videographers, heading and
+   names together, at 0.4s, and the contact line last at 0.5s. The page is whole
+   by about 1.7s. */
 .page-credits .credits-intro,
 .credit,
+.credits-lede,
 .thanks-list,
 .contact-line {
   animation:
@@ -1115,6 +1124,7 @@ a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   .page-credits .credits-intro,
   .credit,
+  .credits-lede,
   .thanks-list,
   .contact-line { animation: none; }
 }
@@ -1129,10 +1139,10 @@ a { color: inherit; text-decoration: none; }
 /* The page's one belief, as a poster, in the tagline's own type: sentence case
    at the same scale as the home page's opening line, pulled a step back in gray
    so only the words the podcast is about light up in --fg. --space-xl above, so
-   it stands apart from the principles as a block, and --space-xl plus
-   --space-m below, a wider break down to the sign off. */
+   it stands apart from the principles as a block. It closes the page, so the
+   page's bottom padding is the only thing under it. */
 .about-statement {
-  margin: var(--space-xl) 0 calc(var(--space-xl) + var(--space-m));
+  margin: var(--space-xl) 0 0;
   color: var(--muted);
   font-size: clamp(1.35rem, 3vw, 3.75rem);
   font-weight: 700;
@@ -1282,18 +1292,8 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* The sign off, at the prose's size and in gray, centred under the grid: after
-   the statement it should read as a whisper, not a third headline. */
-.about-closing {
-  margin: var(--space-xl) 0 0;
-  color: var(--muted);
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
-  line-height: 1.6;
-  text-align: center;
-}
-
 /* Entrance, in the manifesto's reading order: the three principles one by
-   one, then the statement, then the sign off.
+   one, then the statement.
 
    Opacity and movement are two animations on purpose. An ease-out on opacity
    does most of its change in the first few hundred milliseconds, which reads as
@@ -1310,8 +1310,7 @@ a { color: inherit; text-decoration: none; }
    repaint. Pure CSS, so it runs with JS off; fill-mode both keeps each block
    hidden only through its own delay. */
 .about-statement,
-.about-section,
-.about-closing {
+.about-section {
   animation:
     fade-in 1.2s var(--ease-fade) both,
     drift-in 1.2s var(--ease-drift) both;
@@ -1321,29 +1320,25 @@ a { color: inherit; text-decoration: none; }
 .about-section:nth-child(2) { animation-delay: 0.4s; }
 .about-section:nth-child(3) { animation-delay: 0.65s; }
 .about-statement { animation-delay: 1s; }
-.about-closing { animation-delay: 1.35s; }
 
 /* Blocks below the fold at load wait for the reader instead: script.js marks
    them .is-waiting (never under reduced motion), then swaps in .is-entering as
    each scrolls into view, which replays the same fade and drift with no delay.
    Blocks arriving together are staggered 250ms apart by the script. */
 .about-statement.is-waiting,
-.about-section.is-waiting,
-.about-closing.is-waiting {
+.about-section.is-waiting {
   animation: none;
   opacity: 0;
 }
 
 .about-statement.is-entering,
-.about-section.is-entering,
-.about-closing.is-entering { animation-delay: 0s; }
+.about-section.is-entering { animation-delay: 0s; }
 
 /* Removed outright rather than left to the global reduced-motion rule: that one
    shortens durations but not delays, so the blocks would still blink in late. */
 @media (prefers-reduced-motion: reduce) {
   .about-statement,
-  .about-section,
-  .about-closing { animation: none; }
+  .about-section { animation: none; }
 }
 
 /* Colour follows the scroll: each band comes to colour as it rises into view,
@@ -1377,15 +1372,6 @@ a { color: inherit; text-decoration: none; }
     animation: band-words linear both;
     animation-timeline: --band;
   }
-}
-
-/* The one link in the prose, lifted to --fg so it is the brightest thing in
-   the line, with the same underline as the episode description's prose link
-   so it still reads as a link at a glance. */
-.about-closing a {
-  color: var(--fg);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 
 /* The contact overlay.
@@ -1676,6 +1662,34 @@ body.is-locked { overflow: hidden; }
   display: block;
   margin-top: 0.25rem;
   color: var(--fg);
+}
+
+/* The mark and the line under it move as one item in the band, so the columns
+   still sit against the right edge and the two sides still start level. */
+.footer-brand { max-width: 24rem; }
+
+/* The one sentence about who makes the podcast, signing the mark off: the
+   footer's own size and colour, inherited, so it sits in the same quiet band as
+   the copyright rather than reading as a third column. --space-s under the
+   mark, the site's label-to-subject gap: the mark carries no leading, so a
+   smaller gap read as crowding it. */
+.footer-tagline {
+  margin: var(--space-s) 0 0;
+  line-height: 1.6;
+}
+
+/* The one link on the site that does not show as one at rest: the line reads as
+   a sentence, and an underline in the middle of it would pull the eye away from
+   the mark above. Hovering lifts it to --fg, glows it and draws the prose
+   underline, the same one the other prose links carry. Focus does the same, so
+   the keyboard still finds it, on top of the global focus ring. */
+.footer-tagline a { text-decoration: none; }
+
+.footer-tagline a:hover,
+.footer-tagline a:focus-visible {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .footer-wordmark svg {
