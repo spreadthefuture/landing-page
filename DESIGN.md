@@ -186,9 +186,10 @@ to edge. No lit phrases.
 Above: `--space-xl`, or `--space-xl` plus `--space-m` under 46rem. Below: `--space-xl`
 plus `--space-m`, plus `.episodes-layout`'s `--space-m` padding, so the sentence stands clear of both the masthead and the cover.
 
-**Homepage entrance:** `fade-in` and `drift-in` over 1.2s, in two beats: tagline at
-0.1s, then the whole `.episodes-layout` at 0.2s. The header stays still. Settled by
-about 1.5s. Pure CSS, removed under reduced motion.
+**Homepage entrance:** `fade-in` and `drift-in` over 1.2s, in two beats 250ms apart,
+the about page's tempo: tagline at 0.15s, then the whole `.episodes-layout` at 0.4s.
+The header stays still. Settled by about 1.6s. Pure CSS, removed under reduced
+motion.
 
 ### Season section
 A `<section class="season">` per season, newest first, stacked in `.seasons` to the
