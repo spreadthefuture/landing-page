@@ -149,7 +149,7 @@ now sits twice in each. Change one, change all six.
 - **Header:** platform names collapse to icons, with "Listen on" at their size; the
   site nav folds behind a plus beside the wordmark.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
-- **About:** each band stacks photo then text, left aligned; the statement switches to viewport sizing.
+- **About:** each band stacks photo then text, band 02's text right aligned; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
 - **Footer:** reduced to three centred lines (page links, social row, copyright).
 
@@ -299,7 +299,7 @@ A manifesto in three beats, the statement landing as the conclusion:
    `03`, `aria-hidden`, `--muted`) on its own line above. Prose in `--fg`, `--space-s`
    below, max **48ch**: the cap sits on the paragraph, so it is measured in the prose
    size and every band reads the same width. Below 46rem every band stacks photo then
-   text, all left aligned, `--space-m` apart.
+   text, `--space-m` apart; band 02 keeps its text right aligned.
 2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
    `--space-xl` above and nothing below: it closes the page. The sentence is
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
@@ -469,7 +469,7 @@ repo, unused.
 
 **Below 46rem the footer is a different object.** Not a columned block but three
 centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links side by
-side as one row, then the social row, then the copyright. `--space-s` between them and
+side as one row, then the social row, then the credit and the copyright on two lines. `--space-s` between them all and
 `--space-xl` above, since three lines of type do not need a block's worth of air to
 read as the end. The wordmark, the two column headings and the whole LISTEN column
 are hidden, and the bottom band's rule with them: a second
