@@ -292,7 +292,7 @@ A manifesto in three beats, the statement landing as the conclusion:
    alternating bands, `--space-xl` apart. Each band is a square photo
    (`.about-figure`, the homepage cover's size, `object-fit: cover`, 6px radius over
    `--surface`) with its credit caption set inside the bottom corner on the outer
-   edge (bottom right on band 02; bottom right on every band below 46rem),
+   edge (bottom right on band 02; below 46rem, opposite the text: bottom right on bands 01 and 03, bottom left on band 02),
    `0.75rem` in, in `--muted` at `0.75rem` (`0.625rem` at 70% opacity below 46rem), and the principle beside it at
    `--space-m`, centred on the photo's height. Band 02 is mirrored with `row-reverse`
    and its text right aligned against the photo. Each heading has its number (`01` to

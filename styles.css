@@ -1275,15 +1275,20 @@ a { color: inherit; text-decoration: none; }
 
   .about-figure { flex: none; }
 
-  /* Full width photos have no outer edge, so every credit sits bottom right,
-     clear of the prose below, and drops a step smaller and dimmer
-     so it reads as a mark on the photo, not a line of type. */
-  .about-caption,
-  .about-section:nth-child(even) .about-caption {
+  /* Full width photos have no outer edge, so each credit sits on the side
+     opposite its text, clear of the prose below: bottom right over the left
+     aligned bands, bottom left over the mirrored one. It drops a step smaller
+     and dimmer so it reads as a mark on the photo, not a line of type. */
+  .about-caption {
     left: auto;
     right: 0.75rem;
     font-size: 0.625rem;
     opacity: 0.7;
+  }
+
+  .about-section:nth-child(even) .about-caption {
+    left: 0.75rem;
+    right: auto;
   }
 }
 
