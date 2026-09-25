@@ -23,7 +23,7 @@ near-duplicate.
 | Breakpoint | `46rem`, always written `max-width: 46rem` |
 | Vertical gaps | `--space-s` / `--space-m` / `--space-xl`, on every page |
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
-| Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links) | `clamp(0.875rem, 1.2vw, 1rem)` |
+| Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links; the footer links are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
@@ -96,7 +96,7 @@ uses the same trick with `Arial-BoldMT`.
 | Role | Size | Weight | Line height | Tracking |
 |------|------|--------|-------------|----------|
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 (reset) | |
-| site nav | `clamp(2rem, 5vw, 4rem)` · `1.25rem` below 46rem (the "More" toggle's size) | 700 | 1 | |
+| site nav | `clamp(2rem, 5vw, 4rem)` · `8vw` below 46rem | 700 | 1 | |
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
@@ -165,7 +165,7 @@ About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
 **Below 46rem:** the links fold behind "MORE" and the episode row's plus
 (`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the wordmark,
 reading bottom to top with the plus at the top and upright. Tapping it slides About and
-Credits open under it, right aligned at `1.25rem`, the same size as "More", `--space-s` below the wordmark, on the
+Credits open under it, right aligned at `8vw`, `--space-s` below the wordmark, on the
 mobile feed's 500ms cubic ease-in-out; the words fade and drift in 0.1s and 0.18s
 behind. The plus turns to a minus; Escape closes. A `.js` class set by a one-line
 script in each page's head hides the nav before first paint, so without JS the nav
@@ -469,7 +469,7 @@ repo, unused.
 
 **Below 46rem the footer is a different object.** Not a columned block but three
 centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links side by
-side as one row, then the social row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
+side as one row at `1.25rem` (the header's "More" size), then the social row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
 `--space-xl` above, since three lines of type do not need a block's worth of air to
 read as the end. The wordmark, the two column headings and the whole LISTEN column
 are hidden, and the bottom band's rule with them: a second
