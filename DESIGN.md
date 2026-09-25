@@ -100,6 +100,7 @@ uses the same trick with `Arial-BoldMT`.
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
+| sub-heading: "Videographers" only | `clamp(1.25rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.7vw, 1.25rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
@@ -123,8 +124,8 @@ block, **xl** is the break between blocks. Needing a fourth means the stack is w
 | Gap | Home | About | Credits |
 |-----|------|-------|---------|
 | Platform links to first block | `--space-xl` | `--space-xl` | `--space-xl` |
-| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` |
-| Items inside a block | `--space-m` between seasons | `--space-m` between principles | `--space-xl` between card rows, `--space-m` between videographers |
+| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` and the videographers at `--space-m` |
+| Items inside a block | `--space-m` between seasons | `--space-m` between principles | `--space-xl` between card rows, `--space-m` between videographers (`--space-s` below 46rem) |
 | Block to block | `--space-xl` | `--space-xl` | `--space-xl` |
 
 Credits uses `--space-xl` where the others use `s` or `m` because the portraits are
@@ -272,8 +273,14 @@ The whole card links to that person's LinkedIn: circular portrait
 
 **Team line.** `.credits-lede` introduces the grid: "Meet the people behind the
 episodes.", centred gray prose at the prose size, `--space-s` under "Our team" so it
-belongs to the heading rather than floating between it and the portraits. The one
-place on this page that uses `--space-s`.
+belongs to the heading rather than floating between it and the portraits.
+
+**Videographers.** `.credits-intro--sub`: the "Our team" heading a step down, at its
+own `clamp(1.25rem, 2.6vw, 2.25rem)`, so it sits between "Our team" and the names on
+every screen and the videographers no longer read as the team's equals. Their names
+keep the card name's style, three across (one below 46rem), `--space-m` under the
+heading and `--space-m` apart (`--space-s` below 46rem, so the heading's gap stays
+the larger one).
 
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
 videographers: centred gray prose at the prose size, "The future is a

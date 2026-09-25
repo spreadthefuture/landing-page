@@ -965,6 +965,13 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
+/* "Videographers": the same heading, a step down. Between "Our team" and the
+   names under it on every screen (36 / 52 / 24px on desktop, 20 / 26 / 17px on
+   a phone), so it still leads a section of its own but no longer puts the
+   videographers on the team's level. Its own size, used nowhere else: no
+   existing step sits between the two at every width. */
+.credits-intro--sub { font-size: clamp(1.25rem, 2.6vw, 2.25rem); }
+
 .credits {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1033,7 +1040,9 @@ a { color: inherit; text-decoration: none; }
      columns rather than on a second set of their own. */
   row-gap: var(--space-m);
   column-gap: var(--col-gap);
-  margin: var(--space-xl) 0 0;
+  /* --space-m, not the --space-xl the portraits need: a list of names under a
+     smaller heading, which at xl would float away from them. */
+  margin: var(--space-m) 0 0;
   padding: 0;
   list-style: none;
   text-align: center;
@@ -1061,7 +1070,12 @@ a { color: inherit; text-decoration: none; }
   .credit-role,
   .credit-location { font-size: 1rem; }
 
-  .thanks-list { grid-template-columns: minmax(0, 1fr); }
+  /* --space-s between the stacked names, so the --space-m under the heading
+     stays the larger gap and the heading does not read as the first name. */
+  .thanks-list {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-s);
+  }
 
   .thanks-list li:last-child:nth-child(3n + 1) {
     grid-column: 1;
