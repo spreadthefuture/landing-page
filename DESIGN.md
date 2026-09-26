@@ -25,7 +25,7 @@ near-duplicate.
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
 | Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links; the footer links are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
-| Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
+| Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
 | Measure (max line length) | `48ch` about principles, `60ch` episode description, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
@@ -112,7 +112,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | sub-heading: "Videographers" only | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
-| prose | `clamp(1rem, 1.7vw, 1.25rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
+| prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
 | label | `clamp(0.875rem, 1.2vw, 1rem)` | 700 | 1.2 | |
 | footer RSS word | `0.8125rem` | 700 | 1 (reset) | 0.12em |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |

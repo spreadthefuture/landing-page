@@ -575,13 +575,13 @@ a { color: inherit; text-decoration: none; }
 .episode-meta {
   margin: 0;
   color: var(--muted);
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
 }
 
 .episode-description {
   max-width: 60ch;
   color: var(--muted);
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
   text-align: justify;
   hyphens: auto;
@@ -1026,7 +1026,7 @@ a { color: inherit; text-decoration: none; }
 .credit-role,
 .credit-location {
   margin: 0.5rem 0 0;
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.2;
   /* The column is exactly one portrait wide, which the longest role outgrows.
      These two lines are allowed a little under a third of the gutter on each
@@ -1098,7 +1098,7 @@ a { color: inherit; text-decoration: none; }
 .contact-line {
   margin: var(--space-xl) 0 0;
   color: var(--muted);
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
   text-align: center;
 }
@@ -1284,7 +1284,7 @@ a { color: inherit; text-decoration: none; }
 .about-text {
   max-width: 48ch;
   margin: var(--space-s) 0 0;
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
 }
 
@@ -1502,7 +1502,7 @@ body.is-locked { overflow: hidden; }
   margin: var(--space-s) 0 0;
   max-width: 48ch;
   color: var(--muted);
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
 }
 
@@ -1539,7 +1539,7 @@ body.is-locked { overflow: hidden; }
   background: none;
   color: var(--fg);
   font-family: inherit;
-  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
   transition: border-color 0.2s ease;
 }
