@@ -54,6 +54,16 @@
   font-display: swap;
 }
 
+/* ABC Areal, served from a separate Netlify site so the licensed font never
+   enters this public repo (Dinamo EULA section 10). */
+@font-face {
+  font-family: 'ABC Areal';
+  src: url('https://stf-areal-font.netlify.app/ABCArealVariable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #0A0A0A;
   --fg: #F4F4F2;
@@ -108,11 +118,12 @@ body {
   padding-bottom: clamp(1.25rem, 5vh, var(--gutter));
   background: var(--bg);
   color: var(--fg);
-  /* 'STF Sans' is Arial: it resolves to the viewer's own Arial where one exists
-     and to the bundled metric-compatible file where none does. See the
-     @font-face rules at the top of this file for why it is not simply "Arial".
-     The bare Arial after it only matters if the @font-face rules fail outright. */
-  font-family: 'STF Sans', Arial, Helvetica, sans-serif;
+  /* ABC Areal first. If it fails to load, 'STF Sans' is Arial: it resolves to the
+     viewer's own Arial where one exists and to the bundled metric-compatible file
+     where none does. See the @font-face rules at the top of this file for why it
+     is not simply "Arial". The bare Arial after it only matters if the
+     @font-face rules fail outright. */
+  font-family: 'ABC Areal', 'STF Sans', Arial, Helvetica, sans-serif;
   font-weight: 400;
   /* One of the site's three line heights: 1 for the nav, 1.6 for prose, and
      this 1.2 for everything else, headings and labels included. */
@@ -800,10 +811,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* The bold gray label, set like the platform bar, pinned to its quote with
-   --space-s. A work's title in
-   it is a <cite>, left in the browser's default italic: on devices without Arial
-   that fetches the regular italic face at page load, the one episode
-   descriptions already use. */
+   --space-s. */
 .quote-source {
   margin-top: var(--space-s);
   color: var(--muted);

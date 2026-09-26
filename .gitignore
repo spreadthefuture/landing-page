@@ -19,3 +19,6 @@ CLAUDE.md
 
 # Full resolution source portraits, kept locally, not published
 assets/credits-photos/originals/
+
+# Licensed ABC Areal font (Dinamo EULA forbids public repos). Served from a separate Netlify site
+assets/font/ABCAreal/

@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-23
+> Last updated: 2026-09-26
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -49,34 +49,43 @@ Podcasts `#A945E3`, Deezer `#A238FF`.
 
 ## Typography
 
-### Arial, the only typeface
+### ABC Areal, with Arial as the fallback
 
-Stack: `'STF Sans', Arial, Helvetica, sans-serif`. `STF Sans` is four `@font-face`
-rules at the top of `styles.css`, each asking for Arial's PostScript face first and
-falling back to bundled Liberation Sans:
+Stack: `'ABC Areal', 'STF Sans', Arial, Helvetica, sans-serif`. `ABC Areal` is one
+variable `@font-face` (weights 100 to 900, no italic) at the top of `styles.css`, loaded
+from `https://stf-areal-font.netlify.app/ABCArealVariable.woff2`, a separate Netlify
+site. The font is licensed (Dinamo EULA, web license: WOFF2 only, one domain) and the
+license forbids public repos, so the file is gitignored (`assets/font/ABCAreal/`) and
+never committed. That site's `_headers` currently allows any origin (`*`) so local
+testing works. At launch, lock it to `https://spreadthefuture.com` so other sites
+cannot hotlink the font.
+
+If Areal fails to load, `STF Sans` takes over: four `@font-face` rules that ask for
+Arial's PostScript face first and fall back to bundled Liberation Sans:
 
 ```css
 src: local('ArialMT'),
      url('assets/font/liberation-fonts-ttf-2.1.5/LiberationSans-Regular.ttf') format('truetype');
 ```
 
-**Do not flatten this to `font-family: Arial`.** Android aliases `arial` to Roboto and
-Linux fontconfig aliases it to Liberation Sans, so a stack led by `Arial` never falls
+**Do not flatten `STF Sans` to `font-family: Arial`.** Android aliases `arial` to Roboto
+and Linux fontconfig aliases it to Liberation Sans, so a stack led by `Arial` never falls
 through. A family name with no system alias forces the `src` list to be read, and the
-PostScript name (`ArialMT`) keeps `local()` clear of the same aliases. The wordmark SVG
-uses the same trick with `Arial-BoldMT`.
+PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 
-| Platform | Renders | Downloaded |
-|----------|---------|------------|
-| Windows, macOS, iOS, Linux with Arial | Arial | nothing |
-| Android, Linux without Arial | Liberation Sans (metric-compatible) | ~400KB per face used |
+| Situation | Renders | Downloaded |
+|-----------|---------|------------|
+| Areal loads | ABC Areal | ~180KB, once, then cached |
+| Areal blocked or down, Arial installed | Arial | nothing extra |
+| Areal blocked or down, no Arial (Android, some Linux) | Liberation Sans | ~400KB per face used |
 
-- **`font-display: swap`:** viewers without Arial see their default sans first, with a
-  slight reflow when the file lands.
-- **Do not add `rel="preload"`.** It would force the download on viewers who have
-  Arial.
+- **`font-display: swap`:** viewers see the fallback first, with a slight reflow when
+  Areal lands.
+- **No italic.** Areal ships no italic in the hosted file, and the site uses none.
+- **The wordmark** is outlined paths (`Logo2-AREAL.svg` and the inline logo), so it
+  does not depend on any font loading.
 - **Settled.** Do not swap the stack, change the `local()` names, or rename
-  `STF Sans` without asking.
+  `STF Sans` without asking. Never commit the Areal files.
 
 ### Rules
 
@@ -405,8 +414,7 @@ so a written message is never lost to a network error. Closing the panel clears
 ### Quotes
 The homepage's closing block, `--space-xl` below the list. A `<section class="quotes">`
 of `<figure>`s (`<blockquote>` + `<figcaption>`). Quote at the heading scale, capped
-at 38ch, centered, in sentence case. The source sits `--space-s` below as a gray label;
-a work's title is a `<cite>` in italic.
+at 38ch, centered, in sentence case. The source sits `--space-s` below as a gray label.
 
 Without JS the quotes stack `--space-m` apart. `script.js` adds `.is-rotating`: all
 quotes share one grid cell (so the block never changes height), bottom aligned, and
