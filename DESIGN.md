@@ -23,7 +23,7 @@ near-duplicate.
 | Breakpoint | `46rem`, always written `max-width: 46rem` |
 | Vertical gaps | `--space-s` / `--space-m` / `--space-xl`, on every page |
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
-| Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links) | `clamp(0.875rem, 1.2vw, 1rem)` |
+| Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links; the footer links are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.7vw, 1.25rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
@@ -109,6 +109,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
+| sub-heading: "Videographers" only | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.7vw, 1.25rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
@@ -132,8 +133,8 @@ block, **xl** is the break between blocks. Needing a fourth means the stack is w
 | Gap | Home | About | Credits |
 |-----|------|-------|---------|
 | Platform links to first block | `--space-xl` | `--space-xl` | `--space-xl` |
-| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` |
-| Items inside a block | `--space-m` between seasons | `--space-m` between principles | `--space-xl` between card rows, `--space-m` between videographers |
+| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` and the videographers at `--space-m` |
+| Items inside a block | `--space-m` between seasons | `--space-m` between principles | `--space-xl` between card rows, `--space-m` between videographers (`--space-s` below 46rem) |
 | Block to block | `--space-xl` | `--space-xl` | `--space-xl` |
 
 Credits uses `--space-xl` where the others use `s` or `m` because the portraits are
@@ -158,9 +159,9 @@ now sits twice in each. Change one, change all six.
 - **Header:** platform names collapse to icons, with "Listen on" at their size; the
   site nav folds behind a plus beside the wordmark.
 - **Home:** the list becomes the mobile feed; the tagline switches to viewport sizing.
-- **About:** each band stacks photo then text, left aligned; the statement switches to viewport sizing.
+- **About:** each band stacks photo then text, band 02's text right aligned; the statement switches to viewport sizing.
 - **Credits:** grids drop to one column.
-- **Footer:** reduced to three centred lines (page links, social row, copyright).
+- **Footer:** reduced to centred lines (page links, social row), then the credit and copyright as one tight two-line block.
 
 ## Components
 
@@ -281,8 +282,14 @@ The whole card links to that person's LinkedIn: circular portrait
 
 **Team line.** `.credits-lede` introduces the grid: "Meet the people behind the
 episodes.", centred gray prose at the prose size, `--space-s` under "Our team" so it
-belongs to the heading rather than floating between it and the portraits. The one
-place on this page that uses `--space-s`.
+belongs to the heading rather than floating between it and the portraits.
+
+**Videographers.** `.credits-intro--sub`: the "Our team" heading a step down, at its
+own `clamp(1.375rem, 2.6vw, 2.25rem)`, so it sits between "Our team" and the names on
+every screen and the videographers no longer read as the team's equals. Their names
+keep the card name's style, three across (one below 46rem), `--space-m` under the
+heading and `--space-m` apart (`--space-s` below 46rem, so the heading's gap stays
+the larger one).
 
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
 videographers: centred gray prose at the prose size, "The future is a
@@ -301,14 +308,14 @@ A manifesto in three beats, the statement landing as the conclusion:
    alternating bands, `--space-xl` apart. Each band is a square photo
    (`.about-figure`, the homepage cover's size, `object-fit: cover`, 6px radius over
    `--surface`) with its credit caption set inside the bottom corner on the outer
-   edge (bottom right on band 02; bottom right on every band below 46rem),
+   edge (bottom right on band 02; below 46rem, opposite the text: bottom right on bands 01 and 03, bottom left on band 02),
    `0.75rem` in, in `--muted` at `0.75rem` (`0.625rem` at 70% opacity below 46rem), and the principle beside it at
    `--space-m`, centred on the photo's height. Band 02 is mirrored with `row-reverse`
    and its text right aligned against the photo. Each heading has its number (`01` to
    `03`, `aria-hidden`, `--muted`) on its own line above. Prose in `--fg`, `--space-s`
    below, max **48ch**: the cap sits on the paragraph, so it is measured in the prose
    size and every band reads the same width. Below 46rem every band stacks photo then
-   text, all left aligned, `--space-m` apart.
+   text, `--space-m` apart; band 02 keeps its text right aligned.
 2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
    `--space-xl` above and nothing below: it closes the page. The sentence is
    `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
@@ -477,7 +484,7 @@ repo, unused.
 
 **Below 46rem the footer is a different object.** Not a columned block but three
 centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links side by
-side as one row, then the social row, then the copyright. `--space-s` between them and
+side as one row at `1.25rem` (the header's "More" size), then the social row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
 `--space-xl` above, since three lines of type do not need a block's worth of air to
 read as the end. The wordmark, the two column headings and the whole LISTEN column
 are hidden, and the bottom band's rule with them: a second
