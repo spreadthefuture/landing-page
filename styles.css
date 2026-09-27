@@ -995,7 +995,7 @@ a { color: inherit; text-decoration: none; }
 
 .credit { text-align: center; }
 
-/* The whole card is one link to that person's LinkedIn, photograph and type
+/* The whole card is one link to that person's LinkedIn or website, photograph and type
    together, so there is a single target and the type keeps its own colours. */
 .credit-link {
   display: block;
