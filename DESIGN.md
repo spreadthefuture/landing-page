@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-26
+> Last updated: 2026-09-27
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -231,7 +231,10 @@ on the mobile feed's engine (500ms cubic ease-in-out), and opening one folds the
 other at the same time. Above 46rem the page eases the clicked row up until its top
 rule sits level with the top of the cover, which is the panel's sticky offset
 (`--gutter`); the first row already sits on that line, so every row lands on the same
-one. Without a cover panel the clicked row simply holds its place under the pointer. Above 46rem the text also fades and drifts in over
+one, except near the end of the list: there the row stops as far down as it takes for the
+cover to stay pinned, since easing it higher would push the layout's bottom past the
+cover's and release it. Closing holds the row in place, or eases the rows down for the
+same reason. Without a cover panel the clicked row simply holds its place under the pointer. Above 46rem the text also fades and drifts in over
 0.6s. The toggle turns back to plus on the closing click via `.is-closing`. Padding
 sits on `.episode-body` so the fold reaches 0.
 

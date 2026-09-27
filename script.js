@@ -53,7 +53,9 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     details.open = true;
     details.classList.toggle('is-closing', !opening);
     panel.style.height = '';
-    const to = opening ? panel.scrollHeight : 0;
+    // The laid-out height, not scrollHeight: that also counts the text's
+    // drift-in offset, so the fold overshot and snapped back a few pixels.
+    const to = opening ? panel.getBoundingClientRect().height : 0;
     panel.style.overflow = 'hidden';
     panel.style.height = `${from}px`;
     return { panel, from, to };
@@ -73,10 +75,12 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     // topTo, so it travels one way only however the rows above it fold. Read after the heights are written, so this frame's fold counts.
     // Scrolled to a whole pixel, worked out from the page position rather than
     // nudged by the fractional difference: browsers round the scroll, and those
-    // sub-pixel nudges made the slow end of the ease shiver up and down.
+    // sub-pixel nudges made the slow end of the ease shiver up and down. Floored,
+    // so the list only ever lands a fraction low, never high enough to pull the
+    // sticky cover up with it.
     if (m.focus) {
       const top = m.focus.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo(0, Math.round(top - (m.topFrom + (m.topTo - m.topFrom) * e)));
+      window.scrollTo(0, Math.floor(top - (m.topFrom + (m.topTo - m.topFrom) * e)));
     }
 
     if (t < 1) {
@@ -94,14 +98,44 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     root.classList.remove('is-list-moving');
   };
 
+  // The cover is sticky inside this layout, and lets go once the list beside it
+  // ends above its bottom, which easing one of the last rows up to the cover's
+  // top would do. So the focus stops as far down as it takes for the cover to
+  // stay where it is (or to reach its pinned place and stop there, if it is
+  // still below it). `most` is how far the page may scroll up: until the list's
+  // bottom, once every panel has reached its height, meets the cover's bottom,
+  // or until the cover's own place in the flow meets it, when the list is the
+  // shorter of the two (a tall cover on a big screen).
+  // Measured in fractional pixels, and a cover within a pixel of its sticky
+  // offset counts as pinned, so a sub-pixel slip is never taken as the new place
+  // to hold: that ratcheted it up a little every open.
+  const seasonsColumn = layout.querySelector('.seasons');
+  const coverFloor = (focus, panels) => {
+    let before = 0;
+    let all = 0;
+    for (const { panel, from, to } of panels.values()) {
+      all += to - from;
+      if (focus.compareDocumentPosition(panel) & Node.DOCUMENT_POSITION_PRECEDING) before += to - from;
+    }
+    const pinTop = parseFloat(getComputedStyle(artPanel).top) || 0;
+    const cover = artPanel.getBoundingClientRect();
+    const hold = cover.top > pinTop - 1 ? pinTop : cover.top;
+    const flowTop = layout.getBoundingClientRect().top + parseFloat(getComputedStyle(layout).paddingTop);
+    const listBottom = seasonsColumn.getBoundingClientRect().bottom + all;
+    const most = Math.max(listBottom - cover.height, flowTop) - hold;
+    return focus.getBoundingClientRect().top + before - most;
+  };
+
   // changes: [details, opening] pairs. focus: the element whose place on screen
   // eases to topTo while everything moves.
   const run = (changes, focus, topTo) => {
     const targets = new Map();
     if (motion) for (const [details, { to }] of motion.panels) targets.set(details, to > 0);
     for (const [details, opening] of changes) targets.set(details, opening);
+    const panels = new Map([...targets].map(([details, opening]) => [details, measure(details, opening)]));
+    if (focus && artPanel && !feed.matches) topTo = Math.max(topTo, coverFloor(focus, panels));
     motion = {
-      panels: new Map([...targets].map(([details, opening]) => [details, measure(details, opening)])),
+      panels,
       focus,
       topFrom: focus ? focus.getBoundingClientRect().top : 0,
       topTo,
@@ -117,9 +151,12 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     const details = summary.closest('.episode');
 
     event.preventDefault();
+    // Closing holds the row where it is, except near the end of the list on
+    // desktop, where the rows ease down just enough that the cover stays put.
     if (current === details) {
       current = null;
-      run([[details, false]], null);
+      if (feed.matches) run([[details, false]], null);
+      else run([[details, false]], summary, summary.getBoundingClientRect().top);
       return;
     }
     const changes = current ? [[current, false], [details, true]] : [[details, true]];
