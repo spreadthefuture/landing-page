@@ -168,7 +168,8 @@ a { color: inherit; text-decoration: none; }
 .contact-line a,
 .episode-description a,
 .footer-links a,
-.episode-listen { transition: color 0.2s ease, text-shadow 0.2s ease; }
+.episode-listen,
+.episode-page-link { transition: color 0.2s ease, text-shadow 0.2s ease; }
 
 .site-nav a:hover,
 .platforms a:hover,
@@ -178,7 +179,8 @@ a { color: inherit; text-decoration: none; }
 .contact-line a:hover,
 .episode-description a:hover,
 .footer-links a:hover,
-.episode-listen:hover { text-shadow: var(--glow); }
+.episode-listen:hover,
+.episode-page-link:hover { text-shadow: var(--glow); }
 
 .logo svg,
 .footer-wordmark svg,
@@ -1412,6 +1414,159 @@ a { color: inherit; text-decoration: none; }
     animation: band-words linear both;
     animation-timeline: --band;
   }
+}
+
+/* ---- Episode page ---- */
+
+/* One episode on a page of its own, the link to share when a single platform
+   link would choose for the reader. The homepage's cover and list, reduced to
+   one: the cover at the panel's size on the left, sticky the same way, and the
+   episode's words beside it, starting level with its top. */
+.episode-page {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-m);
+  margin-top: var(--space-xl);
+}
+
+.episode-page-cover {
+  flex: 0 0 clamp(240px, 47vw, max(620px, 100vw / 3));
+  position: sticky;
+  top: var(--gutter);
+  margin: 0;
+}
+
+.episode-page-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.episode-page-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The row's number and title, stacked like an about heading, the title at the
+   sub-heading size ("Videographers"): the full heading scale was too loud in
+   uppercase beside the cover. */
+.episode-page-title {
+  margin: 0;
+  font-size: clamp(1.375rem, 2.6vw, 2.25rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+.episode-page-title .episode-number {
+  display: block;
+  margin-bottom: var(--space-s);
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+}
+
+.episode-page-head .episode-meta { margin-top: var(--space-s); }
+
+/* The reason the page exists, so it comes straight under the title rather than
+   after the description: the platforms as rows, the episode row's type and its
+   hairline under each, in --fg with the icon beside the name. Same hover as the
+   header's platform bar: the name glows, the icon takes its brand colour. */
+.episode-page-listen { margin-top: var(--space-m); }
+
+.episode-page-listen .platforms-label {
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.episode-page-links {
+  margin: calc(var(--space-s) - var(--row-pad)) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.episode-page-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: var(--row-pad) 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-weight: 650;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+.episode-page-link .platform-icon { flex: none; }
+
+.episode-page-link:hover .platform-icon--spotify { background-color: #1ED760; }
+.episode-page-link:hover .platform-icon--apple { background-color: #A945E3; }
+.episode-page-link:hover .platform-icon--deezer { background-color: #A238FF; }
+
+.episode-page .episode-description { margin-top: var(--space-m); }
+
+/* The way back to every episode, "Discover more episodes": a gray label at the
+   label size, which carries a phrase that long where the row size did not,
+   --space-m clear of the description. It lifts and glows on hover. */
+.episode-page-back {
+  display: inline-block;
+  margin-top: var(--space-m);
+  color: var(--muted);
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-weight: 650;
+  text-transform: uppercase;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.episode-page-back:hover { color: var(--fg); text-shadow: var(--glow); }
+
+@media (max-width: 46rem) {
+  .episode-page {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: calc(var(--space-xl) + var(--space-m));
+  }
+
+  .episode-page-cover { position: static; }
+
+  /* The footer's page links' size (1.25rem): at the label size it was the
+     smallest link on a phone, smaller than the footer it sits above. */
+  .episode-page-back { font-size: 1.25rem; }
+}
+
+/* Entrance, the site's fade and drift in reading order: the cover, the title,
+   each platform 100ms apart, then the description. Settled by about 2s. */
+.episode-page-cover,
+.episode-page-head,
+.episode-page-listen .platforms-label,
+.episode-page-links li,
+.episode-page .episode-description,
+.episode-page-back {
+  animation:
+    fade-in 1.2s var(--ease-fade) both,
+    drift-in 1.2s var(--ease-drift) both;
+  animation-delay: 0.15s;
+}
+
+.episode-page-head { animation-delay: 0.3s; }
+.episode-page-listen .platforms-label { animation-delay: 0.4s; }
+.episode-page-links li:nth-child(1) { animation-delay: 0.45s; }
+.episode-page-links li:nth-child(2) { animation-delay: 0.55s; }
+.episode-page-links li:nth-child(3) { animation-delay: 0.65s; }
+.episode-page .episode-description,
+.episode-page-back { animation-delay: 0.8s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .episode-page-cover,
+  .episode-page-head,
+  .episode-page-listen .platforms-label,
+  .episode-page-links li,
+  .episode-page .episode-description,
+  .episode-page-back { animation: none; }
 }
 
 /* The contact overlay.

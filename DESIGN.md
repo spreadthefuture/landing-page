@@ -23,7 +23,7 @@ near-duplicate.
 | Breakpoint | `46rem`, always written `max-width: 46rem` |
 | Vertical gaps | `--space-s` / `--space-m` / `--space-xl`, on every page |
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
-| Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links; the footer links are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
+| Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links, the episode page's "Discover more episodes"; the footer links and "Discover more episodes" are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
