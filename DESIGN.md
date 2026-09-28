@@ -112,7 +112,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
-| episode page platform links | row size · below 46rem a row of three equal columns, `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 700 | 1.2 | 0.01em |
+| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a row of three equal columns, `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 700 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
 | label | `clamp(0.875rem, 1.2vw, 1rem)` | 700 | 1.2 | |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |
@@ -140,6 +140,9 @@ block, **xl** is the break between blocks. Needing a fourth means the stack is w
 Credits uses `--space-xl` where the others use `s` or `m` because the portraits are
 large and a tighter gap crowds them. `--portrait` and `--col-gap` are widths and stay
 page-local.
+
+On an episode page, "Discover more episodes" sits `--space-xl` under the date line,
+so it reads as a way out rather than part of the description.
 
 Bottom padding is `clamp(1.25rem, 5vh, var(--gutter))`, measured against viewport
 height so the last element sits the same distance off the bottom on every page.
@@ -606,7 +609,7 @@ footing, where a white thing only glows on hover instead of lifting first.
 
 ### Don't
 - Draw a divider line below 46rem. On a phone nothing carries a `--rule` line (episode
-  rows, footer band, episode page platform rows); spacing does the separating. Form
+  rows, footer band); spacing does the separating. Form
   field underlines and the quote bars are controls, not dividers, and stay.
 - Add a chromatic color. Brand colors are for platform icon hover only.
 - Use pure `#000` or `#FFF`.
