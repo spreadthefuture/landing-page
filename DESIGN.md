@@ -168,6 +168,24 @@ now sits twice in each. Change one, change all six.
 Inline SVG, filled with `currentColor`, linked to `/` on every page, with the standard
 hover fade. `will-change: opacity` stops Safari re-hinting the glyphs mid-hover.
 
+**Homepage entrance (`.logo--intro`).** Plays once on load, then the mark is still.
+Rebuilt in CSS from the motion designer's Lottie (`assets/logos/animation/`), with
+its timings and curves: "SPREAD" slides in from the left (104px in the letters'
+space, 26% of the logo's width) and "THE FUTURE" from the right (123px, 32%), each
+fading up over 0.7s, then the bar wipes in left to right (`scale`, origin left)
+from 0.57s to 1.93s. The Lottie's mask runs 2.23s on `cubic-bezier(0.333, 0, 0, 1)`
+but starts left of the bar and ends past it, so the CSS curve,
+`cubic-bezier(0.31, 0.13, 0.1, 0.81)`, is the slice of it during which the bar
+actually fills; the bar is still moving when it lands, as in the original. Starts
+at 0.15s, settled by about 1.93s. The
+Lottie's own exit and 12s loop are not used: they left the header without a logo
+for about 2.5s of every cycle. The selectors walk the SVG's structure (first six
+letter groups, the rest, the `rect`) because the footer shares the markup, and the
+motion uses the `translate` / `scale` properties because a CSS `transform` would
+replace each group's transform attribute. The SVG is `overflow: visible` so the
+letters are not cut at its edge. Removed under reduced motion. Other pages' logos
+stay still.
+
 ### Site nav
 About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
 
@@ -197,7 +215,8 @@ plus `--space-m`, plus `.episodes-layout`'s `--space-m` padding, so the sentence
 
 **Homepage entrance:** `fade-in` and `drift-in` over 1.2s, in two beats 250ms apart,
 the about page's tempo: tagline at 0.15s, then the whole `.episodes-layout` at 0.4s.
-The header stays still. Settled by about 1.6s. Pure CSS, removed under reduced
+The header stays still except for the wordmark's own entrance (see **Wordmark**).
+Settled by about 1.6s, the wordmark's bar by about 1.93s. Pure CSS, removed under reduced
 motion.
 
 ### Season section
@@ -531,7 +550,8 @@ footing, where a white thing only glows on hover instead of lifting first.
   (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`) for movement. One pair of keyframes,
   `fade-in` and `drift-in` (0.375rem rise). Opacity never goes on an ease-out: it snaps
   on. Entrances start within 0.3s of load and settle by about 1.5s (about is the 2.5s
-  exception). No animation library.
+  exception). The one departure is the homepage wordmark's entrance, which keeps the
+  motion designer's slides, wipe and curves (see **Wordmark**). No animation library.
 - **Reduced motion:** a global `prefers-reduced-motion` block cuts every transition,
   animation and smooth scroll to 0.01ms.
 
