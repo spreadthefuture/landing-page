@@ -309,11 +309,29 @@ a { color: inherit; text-decoration: none; }
 @keyframes logo-from-right { from { translate: 123px 0; } }
 @keyframes logo-bar { from { scale: 0 1; } }
 
+/* The rest of the header on the homepage (the nav, its phone toggle and the
+   platform links) holds back so the wordmark arrives alone, then comes in as
+   one beat at 1.4s, as the letters are landing and just ahead of the tagline.
+   A fade only, no drift: it is chrome, not content, and a vertical drift beside
+   the letters' horizontal slide would pull against it. The toggle's
+   rotate(180deg) is also a transform the drift would overwrite. Keyed off
+   .logo--intro so the other pages' headers stay still. The open phone nav is
+   left out (:not(.is-open)): it is display: none until opened, and showing it
+   would replay this delay; its links have their own entrance. */
+.logo--intro ~ .menu-toggle,
+.logo--intro ~ .site-nav:not(.is-open),
+.header-top:has(.logo--intro) + .platforms {
+  animation: fade-in 1.2s var(--ease-fade) 1.4s both;
+}
+
 /* Removed outright, as on every page: the global rule shortens durations but
    not delays. */
 @media (prefers-reduced-motion: reduce) {
   .logo--intro svg g,
-  .logo--intro rect { animation: none; }
+  .logo--intro rect,
+  .logo--intro ~ .menu-toggle,
+  .logo--intro ~ .site-nav,
+  .header-top:has(.logo--intro) + .platforms { animation: none; }
 }
 
 .platforms {
@@ -460,8 +478,8 @@ a { color: inherit; text-decoration: none; }
 /* Entrance, the about page's fade, drift and tempo: the tagline, then the cover
    and every season together as one block, 250ms apart. Both wait for the
    wordmark's entrance (.logo--intro): the tagline starts at 1.6s, as the
-   letters finish landing, while the bar is still drawing. The rest of the
-   header stays still, as on the other pages. The page is settled by about
+   letters finish landing, while the bar is still drawing, 0.2s behind the rest
+   of the header (see .logo--intro above). The page is settled by about
    3.05s. The layout's transform ends at none, so the sticky cover is
    unaffected after. */
 .tagline,

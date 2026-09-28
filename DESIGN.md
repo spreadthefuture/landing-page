@@ -218,8 +218,13 @@ plus `--space-m`, plus `.episodes-layout`'s `--space-m` padding, so the sentence
 **Homepage entrance:** the wordmark goes first (see **Wordmark**), then `fade-in` and
 `drift-in` over 1.2s, in two beats 250ms apart, the about page's tempo: tagline at
 1.6s, as the wordmark's letters finish landing and while its bar is still drawing,
-then the whole `.episodes-layout` at 1.85s. The rest of the header stays still.
-Settled by about 3.05s. Pure CSS, removed under reduced motion.
+then the whole `.episodes-layout` at 1.85s. The rest of the header (site nav, the
+phone's "More" toggle, platform bar) is held back so the wordmark arrives alone,
+then fades in as one beat at 1.4s, 0.2s ahead of the tagline, over 1.2s on
+`--ease-fade`. Fade only, no drift: it is chrome, not content, and a vertical drift
+beside the letters' horizontal slide pulls against it. Keyed off `.logo--intro`, so
+other pages' headers stay still; the open phone nav is excluded, since it would
+replay the delay. Settled by about 3.05s. Pure CSS, removed under reduced motion.
 
 ### Season section
 A `<section class="season">` per season, newest first, stacked in `.seasons` to the
