@@ -1804,20 +1804,6 @@ body.is-locked { overflow: hidden; }
 .social-icon--instagram { -webkit-mask-image: url(/assets/social/instagram.svg); mask-image: url(/assets/social/instagram.svg); }
 .social-icon--tiktok { -webkit-mask-image: url(/assets/social/tiktok.svg); mask-image: url(/assets/social/tiktok.svg); }
 
-/* Bold and tracked, the site's one small tracked word. line-height: 1 drops the word's box to its own type size, which leaves the
-   cap height within a fraction of a pixel of that box's centre, so the row's
-   align-items: center lands the caps on the glyphs' axis rather than hanging the
-   word off a baseline. The negative margin takes back the trailing letter-space
-   that 0.12em adds after the final S, which would otherwise sit the whole row a
-   hair left of centre. */
-.social-rss {
-  margin-right: -0.12em;
-  font-size: 0.8125rem;
-  font-weight: 650;
-  line-height: 1;
-  letter-spacing: 0.12em;
-}
-
 /* Below the breakpoint the footer is a different object: not a columned block
    but three centred lines, the site's quiet last word. A second wordmark and a
    LISTEN column that repeats the header's platform bar read as a wall of small

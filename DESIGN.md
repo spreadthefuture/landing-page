@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-27
+> Last updated: 2026-09-28
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -96,9 +96,9 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
   the season heading ("Season 1"), the quotes and the credits headings. The brand name
   is the one thing uppercase in the markup.
 - **Line height:** `1.2` on `body`, `1` on the site nav, `1.6` on prose.
-  `line-height: 0` on the wordmark and `1` on the RSS word are box resets.
-- **Letter spacing:** `0.01em` to `0.02em` on large bold type, normal on small labels,
-  `0.12em` only on the footer's RSS word. Nothing negative.
+  `line-height: 0` on the wordmark is a box reset.
+- **Letter spacing:** `0.01em` to `0.02em` on large bold type, normal on small labels.
+  Nothing negative.
 
 ### Type scale
 
@@ -114,7 +114,6 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
 | label | `clamp(0.875rem, 1.2vw, 1rem)` | 700 | 1.2 | |
-| footer RSS word | `0.8125rem` | 700 | 1 (reset) | 0.12em |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |
 
 ## Spacing & layout
@@ -467,14 +466,14 @@ overlay**). No season links, which would mean new markup inside the generated bl
 
 **Bottom band (`.footer-bottom`).** A 1px `--rule` line, `--space-m` under the
 columns and `--space-s` above this row, then the social links on the left and the
-copyright on the right, right aligned against them. LinkedIn, Instagram, TikTok and a
-bold tracked "RSS" word, in `--muted`; the credit and the copyright on one line in
+copyright on the right, right aligned against them. LinkedIn, Instagram and TikTok,
+in `--muted` (no RSS link since 2026-09-28); the credit and the copyright on one line in
 `--muted-dim`. None of the three sits in a badge or a container: LinkedIn is
 the bare "in", not the filled square it ships as, because a filled square reads as a
 block of light next to an outline and pulls the row off center. The glyphs are CSS
 masks sized in `rem` (not `em`) so they do not scale with the copyright type. All
-three are drawn in a 24x24 box, so one 1.25rem square aligns them; the RSS word
-centers on the same axis. Instagram is the only one full-bleed in that box.
+three are drawn in a 24x24 box, so one 1.25rem square aligns them. Instagram is the
+only one full-bleed in that box.
 The LinkedIn "in" and the TikTok note are bare marks, so each file scales its glyph
 to 21 of the 24 units and centers it, which holds them a hair inside Instagram's
 frame. Instagram's frame and lens ring are 2.6 of its 24 units, which lands near
