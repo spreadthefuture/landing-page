@@ -974,10 +974,10 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
-/* "Videographers": the same heading, a step down. Between "Our team" and the
+/* "Videographers" and "Special thanks": the same heading, a step down. Between "Our team" and the
    names under it on every screen (36 / 52 / 24px on desktop, 22 / 26 / 17px on
    a phone), so it still leads a section of its own but no longer puts the
-   videographers on the team's level. Its own size, used nowhere else: no
+   videographers on the team's level. Its own size, used only for these two: no
    existing step sits between the two at every width. */
 .credits-intro--sub { font-size: clamp(1.375rem, 2.6vw, 2.25rem); }
 
@@ -1091,6 +1091,19 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+/* "Special thanks": the names on one line rather than a list, so they read as
+   a note and not as a third roster. The line takes .credit-name whole, the same
+   type as every name above it; this rule only places it: --space-m under its
+   heading, as the videographers are, and balanced so a wrap on a phone splits
+   it into even lines. Non-breaking spaces in the HTML keep each name whole. */
+.friends-line {
+  max-width: 48rem;
+  margin: var(--space-m) auto 0;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
 /* Two quiet lines in the same gray prose: the one that introduces the team
    under "Our team" and the page's closing line, the one thing on the site that
    asks something of the reader, under the names it thanks. Both centred at the
@@ -1122,12 +1135,13 @@ a { color: inherit; text-decoration: none; }
    quicker: 1.2s instead of 1.8s and 100ms between beats, since this page is
    mostly faces to reach. The heading and the line under it at 0.1s, each row of
    cards as one block at 0.2s and 0.3s, then the videographers, heading and
-   names together, at 0.4s, and the contact line last at 0.5s. The page is whole
-   by about 1.7s. */
+   names together, at 0.4s, the special thanks at 0.5s, and the contact line last at
+   0.6s. The page is whole by about 1.8s. */
 .page-credits .credits-intro,
 .credit,
 .credits-lede,
 .thanks-list,
+.friends-line,
 .contact-line {
   animation:
     fade-in 1.2s var(--ease-fade) both,
@@ -1139,7 +1153,9 @@ a { color: inherit; text-decoration: none; }
 .credit:nth-child(n + 4) { animation-delay: 0.3s; }
 .page-credits .credits-intro:nth-of-type(2),
 .thanks-list { animation-delay: 0.4s; }
-.contact-line { animation-delay: 0.5s; }
+.page-credits .credits-intro:nth-of-type(3),
+.friends-line { animation-delay: 0.5s; }
+.contact-line { animation-delay: 0.6s; }
 
 /* Removed outright, as on the about page: the global rule shortens durations
    but not delays. */
@@ -1148,6 +1164,7 @@ a { color: inherit; text-decoration: none; }
   .credit,
   .credits-lede,
   .thanks-list,
+  .friends-line,
   .contact-line { animation: none; }
 }
 

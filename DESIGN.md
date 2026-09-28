@@ -109,7 +109,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 700 | 1.2 | 0.01em |
-| sub-heading: "Videographers" only | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
+| sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
@@ -132,7 +132,7 @@ block, **xl** is the break between blocks. Needing a fourth means the stack is w
 | Gap | Home | About | Credits |
 |-----|------|-------|---------|
 | Platform links to first block | `--space-xl` | `--space-xl` | `--space-xl` |
-| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` and the videographers at `--space-m` |
+| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` and the videographers and special thanks at `--space-m` |
 | Items inside a block | `--space-m` between seasons | `--space-m` between principles | `--space-xl` between card rows, `--space-m` between videographers (`--space-s` below 46rem) |
 | Block to block | `--space-xl` | `--space-xl` | `--space-xl` |
 
@@ -293,15 +293,22 @@ keep the card name's style, three across (one below 46rem), `--space-m` under th
 heading and `--space-m` apart (`--space-s` below 46rem, so the heading's gap stays
 the larger one).
 
+**Special thanks.** A second `.credits-intro--sub`, "Special thanks", `--space-xl`
+under the videographers, then `.friends-line` `--space-m` under it: the names on one
+centred line, separated by commas and closed with a full stop, in the card name's
+own style (`.credit-name`: uppercase, weight 650), with non-breaking spaces keeping
+each name whole. Capped at 48rem, line height 1.4, and `text-wrap: balance`, so on a
+phone it breaks into even lines.
+
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
-videographers: centred gray prose at the prose size, "The future is a
+special thanks: centred gray prose at the prose size, "The future is a
 conversation." with only "Contact us." as a `--fg` underlined link that opens the
 contact overlay. It is the site's one way into the form.
 
 **Entrance:** `fade-in` and `drift-in` over 1.2s, 100ms apart: "Our Team" at 0.1s,
 "Our Team" and the line under it at 0.1s,
-each row of cards at 0.2s and 0.3s, the videographers at 0.4s, the contact line at
-0.5s. Whole by about 1.7s. Removed under reduced motion.
+each row of cards at 0.2s and 0.3s, the videographers at 0.4s, the special thanks at 0.5s,
+the contact line at 0.6s. Whole by about 1.8s. Removed under reduced motion.
 
 ### About page
 A manifesto in three beats, the statement landing as the conclusion:
