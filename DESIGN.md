@@ -207,7 +207,9 @@ About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
 
 **Below 46rem:** the links fold behind "MORE" and the episode row's plus
 (`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the wordmark,
-reading bottom to top with the plus at the top and upright. Tapping it slides About and
+reading bottom to top with the plus at the top and upright. The header is a
+two-column grid here, so on the narrowest phones (iPhone SE) the wordmark shrinks
+below its 250px floor rather than pushing "MORE" onto its own line. Tapping it slides About and
 Credits open under it, right aligned at `8vw`, `--space-s` below the wordmark, on the
 mobile feed's 500ms cubic ease-in-out; the words fade and drift in 0.1s and 0.18s
 behind. The plus turns to a minus; Escape closes. A `.js` class set by the small
