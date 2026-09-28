@@ -2108,11 +2108,15 @@ body.is-locked { overflow: hidden; }
 
   /* No rule down here. It is the separator between a block and the line that
      ends the page, and with the block gone there is nothing on its far side to
-     divide off; --space-s carries the three lines on its own. */
+     divide off. The credit links above are their own block, so the break above
+     the social row is a full --space-m; the social row and the sentence under
+     it are one unit, so their own gap stays smaller than that, a step up from
+     --space-s rather than a match for it. */
   .footer-bottom {
     flex-direction: column;
     align-items: center;
-    margin-top: var(--space-s);
+    gap: calc((var(--space-s) + var(--space-m)) / 2);
+    margin-top: var(--space-m);
     padding-top: 0;
     border-top: 0;
   }
