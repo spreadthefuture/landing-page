@@ -1555,11 +1555,9 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(1.05rem, 1.9vw, 1.5rem);
 }
 
-.episode-page-head .episode-meta { margin-top: var(--space-s); }
-
 /* The reason the page exists, so it comes straight under the title rather than
    after the description: the platforms as rows, the episode row's type and its
-   hairline under each, in --fg with the icon beside the name. Same hover as the
+   hairline under each (above 46rem only), in --fg with the icon beside the name. Same hover as the
    header's platform bar: the name glows, the icon takes its brand colour. */
 .episode-page-listen { margin-top: var(--space-m); }
 
@@ -1595,6 +1593,9 @@ a { color: inherit; text-decoration: none; }
 
 .episode-page .episode-description { margin-top: var(--space-m); }
 
+/* Date and length under the description, as in the episode row's open text:
+   the description's last paragraph margin is the only gap. */
+
 /* The way back to every episode, "Discover more episodes": a gray label at the
    label size, which carries a phrase that long where the row size did not,
    --space-m clear of the description. It lifts and glows on hover. */
@@ -1619,6 +1620,43 @@ a { color: inherit; text-decoration: none; }
 
   .episode-page-cover { position: static; }
 
+  /* One row of big logos, each with its name under it as a caption, and size
+     alone makes them read as the page's buttons. No rules on a phone (see
+     DESIGN.md). Three equal columns, so the logos stay evenly spaced whatever
+     the names' lengths; each logo is 8vw, the mobile nav's type size, about
+     31px on a 390px phone: clearly above the header's logos without shouting. */
+  .episode-page-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* The same air above the logos as below them: --space-m plus the link's
+       --row-pad on each side, mirroring the captions' --row-pad and the
+       description's --space-m under them. */
+    margin-top: var(--space-m);
+  }
+
+  .episode-page-link {
+    flex-direction: column;
+    gap: 0.5rem;
+    border-bottom: 0;
+  }
+
+  .episode-page-link .platform-icon { width: 8vw; height: 8vw; }
+  /* The name, brought back from the unscoped .platform-name rule, at the
+     footer's mobile size and weight in sentence case, in --muted so it reads
+     as a caption. "Apple Podcasts" fits one line in a third of the width. */
+  .episode-page-link .platform-name {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
   /* The footer's page links' size (1.25rem): at the label size it was the
      smallest link on a phone, smaller than the footer it sits above. */
   .episode-page-back { font-size: 1.25rem; }
@@ -1631,6 +1669,7 @@ a { color: inherit; text-decoration: none; }
 .episode-page-listen .platforms-label,
 .episode-page-links li,
 .episode-page .episode-description,
+.episode-page .episode-meta,
 .episode-page-back {
   animation:
     fade-in 1.2s var(--ease-fade) both,
@@ -1644,6 +1683,7 @@ a { color: inherit; text-decoration: none; }
 .episode-page-links li:nth-child(2) { animation-delay: 0.55s; }
 .episode-page-links li:nth-child(3) { animation-delay: 0.65s; }
 .episode-page .episode-description,
+.episode-page .episode-meta,
 .episode-page-back { animation-delay: 0.8s; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1652,6 +1692,7 @@ a { color: inherit; text-decoration: none; }
   .episode-page-listen .platforms-label,
   .episode-page-links li,
   .episode-page .episode-description,
+  .episode-page .episode-meta,
   .episode-page-back { animation: none; }
 }
 

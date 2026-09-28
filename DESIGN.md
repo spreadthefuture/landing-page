@@ -112,6 +112,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
+| episode page platform links | row size · below 46rem a row of three equal columns, `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 700 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
 | label | `clamp(0.875rem, 1.2vw, 1rem)` | 700 | 1.2 | |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |
@@ -598,10 +599,13 @@ footing, where a white thing only glows on hover instead of lifting first.
 - Size type with `clamp()` rather than adding a breakpoint.
 - Keep every gap on `--space-s` / `--space-m` / `--space-xl`.
 - Write uppercase copy in sentence case in the markup and uppercase it in CSS.
-- Reuse `--rule` at 1px for any new separator.
+- Reuse `--rule` at 1px for any new separator, above 46rem only.
 - Explain non-obvious CSS in a comment above it, as the file already does.
 
 ### Don't
+- Draw a divider line below 46rem. On a phone nothing carries a `--rule` line (episode
+  rows, footer band, episode page platform rows); spacing does the separating. Form
+  field underlines and the quote bars are controls, not dividers, and stay.
 - Add a chromatic color. Brand colors are for platform icon hover only.
 - Use pure `#000` or `#FFF`.
 - Add shadows, gradients or any elevation. The system is flat. The one exception is
