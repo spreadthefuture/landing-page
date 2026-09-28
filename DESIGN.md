@@ -173,11 +173,13 @@ Rebuilt in CSS from the motion designer's Lottie (`assets/logos/animation/`), wi
 its timings and curves: "SPREAD" slides in from the left (104px in the letters'
 space, 26% of the logo's width) and "THE FUTURE" from the right (123px, 32%), each
 fading up over 0.7s, then the bar wipes in left to right (`scale`, origin left)
-from 0.57s to 1.93s. The Lottie's mask runs 2.23s on `cubic-bezier(0.333, 0, 0, 1)`
+from 1.42s to 2.77s. The Lottie's mask runs 2.23s on `cubic-bezier(0.333, 0, 0, 1)`
 but starts left of the bar and ends past it, so the CSS curve,
 `cubic-bezier(0.31, 0.13, 0.1, 0.81)`, is the slice of it during which the bar
 actually fills; the bar is still moving when it lands, as in the original. Starts
-at 0.15s, settled by about 1.93s. The
+at 1s, after a deliberate beat with no mark in the header, settled by about 2.77s.
+It is the page's first beat: the tagline and the list wait for its letters to land
+(see **Tagline**). The
 Lottie's own exit and 12s loop are not used: they left the header without a logo
 for about 2.5s of every cycle. The selectors walk the SVG's structure (first six
 letter groups, the rest, the `rect`) because the footer shares the markup, and the
@@ -213,11 +215,11 @@ to edge. No lit phrases.
 Above: `--space-xl`, or `--space-xl` plus `--space-m` under 46rem. Below: `--space-xl`
 plus `--space-m`, plus `.episodes-layout`'s `--space-m` padding, so the sentence stands clear of both the masthead and the cover.
 
-**Homepage entrance:** `fade-in` and `drift-in` over 1.2s, in two beats 250ms apart,
-the about page's tempo: tagline at 0.15s, then the whole `.episodes-layout` at 0.4s.
-The header stays still except for the wordmark's own entrance (see **Wordmark**).
-Settled by about 1.6s, the wordmark's bar by about 1.93s. Pure CSS, removed under reduced
-motion.
+**Homepage entrance:** the wordmark goes first (see **Wordmark**), then `fade-in` and
+`drift-in` over 1.2s, in two beats 250ms apart, the about page's tempo: tagline at
+1.6s, as the wordmark's letters finish landing and while its bar is still drawing,
+then the whole `.episodes-layout` at 1.85s. The rest of the header stays still.
+Settled by about 3.05s. Pure CSS, removed under reduced motion.
 
 ### Season section
 A `<section class="season">` per season, newest first, stacked in `.seasons` to the
@@ -549,8 +551,9 @@ footing, where a white thing only glows on hover instead of lifting first.
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
   (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`) for movement. One pair of keyframes,
   `fade-in` and `drift-in` (0.375rem rise). Opacity never goes on an ease-out: it snaps
-  on. Entrances start within 0.3s of load and settle by about 1.5s (about is the 2.5s
-  exception). The one departure is the homepage wordmark's entrance, which keeps the
+  on. Entrances start within 0.3s of load and settle by about 1.5s (the about page's
+  2.5s and the homepage's 3.05s, which starts with a 1s beat and then waits for the
+  wordmark, are the exceptions). The one departure is the homepage wordmark's entrance, which keeps the
   motion designer's slides, wipe and curves (see **Wordmark**). No animation library.
 - **Reduced motion:** a global `prefers-reduced-motion` block cuts every transition,
   animation and smooth scroll to 0.01ms.

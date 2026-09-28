@@ -265,9 +265,10 @@ a { color: inherit; text-decoration: none; }
    (assets/logos/animation/) on the vector logo itself, so it costs no file and
    no library: "SPREAD" slides in from the left, "THE FUTURE" from the right,
    both fading up, then the bar wipes in left to right. Durations, delays and
-   curves are the Lottie's own (30fps keyframes, shifted to start at the site's
-   usual 0.15s), which is why they are not --ease-fade / --ease-drift. Settled by
-   about 1.93s.
+   curves are the Lottie's own (30fps keyframes, shifted to start at 1s: the
+   header holds a beat without the mark before it arrives), which is why they
+   are not --ease-fade / --ease-drift. The logo is the page's first beat: the
+   tagline and list below wait for its letters to land. Settled by about 2.77s.
 
    The footer carries the same SVG, so there are no wrapper groups to hook onto:
    the selectors walk the SVG's structure instead (the first six letter groups
@@ -282,26 +283,26 @@ a { color: inherit; text-decoration: none; }
 
 .logo--intro svg > g > g:first-child > g:nth-child(-n + 6) {
   animation:
-    logo-from-left 0.73s cubic-bezier(0.333, 0, 0.667, 1) 0.15s both,
-    fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 0.18s both;
+    logo-from-left 0.73s cubic-bezier(0.333, 0, 0.667, 1) 1s both,
+    fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 1.03s both;
 }
 
 .logo--intro svg > g > g:first-child > g:nth-child(n + 7) {
   animation:
-    logo-from-right 0.73s cubic-bezier(0.333, 0, 0.667, 1) 0.32s both,
-    fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 0.35s both;
+    logo-from-right 0.73s cubic-bezier(0.333, 0, 0.667, 1) 1.17s both,
+    fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 1.2s both;
 }
 
 /* The Lottie wipes the bar with a mask whose edge travels 2.23s on
    cubic-bezier(0.333, 0, 0, 1), but starts a little left of the bar and ends
    well past its right end, so the bar itself only fills during part of that
-   run: from 0.57s, done by 1.93s, still moving when it lands. This is that
+   run: from 1.42s, done by 2.77s, still moving when it lands. This is that
    slice of the mask's curve, split out and renormalised, so scaling the bar
    traces the same edge the mask did. */
 .logo--intro rect {
   transform-box: fill-box;
   transform-origin: left center;
-  animation: logo-bar 1.35s cubic-bezier(0.31, 0.13, 0.1, 0.81) 0.57s both;
+  animation: logo-bar 1.35s cubic-bezier(0.31, 0.13, 0.1, 0.81) 1.42s both;
 }
 
 @keyframes logo-from-left { from { translate: -104px 0; } }
@@ -457,19 +458,21 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Entrance, the about page's fade, drift and tempo: the tagline, then the cover
-   and every season together as one block, 250ms apart. The first beat waits
-   0.15s so the first paint is out of the way before anything moves. The header
-   stays still, as on the other pages. The page is settled by about 1.6s. The
-   layout's transform ends at none, so the sticky cover is unaffected after. */
+   and every season together as one block, 250ms apart. Both wait for the
+   wordmark's entrance (.logo--intro): the tagline starts at 1.6s, as the
+   letters finish landing, while the bar is still drawing. The rest of the
+   header stays still, as on the other pages. The page is settled by about
+   3.05s. The layout's transform ends at none, so the sticky cover is
+   unaffected after. */
 .tagline,
 .episodes-layout {
   animation:
     fade-in 1.2s var(--ease-fade) both,
     drift-in 1.2s var(--ease-drift) both;
-  animation-delay: 0.15s;
+  animation-delay: 1.6s;
 }
 
-.episodes-layout { animation-delay: 0.4s; }
+.episodes-layout { animation-delay: 1.85s; }
 
 /* Removed outright, as on the other pages: the global rule shortens durations
    but not delays. */
