@@ -188,6 +188,19 @@ replace each group's transform attribute. The SVG is `overflow: visible` so the
 letters are not cut at its edge. Removed under reduced motion. Other pages' logos
 stay still.
 
+**Only on arrival.** The head script on every page sets a `sessionStorage` flag
+(`stf-visited`) and, if it was already set, adds `.is-return` to `<html>` before
+first paint. On `.is-return` the homepage skips the wordmark and header entrance
+entirely (the header is simply there) and the tagline and list take the other
+pages' timing, 0.15s and 0.4s. So the entrance plays when someone lands on the site
+in a tab, and not when they come back to the homepage from another page, go back,
+or reload. A new tab counts as a new arrival. If storage is blocked the entrance
+plays every time. The intro rules sit inside
+`@media (prefers-reduced-motion: no-preference)` behind `:root:not(.is-return)`,
+because their selectors are too specific for the usual reduced-motion reset. Any
+new page must carry the same head script, or arriving home from it replays the
+entrance.
+
 ### Site nav
 About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
 
@@ -196,7 +209,7 @@ About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
 reading bottom to top with the plus at the top and upright. Tapping it slides About and
 Credits open under it, right aligned at `8vw`, `--space-s` below the wordmark, on the
 mobile feed's 500ms cubic ease-in-out; the words fade and drift in 0.1s and 0.18s
-behind. The plus turns to a minus; Escape closes. A `.js` class set by a one-line
+behind. The plus turns to a minus; Escape closes. A `.js` class set by the small
 script in each page's head hides the nav before first paint, so without JS the nav
 stays open and the plus never shows.
 

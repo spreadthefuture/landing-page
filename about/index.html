@@ -20,7 +20,16 @@
 <link rel="canonical" href="https://spreadthefuture.com/about/">
 <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
 <link rel="stylesheet" href="/styles.css">
-<script>document.documentElement.classList.add('js');</script>
+<script>
+document.documentElement.classList.add('js');
+// A visit already under way in this tab, from any page of the site: the
+// homepage then skips its wordmark entrance (styles.css, .is-return). Storage
+// can be blocked, in which case the entrance simply plays.
+try {
+  if (sessionStorage.getItem('stf-visited')) document.documentElement.classList.add('is-return');
+  sessionStorage.setItem('stf-visited', '1');
+} catch {}
+</script>
 </head>
 <body class="page-about">
   <header>

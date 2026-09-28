@@ -278,61 +278,65 @@ a { color: inherit; text-decoration: none; }
    top of it. The distances are in the letters' parent space, where 1px is 2.365
    viewBox units: 104px and 123px are the Lottie's 26% and 32% of the logo's
    width. Overflow is visible so the letters are not cut at the logo's edge on
-   the way in. */
+   the way in.
+
+   Only on arrival: the head script on every page marks a visit already under
+   way with .is-return on <html> (one sessionStorage flag per tab), so coming
+   back to the homepage from another page, or reloading it, shows the header
+   whole and still. The guard is :root:not(.is-return), and the rules sit
+   inside a no-preference query rather than being reset under reduced motion,
+   the way the other entrances are: these selectors are too specific for a
+   plain reset to beat. */
 .logo--intro svg { overflow: visible; }
 
-.logo--intro svg > g > g:first-child > g:nth-child(-n + 6) {
-  animation:
-    logo-from-left 0.73s cubic-bezier(0.333, 0, 0.667, 1) 1s both,
-    fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 1.03s both;
-}
-
-.logo--intro svg > g > g:first-child > g:nth-child(n + 7) {
-  animation:
-    logo-from-right 0.73s cubic-bezier(0.333, 0, 0.667, 1) 1.17s both,
-    fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 1.2s both;
-}
-
-/* The Lottie wipes the bar with a mask whose edge travels 2.23s on
-   cubic-bezier(0.333, 0, 0, 1), but starts a little left of the bar and ends
-   well past its right end, so the bar itself only fills during part of that
-   run: from 1.42s, done by 2.77s, still moving when it lands. This is that
-   slice of the mask's curve, split out and renormalised, so scaling the bar
-   traces the same edge the mask did. */
 .logo--intro rect {
   transform-box: fill-box;
   transform-origin: left center;
-  animation: logo-bar 1.35s cubic-bezier(0.31, 0.13, 0.1, 0.81) 1.42s both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not(.is-return) .logo--intro svg > g > g:first-child > g:nth-child(-n + 6) {
+    animation:
+      logo-from-left 0.73s cubic-bezier(0.333, 0, 0.667, 1) 1s both,
+      fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 1.03s both;
+  }
+
+  :root:not(.is-return) .logo--intro svg > g > g:first-child > g:nth-child(n + 7) {
+    animation:
+      logo-from-right 0.73s cubic-bezier(0.333, 0, 0.667, 1) 1.17s both,
+      fade-in 0.7s cubic-bezier(0.333, 0, 0.667, 1) 1.2s both;
+  }
+
+  /* The Lottie wipes the bar with a mask whose edge travels 2.23s on
+     cubic-bezier(0.333, 0, 0, 1), but starts a little left of the bar and ends
+     well past its right end, so the bar itself only fills during part of that
+     run: from 1.42s, done by 2.77s, still moving when it lands. This is that
+     slice of the mask's curve, split out and renormalised, so scaling the bar
+     traces the same edge the mask did. */
+  :root:not(.is-return) .logo--intro rect {
+    animation: logo-bar 1.35s cubic-bezier(0.31, 0.13, 0.1, 0.81) 1.42s both;
+  }
+
+  /* The rest of the header on the homepage (the nav, its phone toggle and the
+     platform links) holds back so the wordmark arrives alone, then comes in as
+     one beat at 1.4s, as the letters are landing and just ahead of the
+     tagline. A fade only, no drift: it is chrome, not content, and a vertical
+     drift beside the letters' horizontal slide would pull against it. The
+     toggle's rotate(180deg) is also a transform the drift would overwrite.
+     Keyed off .logo--intro so the other pages' headers stay still. The open
+     phone nav is left out (:not(.is-open)): it is display: none until opened,
+     and showing it would replay this delay; its links have their own
+     entrance. */
+  :root:not(.is-return) .logo--intro ~ .menu-toggle,
+  :root:not(.is-return) .logo--intro ~ .site-nav:not(.is-open),
+  :root:not(.is-return) .header-top:has(.logo--intro) + .platforms {
+    animation: fade-in 1.2s var(--ease-fade) 1.4s both;
+  }
 }
 
 @keyframes logo-from-left { from { translate: -104px 0; } }
 @keyframes logo-from-right { from { translate: 123px 0; } }
 @keyframes logo-bar { from { scale: 0 1; } }
-
-/* The rest of the header on the homepage (the nav, its phone toggle and the
-   platform links) holds back so the wordmark arrives alone, then comes in as
-   one beat at 1.4s, as the letters are landing and just ahead of the tagline.
-   A fade only, no drift: it is chrome, not content, and a vertical drift beside
-   the letters' horizontal slide would pull against it. The toggle's
-   rotate(180deg) is also a transform the drift would overwrite. Keyed off
-   .logo--intro so the other pages' headers stay still. The open phone nav is
-   left out (:not(.is-open)): it is display: none until opened, and showing it
-   would replay this delay; its links have their own entrance. */
-.logo--intro ~ .menu-toggle,
-.logo--intro ~ .site-nav:not(.is-open),
-.header-top:has(.logo--intro) + .platforms {
-  animation: fade-in 1.2s var(--ease-fade) 1.4s both;
-}
-
-/* Removed outright, as on every page: the global rule shortens durations but
-   not delays. */
-@media (prefers-reduced-motion: reduce) {
-  .logo--intro svg g,
-  .logo--intro rect,
-  .logo--intro ~ .menu-toggle,
-  .logo--intro ~ .site-nav,
-  .header-top:has(.logo--intro) + .platforms { animation: none; }
-}
 
 .platforms {
   display: flex;
@@ -491,6 +495,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 .episodes-layout { animation-delay: 1.85s; }
+
+/* Back on the homepage later in the visit (.is-return, see .logo--intro) the
+   wordmark is already there, so nothing waits for it: the tagline and list
+   take the other pages' tempo, 0.15s and 0.4s, settled by about 1.6s. */
+.is-return .tagline { animation-delay: 0.15s; }
+.is-return .episodes-layout { animation-delay: 0.4s; }
 
 /* Removed outright, as on the other pages: the global rule shortens durations
    but not delays. */
