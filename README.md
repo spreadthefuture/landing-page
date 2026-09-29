@@ -15,6 +15,7 @@ at deploy time.
 ├── index.html              # home: episode list and accordion
 ├── credits/index.html      # the people behind the podcast, served at /credits/
 ├── about/index.html        # about page, served at /about/
+├── 404.html                # not found page, served by GitHub Pages for any missing path
 ├── CNAME                   # custom domain for GitHub Pages, do not delete
 ├── styles.css              # all styling, for every page
 ├── script.js               # optional enhancements: row slides, cover crossfade, quote rotation
