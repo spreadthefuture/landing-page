@@ -402,17 +402,22 @@ colour back. Browsers without `animation-timeline` keep every band in colour.
 `404.html` at the root, which GitHub Pages serves for any missing path at any depth,
 so every link and asset in it is absolute. It is the about page's frame (head script,
 header, footer) with one block in `main`, which grows (`flex: 1`) to keep the footer
-at the bottom.
+at the bottom and centres the block vertically between masthead and footer.
 
-- **Sentence.** `.not-found-text`, the about statement's treatment: bold sentence
-  case at the tagline's scale, `--muted`, with only "possible tomorrow" (a
-  `<strong>` with weight reset) in `--fg`. "This page is a possible tomorrow."
-  `--space-xl` under the masthead, `--space-xl` plus `--space-m` and `8vw` type
-  below 46rem, the tagline's moves. "Page not found" is a visually hidden `h2`.
-- **Way out.** `.not-found-back`, "Back to the present", linked to `/`: a white label
-  set like the episode page's "Discover more episodes", `--space-m` under the
-  sentence, glowing on hover, `1.25rem` below 46rem. A link, not a timed redirect,
-  so the reader can see the link they followed was broken.
+- **Sentence.** `.not-found-text`, "This page is a possible tomorrow.": the about
+  statement's colouring, `--muted` with only "possible tomorrow" (a `<strong>` with
+  weight reset) in `--fg`, but at the site nav's scale, `clamp(2rem, 5vw, 4rem)`,
+  because the line is short and at the tagline's size it sat as a stray caption.
+  "Page not found" is a visually hidden `h2`.
+- **Way out.** `.not-found-back`, "Back to the present", linked to `/`: bold uppercase
+  `--fg` at the row size, glowing on hover. A label under type this large read as a
+  footnote. A link, not a timed redirect, so the reader can see the link they
+  followed was broken.
+- **Desktop.** Centred across the page, a poster rather than a paragraph. `--space-xl`
+  above the sentence, `--space-m` to the link, `--space-xl` under it, so the block
+  keeps clear of the masthead and the footer on a short screen.
+- **Below 46rem.** Back on the left edge, the sentence at the tagline's `8vw`, and the
+  link pinned to it at `--space-s`, so the two lines read as one block.
 - **Own classes.** Not `.about-statement`, which `script.js` holds back until it
   scrolls into view and which waits 1s behind the principles.
 - **Head.** `noindex`, no canonical and no Open Graph: it is not a page to share.
