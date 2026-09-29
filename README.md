@@ -20,7 +20,11 @@ at deploy time.
 ├── script.js               # optional enhancements: row slides, cover crossfade, quote rotation
 ├── episodes.json           # generated episode data, do not hand edit
 ├── links.json              # hand maintained per-episode platform URLs
-├── scripts/build.py        # fetches the RSS feed and generates the episode list
+├── episode/                # generated share page per episode, e.g. /episode/s1e7/, do not hand edit
+├── scripts/
+│   ├── build.py            # fetches the RSS feed and generates the episode list
+│   ├── episode_pages.py    # renders episode/ from the template
+│   └── episode-template.html  # the episode page, with its last updated date
 ├── assets/
 │   ├── font/               # Liberation Sans, the fallback for viewers without Arial
 │   ├── logos/              # STF wordmark and favicon
@@ -28,7 +32,7 @@ at deploy time.
 │   ├── social/             # footer social icons
 │   └── credits-photos/     # portraits for the credits page
 ├── archive/                # previous versions of the page, kept for reference
-└── .github/workflows/      # RSS to episode data pipeline (manual trigger)
+└── .github/workflows/      # feed and episode page workflows (manual trigger)
 ```
 
 ## Episodes
@@ -37,6 +41,10 @@ Episode content is generated from the podcast RSS feed
 (`https://anchor.fm/s/469ddf8c/podcast/rss`), which is the single source of truth.
 
 A GitHub Actions workflow fetches the feed and commits the generated output. The workflow is triggered manually (`workflow_dispatch`), meaning new episodes appear only when someone runs it.
+
+Each episode also gets a standalone share page in `episode/`, rendered by
+`scripts/episode_pages.py` from `scripts/episode-template.html`. Run it after the
+feed update, locally or with the "Update episode pages" workflow (also manual).
 
 ## Listen to it here
 

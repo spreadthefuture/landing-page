@@ -1612,12 +1612,16 @@ a { color: inherit; text-decoration: none; }
   .episode-page-cover { position: static; }
 
   /* One row of big logos, each with its name under it as a caption, and size
-     alone makes them read as the page's buttons. Three equal columns, so the
-     logos stay evenly spaced whatever the names' lengths; each logo is 8vw, the mobile nav's type size, about
-     31px on a 390px phone: clearly above the header's logos without shouting. */
+     alone makes them read as the page's buttons. Columns a third wide, so the
+     logos stay evenly spaced whatever the names' lengths, and an episode with
+     only one or two links sits centred rather than leaving an empty column;
+     each logo is 8vw, the mobile nav's type size, about 31px on a 390px phone:
+     clearly above the header's logos without shouting. */
   .episode-page-links {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: calc(100% / 3);
+    justify-content: center;
     gap: 0;
     /* The same air above the logos as below them: --space-m plus the link's
        --row-pad on each side, mirroring the captions' --row-pad and the
