@@ -1586,20 +1586,21 @@ a { color: inherit; text-decoration: none; }
 /* Date and length under the description, as in the episode row's open text:
    the description's last paragraph margin is the only gap. */
 
-/* The way back to every episode, "Discover more episodes": a gray label at the
+/* The way back to every episode, "Discover more episodes": a white label at the
    label size, which carries a phrase that long where the row size did not,
-   --space-m clear of the description. It lifts and glows on hover. */
+   --space-m clear of the date line, the same gap as between the column's other
+   blocks. It glows on hover. */
 .episode-page-back {
   display: inline-block;
-  margin-top: var(--space-xl);
-  color: var(--muted);
+  margin-top: var(--space-m);
+  color: var(--fg);
   font-size: clamp(0.875rem, 1.2vw, 1rem);
   font-weight: 650;
   text-transform: uppercase;
   transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
-.episode-page-back:hover { color: var(--fg); text-shadow: var(--glow); }
+.episode-page-back:hover { text-shadow: var(--glow); }
 
 @media (max-width: 46rem) {
   .episode-page {
@@ -1648,8 +1649,15 @@ a { color: inherit; text-decoration: none; }
   }
 
   /* The footer's page links' size (1.25rem): at the label size it was the
-     smallest link on a phone, smaller than the footer it sits above. */
-  .episode-page-back { font-size: 1.25rem; }
+     smallest link on a phone, smaller than the footer it sits above. On its own
+     line and centred, --space-xl under the date line so it reads as a way out
+     once the column is the whole page. */
+  .episode-page-back {
+    display: block;
+    width: fit-content;
+    margin: var(--space-xl) auto 0;
+    font-size: 1.25rem;
+  }
 }
 
 /* Entrance, the site's fade and drift in reading order: the cover, the title,

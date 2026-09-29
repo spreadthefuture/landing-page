@@ -141,8 +141,10 @@ Credits uses `--space-xl` where the others use `s` or `m` because the portraits 
 large and a tighter gap crowds them. `--portrait` and `--col-gap` are widths and stay
 page-local.
 
-On an episode page, "Discover more episodes" sits `--space-xl` under the date line,
-so it reads as a way out rather than part of the description.
+On an episode page, "Discover more episodes" is a white label `--space-m` under the
+date line on desktop, the same gap as between the text column's other blocks. Below
+46rem it sits `--space-xl` under it, centred, so it reads as a way out rather than
+part of the description.
 
 Bottom padding is `clamp(1.25rem, 5vh, var(--gutter))`, measured against viewport
 height so the last element sits the same distance off the bottom on every page.
