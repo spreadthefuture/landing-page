@@ -339,11 +339,10 @@ heading and `--space-m` apart (`--space-s` below 46rem, so the heading's gap sta
 the larger one).
 
 **Special thanks.** A second `.credits-intro--sub`, "Special thanks", `--space-xl`
-under the videographers, then `.friends-line` `--space-m` under it: the names on one
-centred line, separated by commas and closed with a full stop, in the card name's
-own style (`.credit-name`: uppercase, weight 650), with non-breaking spaces keeping
-each name whole. Capped at 48rem, line height 1.4, and `text-wrap: balance`, so on a
-phone it breaks into even lines.
+under the videographers, then a second `.thanks-list` laid out exactly as the
+videographers': the card name's style, three across (one below 46rem), `--space-m`
+under the heading and `--space-m` apart (`--space-s` below 46rem). With four names
+the last one sits alone and centred in the second row.
 
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
 special thanks: centred gray prose at the prose size, "The future is a
