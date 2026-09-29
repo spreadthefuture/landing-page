@@ -15,7 +15,7 @@ cover that crossfades beside the list.
 
 ## The system at a glance
 
-One value per job, shared by all three pages. Reuse these rather than adding a
+One value per job, shared by every page. Reuse these rather than adding a
 near-duplicate.
 
 | Job | The one value |
@@ -31,7 +31,7 @@ near-duplicate.
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
 | Brand name in copy | `SPREAD THE FUTURE`, uppercase in the markup |
-| Page description (meta and Open Graph) | The same sentence on all three pages, matching the tagline |
+| Page description (meta and Open Graph) | The same sentence on every page, matching the tagline (`404.html` carries the meta description but no Open Graph) |
 
 ## Colors
 
@@ -152,8 +152,8 @@ height so the last element sits the same distance off the bottom on every page.
 **Page structure.** `body` is a flex column at `min-height: 100svh`, padded by
 `--gutter`. No max-width container, except credits, whose `main` is capped at 85rem
 and centered. Every page is standalone: the head block, wordmark SVG and footer are
-repeated in all three files, and since the footer carries the wordmark too, that SVG
-now sits twice in each. Change one, change all six.
+repeated in all four files (the three pages and `404.html`), and since the footer carries
+the wordmark too, that SVG now sits twice in each. Change one, change all eight.
 
 **Border radius:** 6px on cover art, 50% on credit portraits, 0 everywhere else.
 
@@ -397,6 +397,28 @@ timeline per band (`view-timeline: --band`), linear, so the colour is always exa
 where the scroll is at any speed; neighbouring bands crossfade in the gap. The
 number stays `--muted`. No hover state: a stale hover during scrolling held the
 colour back. Browsers without `animation-timeline` keep every band in colour.
+
+### Not found page
+`404.html` at the root, which GitHub Pages serves for any missing path at any depth,
+so every link and asset in it is absolute. It is the about page's frame (head script,
+header, footer) with one block in `main`, which grows (`flex: 1`) to keep the footer
+at the bottom.
+
+- **Sentence.** `.not-found-text`, the about statement's treatment: bold sentence
+  case at the tagline's scale, `--muted`, with only "possible tomorrow" (a
+  `<strong>` with weight reset) in `--fg`. "This page is a possible tomorrow."
+  `--space-xl` under the masthead, `--space-xl` plus `--space-m` and `8vw` type
+  below 46rem, the tagline's moves. "Page not found" is a visually hidden `h2`.
+- **Way out.** `.not-found-back`, "Back to the present", linked to `/`: a white label
+  set like the episode page's "Discover more episodes", `--space-m` under the
+  sentence, glowing on hover, `1.25rem` below 46rem. A link, not a timed redirect,
+  so the reader can see the link they followed was broken.
+- **Own classes.** Not `.about-statement`, which `script.js` holds back until it
+  scrolls into view and which waits 1s behind the principles.
+- **Head.** `noindex`, no canonical and no Open Graph: it is not a page to share.
+
+**Entrance:** `fade-in` and `drift-in` over 1.2s, sentence at 0.15s and link at 0.4s.
+Settled by about 1.6s. Removed under reduced motion.
 
 ### Contact overlay
 The contact form, on the credits page only, opened from that page's contact line. No
