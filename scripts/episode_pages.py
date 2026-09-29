@@ -49,7 +49,7 @@ def share_description(episode, entry):
         return description
     guest = episode["title"].split(" on ", 1)[0]
     print(f"  no description in links.json for {episode['label']}, using the fallback")
-    return f"A conversation with {guest}, on SPREAD THE FUTURE."
+    return f"A conversation with {guest}, on SPREAD THE FUTURE: a podcast about possible tomorrows."
 
 
 def render_listen(block, episode, entry, links):

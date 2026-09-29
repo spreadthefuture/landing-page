@@ -1,5 +1,5 @@
 {
-  "_comment": "Hand-maintained. scripts/build.py and scripts/episode_pages.py read this and never write it. Paste one URL per platform per episode; leave a URL empty to drop that link from the episode. 'description' is the one-line summary shown when an episode page is shared (meta and Open Graph); leave it empty and episode_pages.py falls back to 'A conversation with <guest>'. 'title' is a label for you, the scripts ignore it.",
+  "_comment": "Hand-maintained. scripts/build.py and scripts/episode_pages.py read this and never write it. Paste one URL per platform per episode; leave a URL empty to drop that link from the episode. 'description' is the one-line summary shown when an episode page is shared (meta and Open Graph); leave it empty and episode_pages.py falls back to 'A conversation with <guest>, on SPREAD THE FUTURE: a podcast about possible tomorrows.'. 'title' is a label for you, the scripts ignore it.",
   "platforms": [
     {
       "key": "spotify",
@@ -30,7 +30,7 @@
       "spotify": "https://open.spotify.com/episode/0VpCIqAkHEvLHGbbsVUbX1?si=bnO4Z-alSSauoF5RUo3cjg",
       "apple": "https://podcasts.apple.com/ch/podcast/s1e7-sofia-on-our-relations-with-others/id1551075626?i=1000567956487&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kRhBxUAVXVVtZ0iaqg",
-      "description": "As quarantine separated us, it made us realize how important our relations with others are. A conversation with Sofia Esposito, on SPREAD THE FUTURE."
+      "description": ""
     },
     "18c191ca-8124-43a5-a993-5f6066e0ef7b": {
       "title": "S1E6: Fabio on our Relations with Objects",
