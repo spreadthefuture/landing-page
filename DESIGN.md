@@ -341,8 +341,10 @@ the larger one).
 **Special thanks.** A second `.credits-intro--sub`, "Special thanks", `--space-xl`
 under the videographers, then a second `.thanks-list` laid out exactly as the
 videographers': the card name's style, three across (one below 46rem), `--space-m`
-under the heading and `--space-m` apart (`--space-s` below 46rem). With four names
-the last one sits alone and centred in the second row.
+under the heading and `--space-m` apart (`--space-s` below 46rem).
+
+In both lists the grid fills left to right, so a short last row starts in the left
+column: one name alone sits in the left column, not centred.
 
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
 special thanks: centred gray prose at the prose size, "The future is a

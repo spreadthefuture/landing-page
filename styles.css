@@ -1156,12 +1156,6 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
-/* If the last name ends up alone in the final row, centre it under the row above
-   instead of leaving it stuck in the first column. */
-.thanks-list li:last-child:nth-child(3n + 1) {
-  grid-column: 2;
-}
-
 .thanks-list .credit-name { margin: 0; }
 
 /* One per row below the point where three columns start crowding the names. */
@@ -1183,10 +1177,6 @@ a { color: inherit; text-decoration: none; }
   .thanks-list {
     grid-template-columns: minmax(0, 1fr);
     row-gap: var(--space-s);
-  }
-
-  .thanks-list li:last-child:nth-child(3n + 1) {
-    grid-column: 1;
   }
 }
 
