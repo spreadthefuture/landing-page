@@ -1156,12 +1156,6 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
-/* If the last name ends up alone in the final row, centre it under the row above
-   instead of leaving it stuck in the first column. */
-.thanks-list li:last-child:nth-child(3n + 1) {
-  grid-column: 2;
-}
-
 .thanks-list .credit-name { margin: 0; }
 
 /* One per row below the point where three columns start crowding the names. */
@@ -1184,23 +1178,6 @@ a { color: inherit; text-decoration: none; }
     grid-template-columns: minmax(0, 1fr);
     row-gap: var(--space-s);
   }
-
-  .thanks-list li:last-child:nth-child(3n + 1) {
-    grid-column: 1;
-  }
-}
-
-/* "Special thanks": the names on one line rather than a list, so they read as
-   a note and not as a third roster. The line takes .credit-name whole, the same
-   type as every name above it; this rule only places it: --space-m under its
-   heading, as the videographers are, and balanced so a wrap on a phone splits
-   it into even lines. Non-breaking spaces in the HTML keep each name whole. */
-.friends-line {
-  max-width: 48rem;
-  margin: var(--space-m) auto 0;
-  line-height: 1.4;
-  text-align: center;
-  text-wrap: balance;
 }
 
 /* Two quiet lines in the same gray prose: the one that introduces the team
@@ -1240,7 +1217,6 @@ a { color: inherit; text-decoration: none; }
 .credit,
 .credits-lede,
 .thanks-list,
-.friends-line,
 .contact-line {
   animation:
     fade-in 1.2s var(--ease-fade) both,
@@ -1253,7 +1229,7 @@ a { color: inherit; text-decoration: none; }
 .page-credits .credits-intro:nth-of-type(2),
 .thanks-list { animation-delay: 0.4s; }
 .page-credits .credits-intro:nth-of-type(3),
-.friends-line { animation-delay: 0.5s; }
+.thanks-list ~ .thanks-list { animation-delay: 0.5s; }
 .contact-line { animation-delay: 0.6s; }
 
 /* Removed outright, as on the about page: the global rule shortens durations
@@ -1263,7 +1239,6 @@ a { color: inherit; text-decoration: none; }
   .credit,
   .credits-lede,
   .thanks-list,
-  .friends-line,
   .contact-line { animation: none; }
 }
 
@@ -1611,20 +1586,21 @@ a { color: inherit; text-decoration: none; }
 /* Date and length under the description, as in the episode row's open text:
    the description's last paragraph margin is the only gap. */
 
-/* The way back to every episode, "Discover more episodes": a gray label at the
+/* The way back to every episode, "Discover more episodes": a white label at the
    label size, which carries a phrase that long where the row size did not,
-   --space-m clear of the description. It lifts and glows on hover. */
+   --space-m clear of the date line, the same gap as between the column's other
+   blocks. It glows on hover. */
 .episode-page-back {
   display: inline-block;
-  margin-top: var(--space-xl);
-  color: var(--muted);
+  margin-top: var(--space-m);
+  color: var(--fg);
   font-size: clamp(0.875rem, 1.2vw, 1rem);
   font-weight: 650;
   text-transform: uppercase;
   transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
-.episode-page-back:hover { color: var(--fg); text-shadow: var(--glow); }
+.episode-page-back:hover { text-shadow: var(--glow); }
 
 @media (max-width: 46rem) {
   .episode-page {
@@ -1673,8 +1649,15 @@ a { color: inherit; text-decoration: none; }
   }
 
   /* The footer's page links' size (1.25rem): at the label size it was the
-     smallest link on a phone, smaller than the footer it sits above. */
-  .episode-page-back { font-size: 1.25rem; }
+     smallest link on a phone, smaller than the footer it sits above. On its own
+     line and centred, --space-xl under the date line so it reads as a way out
+     once the column is the whole page. */
+  .episode-page-back {
+    display: block;
+    width: fit-content;
+    margin: var(--space-xl) auto 0;
+    font-size: 1.25rem;
+  }
 }
 
 /* Entrance, the site's fade and drift in reading order: the cover, the title,

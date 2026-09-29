@@ -141,8 +141,10 @@ Credits uses `--space-xl` where the others use `s` or `m` because the portraits 
 large and a tighter gap crowds them. `--portrait` and `--col-gap` are widths and stay
 page-local.
 
-On an episode page, "Discover more episodes" sits `--space-xl` under the date line,
-so it reads as a way out rather than part of the description.
+On an episode page, "Discover more episodes" is a white label `--space-m` under the
+date line on desktop, the same gap as between the text column's other blocks. Below
+46rem it sits `--space-xl` under it, centred, so it reads as a way out rather than
+part of the description.
 
 Bottom padding is `clamp(1.25rem, 5vh, var(--gutter))`, measured against viewport
 height so the last element sits the same distance off the bottom on every page.
@@ -339,11 +341,12 @@ heading and `--space-m` apart (`--space-s` below 46rem, so the heading's gap sta
 the larger one).
 
 **Special thanks.** A second `.credits-intro--sub`, "Special thanks", `--space-xl`
-under the videographers, then `.friends-line` `--space-m` under it: the names on one
-centred line, separated by commas and closed with a full stop, in the card name's
-own style (`.credit-name`: uppercase, weight 650), with non-breaking spaces keeping
-each name whole. Capped at 48rem, line height 1.4, and `text-wrap: balance`, so on a
-phone it breaks into even lines.
+under the videographers, then a second `.thanks-list` laid out exactly as the
+videographers': the card name's style, three across (one below 46rem), `--space-m`
+under the heading and `--space-m` apart (`--space-s` below 46rem).
+
+In both lists the grid fills left to right, so a short last row starts in the left
+column: one name alone sits in the left column, not centred.
 
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
 special thanks: centred gray prose at the prose size, "The future is a
