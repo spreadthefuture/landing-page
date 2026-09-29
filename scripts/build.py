@@ -39,7 +39,7 @@ ITUNES = "{http://www.itunes.com/dtds/podcast-1.0.dtd}"
 # through #season-upcoming-template as a heading ending in "coming soon", with
 # no cover and no rows. A season listed here that does have episodes renders as
 # normal, so this only ever needs pruning once a season has landed.
-ANNOUNCED_SEASONS = (2,)
+ANNOUNCED_SEASONS = ()
 
 # Titles carry their own season and display number ahead of the colon, e.g.
 # "S1E6: Fabio on our Relations with Objects". The season is optional so the older

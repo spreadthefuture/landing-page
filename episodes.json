@@ -1,12 +1,30 @@
 {
   "feed_url": "https://anchor.fm/s/469ddf8c/podcast/rss",
   "title": "SPREAD THE FUTURE",
-  "episode_count": 7,
+  "episode_count": 8,
   "seasons": [
     2,
     1
   ],
   "episodes": [
+    {
+      "guid": "e0071d07-b933-46da-b15a-c902a466dd4b",
+      "number": 1,
+      "season": 2,
+      "label": "S2E1",
+      "title": "Geneviève Pons on Fighting Global Warming and Protecting the Biosphere",
+      "title_full": "S2E1 - Geneviève Pons on Fighting Global Warming and Protecting the Biosphere",
+      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S2E1---Genevive-Pons-on-Fighting-Global-Warming-and-Protecting-the-Biosphere-e3ph92d",
+      "description_html": "<p>&quot;<em>What I realized when I was at WWF was that I was respected, I was received at the highest level, including Mr Juncker, but my influence was not as strong as now as a think tanker.</em>&quot;</p><p>Where can one have the most impact while fighting for environmental protection? How does a personal experience of environmental damage foster a vocation for climate and social justice?</p><p>Geneviève Pons is the President of Europe Jacques Delors, the Co-chair of Antarctica 2030, and former Director of WWF Europe.</p><p>With three decades of experience across law, climate policy and advocacy both at the European Commission and in NGOs, she reflects on how to contribute to the fight against climate change and for the protection of the environment.</p><p>Original art cover by <a href=\"https://www.instagram.com/willysheepskin/\" target=\"_blank\" rel=\"ugc noopener noreferrer\">William Sheepskin</a>.</p>",
+      "published": "2026-09-29T07:00:00+00:00",
+      "published_display": "29 September 2026",
+      "duration": "26:23",
+      "duration_seconds": 1583,
+      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790630089264-8e42ca29238bd.jpg",
+      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/126444045/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-8-28%2F432861560-44100-2-274b7a8431266.m4a",
+      "audio_type": "audio/x-m4a",
+      "audio_bytes": 25602736
+    },
     {
       "guid": "00ac3941-e736-4355-8961-4dafa4f41408",
       "number": 7,
