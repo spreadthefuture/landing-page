@@ -20,7 +20,11 @@ try {
   sessionStorage.setItem('stf-visited', '1');
 } catch {}
 </script>
+<!-- Every missing address counts as one path, /404, so broken links do not
+     show up in the stats as pages of their own. The referrer still records
+     where each one came from. -->
 <script data-goatcounter="https://spreadthefuture.goatcounter.com/count"
+        data-goatcounter-settings='{"path": "/404"}'
         async src="//gc.zgo.at/count.js"></script>
 </head>
 <body class="page-404">

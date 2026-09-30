@@ -406,8 +406,7 @@ at the bottom and centres the block vertically between masthead and footer.
 
 - **Sentence.** `.not-found-text`, "This page is a possible tomorrow.": the about
   statement's colouring, `--muted` with only "possible tomorrow" (a `<strong>` with
-  weight reset) in `--fg`, but at the site nav's scale, `clamp(2rem, 5vw, 4rem)`,
-  because the line is short and at the tagline's size it sat as a stray caption.
+  weight reset) in `--fg`, at its size too, `clamp(1.35rem, 3vw, 3.75rem)`.
   "Page not found" is a visually hidden `h2`.
 - **Way out.** `.not-found-back`, "Back to the present", linked to `/`: bold uppercase
   `--fg` at the row size, glowing on hover. A label under type this large read as a
@@ -421,6 +420,9 @@ at the bottom and centres the block vertically between masthead and footer.
 - **Own classes.** Not `.about-statement`, which `script.js` holds back until it
   scrolls into view and which waits 1s behind the principles.
 - **Head.** `noindex`, no canonical and no Open Graph: it is not a page to share.
+- **Analytics.** GoatCounter counts every hit as the path `/404`
+  (`data-goatcounter-settings`), so broken addresses do not appear as pages of their
+  own. The referrer still shows where each one came from.
 
 **Entrance:** `fade-in` and `drift-in` over 1.2s, sentence at 0.15s and link at 0.4s.
 Settled by about 1.6s. Removed under reduced motion.
