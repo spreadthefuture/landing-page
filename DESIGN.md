@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-09-29
+> Last updated: 2026-10-05
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -586,6 +586,9 @@ footing, where a white thing only glows on hover instead of lifting first.
   animation and smooth scroll to 0.01ms.
 
 ## Imagery
+
+- **No saving:** every `<img>` blocks the right-click menu (`script.js`), dragging
+  and the iOS long-press menu (`styles.css`). A deterrent, not protection.
 
 - **Episode covers:** square, from the RSS feed, 6px radius over `--surface`,
   `object-fit: cover`. `build.py` writes an `.episode-art` image into every summary.

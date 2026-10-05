@@ -5,6 +5,12 @@
 // season's list. The panel answers to any row in any of those lists; the loop is
 // still written per layout so a second one would work on its own.
 
+// No right-click "Save image" on any image (styles.css also turns off dragging
+// and the iOS long-press menu).
+document.addEventListener('contextmenu', (event) => {
+  if (event.target instanceof HTMLImageElement) event.preventDefault();
+});
+
 // Rows slide open and closed. In the mobile feed (styles.css, below 46rem) every
 // row is a cover, and a tap also brings that episode's title a third of the way
 // down the screen.
