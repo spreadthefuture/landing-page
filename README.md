@@ -1,6 +1,6 @@
 # SPREAD THE FUTURE: Website
 
-This repository hosts the website for **SPREAD THE FUTURE**, a podcast about the future of Europe.
+This repository hosts the website for **SPREAD THE FUTURE**, a podcast about the future.
 
 Static site: plain HTML and CSS, no framework, no dependencies. Pages are
 standalone, so the header and footer are repeated in each one rather than included.
