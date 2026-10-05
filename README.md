@@ -30,7 +30,8 @@ at deploy time.
 │   ├── logos/              # STF wordmark and favicon
 │   ├── platforms/          # streaming platform icons
 │   ├── social/             # footer social icons
-│   └── credits-photos/     # portraits for the credits page
+│   ├── credits-photos/     # portraits for the credits page
+│   └── about-photos/       # photos for the about page
 ├── archive/                # previous versions of the page, kept for reference
 └── .github/workflows/      # feed and episode page workflows (manual trigger)
 ```
