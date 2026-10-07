@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-10-05
+> Last updated: 2026-10-07
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -39,7 +39,8 @@ near-duplicate.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | Primary text, the wordmark, icons at rest, the focus ring. Never pure white |
-| Gray | `--muted` | `#8A8A8A` | Secondary text: episode numbers, meta, descriptions, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social and column links, the mobile header's platform icons, "Coming soon." |
+| Prose gray | `--prose` | `#B0B0B0` | Paragraphs meant to be read: episode descriptions, the credits lede and contact line, the contact overlay's intro and sent line. 9.1:1 on `--bg` |
+| Gray | `--muted` | `#8A8A8A` | Secondary text that recedes (5.7:1 on `--bg`): episode numbers, meta, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social and column links, the mobile header's platform icons, "Coming soon." |
 | Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row above 46rem, and the one across the footer. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the credit and copyright line |
@@ -330,7 +331,7 @@ The whole card links to that person's LinkedIn: circular portrait
 `--fg` and country in `--muted`. Three across, one below 46rem.
 
 **Team line.** `.credits-lede` introduces the grid: "Meet the people behind the
-episodes.", centred gray prose at the prose size, `--space-s` under "Our team" so it
+episodes.", centred `--prose` at the prose size, `--space-s` under "Our team" so it
 belongs to the heading rather than floating between it and the portraits.
 
 **Videographers.** `.credits-intro--sub`: the "Our team" heading a step down, at its
@@ -433,7 +434,7 @@ card and no elevation: a `min(34rem, 100%)` panel on `--bg` inside a 1px `--rule
 border,
 centred over a `rgb(10 10 10 / 0.92)` scrim, `--space-m` padding. The close
 control is the episode row's plus turned 45 degrees, `--muted` lifting to `--fg`.
-Title at the row size, bold uppercase; intro in `--muted` prose capped at 48ch;
+Title at the row size, bold uppercase; intro in `--prose` capped at 48ch;
 fields are a bold uppercase `--muted` label over an input with no box, just a
 1px `--rule` underline that goes `--muted` on hover and `--fg` on focus.
 The submit button is bold uppercase at the label size on the same hairline
@@ -488,7 +489,7 @@ navigate.
 
 **Sent state.** A sent message is answered in the panel it was written in: same
 box, same close cross, the title, intro and form swapped for a "Message sent"
-title and one line of `--muted` prose, "Thank you." No confirmation page of our own,
+title and one line of `--prose`, "Thank you." No confirmation page of our own,
 and never Web3Forms' own success page. The swap is `display`, on child selectors
 (`.contact-panel > .contact-title`, `> .contact-intro`, `.contact-form`), so the
 confirmation's own title and line, one level deeper, are untouched.

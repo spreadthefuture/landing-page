@@ -68,6 +68,10 @@
   --bg: #0A0A0A;
   --fg: #F4F4F2;
   --muted: #8A8A8A;
+  /* Brighter than --muted, for paragraphs meant to be read: --muted is for
+     labels and metadata that should recede, and long prose in it read as
+     skippable. 9.1:1 on --bg, against 5.7:1 for --muted. */
+  --prose: #B0B0B0;
   --rule: #2A2A2A;
   --surface: #1A1A1A;
   /* Dimmer than --muted, and only the copyright line uses it: the footer should
@@ -678,7 +682,7 @@ a { color: inherit; text-decoration: none; }
 
 .episode-description {
   max-width: 60ch;
-  color: var(--muted);
+  color: var(--prose);
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
   text-align: justify;
@@ -1194,14 +1198,14 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* Two quiet lines in the same gray prose: the one that introduces the team
+/* Two quiet lines in the same prose gray: the one that introduces the team
    under "Our team" and the page's closing line, the one thing on the site that
    asks something of the reader, under the names it thanks. Both centred at the
    prose size. */
 .credits-lede,
 .contact-line {
   margin: var(--space-xl) 0 0;
-  color: var(--muted);
+  color: var(--prose);
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
   text-align: center;
@@ -1900,7 +1904,7 @@ body.is-locked { overflow: hidden; }
 .contact-intro {
   margin: var(--space-s) 0 0;
   max-width: 48ch;
-  color: var(--muted);
+  color: var(--prose);
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.6;
 }
