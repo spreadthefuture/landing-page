@@ -72,7 +72,7 @@ try {
          Edit the markup and the CSS here, never in the build script. -->
     <template id="episode-template">
       <li>
-        <details class="episode" name="episode">
+        <details class="episode" id="{{label}}" name="episode">
           <summary class="episode-summary">
             <img class="episode-art" src="{{image}}" alt="" loading="lazy" decoding="async" width="600" height="600">
             <span class="episode-number">{{label}}</span>
@@ -139,7 +139,7 @@ try {
           <h2 class="season-title">Season 2</h2>
           <ul class="episodes">
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S2E1" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790630089264-8e42ca29238bd.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S2E1</span>
@@ -166,7 +166,7 @@ try {
           <h2 class="season-title">Season 1</h2>
           <ul class="episodes">
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S1E7" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790330617806-70791f4ab872f.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S1E7</span>
@@ -188,7 +188,7 @@ try {
               </details>
             </li>
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S1E6" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790330600377-91ad33fc86627.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S1E6</span>
@@ -210,7 +210,7 @@ try {
               </details>
             </li>
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S1E5" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790330569181-e49deedd5fab.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S1E5</span>
@@ -232,7 +232,7 @@ try {
               </details>
             </li>
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S1E4" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790330541515-c6d8279052dc7.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S1E4</span>
@@ -254,7 +254,7 @@ try {
               </details>
             </li>
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S1E3" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790330518071-adb37e9421688.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S1E3</span>
@@ -276,7 +276,7 @@ try {
               </details>
             </li>
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S1E2" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790330495881-6eab94a7892a1.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S1E2</span>
@@ -298,7 +298,7 @@ try {
               </details>
             </li>
             <li>
-              <details class="episode" name="episode">
+              <details class="episode" id="S1E1" name="episode">
                 <summary class="episode-summary">
                   <img class="episode-art" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1790330470180-69ed0af47283a.jpg" alt="" loading="lazy" decoding="async" width="600" height="600">
                   <span class="episode-number">S1E1</span>
@@ -330,7 +330,7 @@ try {
          progress bars that both times and navigates the rotation. -->
     <section class="quotes" aria-label="Quotes">
       <figure class="quote">
-        <blockquote class="quote-text"><p>“When I was at WWF I was respected, I was received at the highest level, but my influence was not as strong as a think tanker.”</p></blockquote>
+        <blockquote class="quote-text"><p><a class="quote-link" href="#S2E1">“When I was at WWF I was respected, I was received at the highest level, but my influence was not as strong as a think tanker.”</a></p></blockquote>
         <figcaption class="quote-source">Geneviève Pons, S2E1</figcaption>
       </figure>
       <figure class="quote">
