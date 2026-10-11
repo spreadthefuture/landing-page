@@ -551,17 +551,16 @@ overlay**). No season links, which would mean new markup inside the generated bl
 
 **Bottom band (`.footer-bottom`).** A 1px `--rule` line, `--space-m` under the
 columns and `--space-s` above this row, then the social links on the left and the
-copyright on the right, right aligned against them. LinkedIn, Instagram and TikTok,
+copyright on the right, right aligned against them. LinkedIn and Instagram,
 in `--muted` (no RSS link since 2026-09-28); the credit and the copyright on one line in
-`--muted-dim`. None of the three sits in a badge or a container: LinkedIn is
+`--muted-dim`. Neither sits in a badge or a container: LinkedIn is
 the bare "in", not the filled square it ships as, because a filled square reads as a
 block of light next to an outline and pulls the row off center. The glyphs are CSS
-masks sized in `rem` (not `em`) so they do not scale with the copyright type. All
-three are drawn in a 24x24 box, so one 1.25rem square aligns them. Instagram is the
+masks sized in `rem` (not `em`) so they do not scale with the copyright type. Both
+are drawn in a 24x24 box, so one 1.25rem square aligns them. Instagram is the
 only one full-bleed in that box.
-The LinkedIn "in" and the TikTok note are bare marks, so each file scales its glyph
-to 21 of the 24 units and centers it, which holds them a hair inside Instagram's
-frame. Instagram's frame and lens ring are 2.6 of its 24 units, which lands near
+The LinkedIn "in" is a bare mark, so its file scales the glyph to 21 of the 24
+units and centers it, which holds it a hair inside Instagram's frame. Instagram's frame and lens ring are 2.6 of its 24 units, which lands near
 2.2px on a 20px glyph; rescaling it means redoing that arithmetic.
 Each link is padded to a 32px tap target, with the padding taken back out of the row
 gap so glyphs still read 1.75rem apart.
@@ -627,9 +626,9 @@ footing, where a white thing only glows on hover instead of lifting first.
   is and squared in CSS with `object-fit: cover`.
 - **Credit portraits:** 720x720, JPEG q68, from `assets/credits-photos/`, cropped to a
   circle.
-- **Icons:** only the three masked platform glyphs and the three masked social glyphs
+- **Icons:** only the three masked platform glyphs and the two masked social glyphs
   (`assets/social/`, single path, single color, in a 24x24 box; Instagram full-bleed,
-  LinkedIn and TikTok scaled to 21 units and centered).
+  LinkedIn scaled to 21 units and centered).
   No badges or containers. `mail.svg` sits beside them, no longer
   used by any page. No illustration or decorative graphics.
 

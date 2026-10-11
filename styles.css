@@ -2198,13 +2198,12 @@ body.is-locked { overflow: hidden; }
   mask-size: contain;
 }
 
-/* Only Instagram is a square drawn edge to edge in its box. The LinkedIn "in" and
-   the TikTok note are bare marks, so their files scale each to 21 of the 24 units
-   and centre it: a hair inside Instagram's frame, which is what keeps a letterform
-   and a solid note from outweighing a 2.6-unit outline. */
+/* Only Instagram is a square drawn edge to edge in its box. The LinkedIn "in" is a
+   bare mark, so its file scales it to 21 of the 24 units and centres it: a hair
+   inside Instagram's frame, which is what keeps a letterform from outweighing a
+   2.6-unit outline. */
 .social-icon--linkedin { -webkit-mask-image: url(/assets/social/linkedin.svg); mask-image: url(/assets/social/linkedin.svg); }
 .social-icon--instagram { -webkit-mask-image: url(/assets/social/instagram.svg); mask-image: url(/assets/social/instagram.svg); }
-.social-icon--tiktok { -webkit-mask-image: url(/assets/social/tiktok.svg); mask-image: url(/assets/social/tiktok.svg); }
 
 /* Below the breakpoint the footer is a different object: not a columned block
    but three centred lines, the site's quiet last word. A second wordmark and a
