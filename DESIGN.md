@@ -509,6 +509,13 @@ so a written message is never lost to a network error. Closing the panel clears
 The homepage's closing block, `--space-xl` below the list. A `<section class="quotes">`
 of `<figure>`s (`<blockquote>` + `<figcaption>`). Quote at the heading scale, capped
 at 38ch, centered, in sentence case. The source sits `--space-s` below as a gray label.
+A quote from an episode is a link to that episode's row (`<a class="quote-link"
+href="#S2E1">` around the text; every row's `<details>` carries its label as `id`).
+It keeps the quote's color and glows on hover like other text links, and its hit area
+stretches over the figure, which is only as wide as its text, so the source line is
+part of the target. `script.js` opens the row and scrolls the page to it on the list's
+own open motion; the hash never reaches the address bar. Without JS the link jumps to
+the closed row.
 
 Without JS the quotes stack `--space-m` apart. `script.js` adds `.is-rotating`: all
 quotes share one grid cell (so the block never changes height), bottom aligned, and

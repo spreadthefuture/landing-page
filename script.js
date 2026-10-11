@@ -151,6 +151,35 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     frame ??= requestAnimationFrame(tick);
   };
 
+  // Where an opening row's motion ends: which element eases, and to what height
+  // on screen.
+  const landing = (details) => {
+    const summary = details.querySelector('.episode-summary');
+
+    // The feed: the open text's title is what lands at its scroll-margin-top (a
+    // third of the way down), not the cover above it.
+    if (feed.matches) {
+      const heading = details.querySelector('.episode-heading');
+      return [heading, parseFloat(getComputedStyle(heading).scrollMarginTop) || 0];
+    }
+
+    // Desktop: the opening row eases up until its top rule lines up with the top
+    // of the cover, which is the panel's sticky offset. The first row already sits
+    // level with the cover, so that offset is exactly where the panel pins, and
+    // every row below it lands on the same line. Without a panel there is nothing
+    // to line up with, so the row just holds still under the pointer.
+    if (!artPanel) return [summary, Math.max(summary.getBoundingClientRect().top, 0)];
+    return [summary, parseFloat(getComputedStyle(artPanel).top) || 0];
+  };
+
+  // Opens a row, closing whichever one is open. On a row that is already open it
+  // only brings it into place.
+  const open = (details) => {
+    const changes = current && current !== details ? [[current, false], [details, true]] : [[details, true]];
+    current = details;
+    run(changes, ...landing(details));
+  };
+
   layout.addEventListener('click', (event) => {
     const summary = event.target.closest('.episode-summary');
     if (!summary) return;
@@ -165,28 +194,18 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       else run([[details, false]], summary, summary.getBoundingClientRect().top);
       return;
     }
-    const changes = current ? [[current, false], [details, true]] : [[details, true]];
-    current = details;
+    open(details);
+  });
 
-    if (feed.matches) {
-      // The open text's title is what lands at its scroll-margin-top (a third
-      // of the way down), not the cover above it.
-      const heading = details.querySelector('.episode-heading');
-      run(changes, heading, parseFloat(getComputedStyle(heading).scrollMarginTop) || 0);
-      return;
-    }
-
-    // Desktop: the opening row eases up until its top rule lines up with the top
-    // of the cover, which is the panel's sticky offset. The first row already sits
-    // level with the cover, so that offset is exactly where the panel pins, and
-    // every row below it lands on the same line. Without a panel there is nothing
-    // to line up with, so the row just holds still under the pointer.
-    if (!artPanel) {
-      const { top } = summary.getBoundingClientRect();
-      run(changes, summary, Math.max(top, 0));
-      return;
-    }
-    run(changes, summary, parseFloat(getComputedStyle(artPanel).top) || 0);
+  // A link elsewhere on the page to a row (a quote's, by the row's label, e.g.
+  // #S2E1) opens that row and carries the page up to it on the same motion,
+  // instead of jumping to a closed row. The hash stays out of the address bar.
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    const details = link && document.getElementById(link.hash.slice(1));
+    if (!details || !episodes.includes(details)) return;
+    event.preventDefault();
+    open(details);
   });
 
   if (!artPanel) continue;
