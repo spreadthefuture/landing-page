@@ -491,7 +491,7 @@ a { color: inherit; text-decoration: none; }
   padding: var(--row-pad) 0;
   color: var(--muted);
   font-weight: 650;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
   letter-spacing: var(--tracking);
   text-transform: uppercase;
 }
@@ -615,7 +615,7 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   list-style: none;
   font-weight: 650;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
   letter-spacing: var(--tracking);
   text-transform: uppercase;
 }
@@ -681,13 +681,13 @@ a { color: inherit; text-decoration: none; }
 .episode-meta {
   margin: 0;
   color: var(--muted);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 0.6rem + 0.75vw, 1.375rem);
 }
 
 .episode-description {
   max-width: 60ch;
   color: var(--prose);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 0.6rem + 0.75vw, 1.375rem);
   line-height: 1.6;
   text-align: justify;
   hyphens: auto;
@@ -1118,7 +1118,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* "Videographers" and "Special thanks": the same heading, a step down. Between "Our team" and the
-   names under it on every screen (36 / 52 / 24px on desktop, 22 / 26 / 17px on
+   names under it on every screen (36 / 52 / 28px on desktop, 22 / 26 / 17px on
    a phone), so it still leads a section of its own but no longer puts the
    videographers on the team's level. Its own size, used only for these two: no
    existing step sits between the two at every width. */
@@ -1158,7 +1158,7 @@ a { color: inherit; text-decoration: none; }
 
 .credit-name {
   margin: 1rem 0 0;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
   font-weight: 650;
   letter-spacing: var(--tracking);
   text-transform: uppercase;
@@ -1170,7 +1170,7 @@ a { color: inherit; text-decoration: none; }
 .credit-role,
 .credit-location {
   margin: 0.5rem 0 0;
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 0.6rem + 0.75vw, 1.375rem);
   line-height: 1.2;
   /* The column is exactly one portrait wide, which the longest role outgrows.
      These two lines are allowed a little under a third of the gutter on each
@@ -1232,7 +1232,7 @@ a { color: inherit; text-decoration: none; }
 .contact-line {
   margin: var(--space-xl) 0 0;
   color: var(--prose);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 0.6rem + 0.75vw, 1.375rem);
   line-height: 1.6;
   text-align: center;
 }
@@ -1400,7 +1400,7 @@ a { color: inherit; text-decoration: none; }
    the three headings start level however their words wrap. */
 .about-heading {
   margin: 0;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: var(--tracking);
@@ -1420,7 +1420,7 @@ a { color: inherit; text-decoration: none; }
 .about-text {
   max-width: 48ch;
   margin: var(--space-s) 0 0;
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 0.6rem + 0.75vw, 1.375rem);
   line-height: 1.6;
 }
 
@@ -1582,7 +1582,7 @@ a { color: inherit; text-decoration: none; }
 .episode-page-title .episode-number {
   display: block;
   margin-bottom: var(--space-s);
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
 }
 
 /* The reason the page exists, so it comes straight under the title rather than
@@ -1613,7 +1613,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   gap: 0.75em;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
   font-weight: 650;
   letter-spacing: var(--tracking);
   text-transform: uppercase;
@@ -1785,7 +1785,7 @@ a { color: inherit; text-decoration: none; }
   display: inline-block;
   margin: var(--space-m) 0 var(--space-xl);
   color: var(--fg);
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
   font-weight: 650;
   letter-spacing: var(--tracking);
   text-transform: uppercase;
@@ -1921,7 +1921,7 @@ body.is-locked { overflow: hidden; }
 
 .contact-title {
   margin: 0;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-size: clamp(1.05rem, 0.4rem + 1.4vw, 1.75rem);
   font-weight: 650;
   letter-spacing: var(--tracking);
   text-transform: uppercase;
@@ -1931,7 +1931,7 @@ body.is-locked { overflow: hidden; }
   margin: var(--space-s) 0 0;
   max-width: 48ch;
   color: var(--prose);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 0.6rem + 0.75vw, 1.375rem);
   line-height: 1.6;
 }
 
@@ -1968,7 +1968,7 @@ body.is-locked { overflow: hidden; }
   background: none;
   color: var(--fg);
   font-family: inherit;
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 0.6rem + 0.75vw, 1.375rem);
   line-height: 1.6;
   transition: border-color 0.2s ease;
 }
