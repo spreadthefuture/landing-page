@@ -16,6 +16,7 @@ at deploy time.
 ├── about/index.html        # about page, served at /about/
 ├── 404.html                # not found page, served by GitHub Pages for any missing path
 ├── CNAME                   # custom domain for GitHub Pages, do not delete
+├── favicon.ico             # browser tab icon, 16 to 64px, rendered from assets/logos/favicon.svg
 ├── styles.css              # all styling, for every page
 ├── script.js               # optional enhancements: row slides, cover crossfade, quote rotation
 ├── episodes.json           # generated episode data, do not hand edit
@@ -27,7 +28,7 @@ at deploy time.
 │   └── episode-template.html  # the episode page, with its last updated date
 ├── assets/
 │   ├── font/               # Liberation Sans, the fallback for viewers without Arial
-│   ├── logos/              # STF wordmark and favicon
+│   ├── logos/              # STF wordmark, favicon.svg (icon source, not linked) and apple-touch-icon.png
 │   ├── platforms/          # streaming platform icons
 │   ├── social/             # footer social icons
 │   ├── credits-photos/     # portraits for the credits page
