@@ -1,12 +1,30 @@
 {
   "feed_url": "https://anchor.fm/s/469ddf8c/podcast/rss",
   "title": "SPREAD THE FUTURE",
-  "episode_count": 8,
+  "episode_count": 9,
   "seasons": [
     2,
     1
   ],
   "episodes": [
+    {
+      "guid": "961f5c9e-b1f3-4dfe-ba70-c91e76016a65",
+      "number": 2,
+      "season": 2,
+      "label": "S2E2",
+      "title": "Alberto Alemanno on Lobbying for Good and Citizens' Empowerment",
+      "title_full": "S2E2 - Alberto Alemanno on Lobbying for Good and Citizens' Empowerment",
+      "link": "https://podcasters.spotify.com/pod/show/spreadthefuture/episodes/S2E2---Alberto-Alemanno-on-Lobbying-for-Good-and-Citizens-Empowerment-e3qceof",
+      "description_html": "<p>“The only way to measure success in lobbying for NGOs is to see how much advocacy capacity we have been able to build, regardless of the outcome.”</p><p>To which extent can lobbying serve the general interest? What does it mean in practice to lobby for &quot;good&quot;? And how to define whether an action is successful or not?</p><p>Alberto Alemanno is a professor of Law at HEC Paris, NYU, University of Tokyo and College of Europe, and an online civic advocator. He is the founder of The Good Lobby, a non-profit organization aiming to make EU politics more welcoming for citizens to express.</p><p>With extensive experience in law, academia and civic advocacy, both in the EU and beyond, he reflects on how citizens can shape the EU, make their voices heard between elections, and turn advocacy into meaningful political change.</p><p>Original art cover by <a href=\"https://www.instagram.com/josederocco/\" target=\"_blank\" rel=\"ugc noopener noreferrer\">José De Rocco</a> from Buenos Aires, Argentina.</p>",
+      "published": "2026-10-13T07:30:00+00:00",
+      "published_display": "13 October 2026",
+      "duration": "23:14",
+      "duration_seconds": 1394,
+      "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/11747515/11747515-1791804099582-377c88e298ca4.jpg",
+      "audio_url": "https://anchor.fm/s/469ddf8c/podcast/play/127334607/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-9-12%2F433996205-44100-2-f3252dfa7816.m4a",
+      "audio_type": "audio/x-m4a",
+      "audio_bytes": 22546033
+    },
     {
       "guid": "e0071d07-b933-46da-b15a-c902a466dd4b",
       "number": 1,
