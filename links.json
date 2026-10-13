@@ -15,6 +15,11 @@
       "key": "deezer",
       "name": "Deezer",
       "icon": "/assets/platforms/deezer.svg"
+    },
+    {
+      "key": "youtube",
+      "name": "YouTube",
+      "icon": "/assets/platforms/youtube.svg"
     }
   ],
   "episodes": {
@@ -23,6 +28,7 @@
       "spotify": "https://open.spotify.com/episode/0CfRpduOn43R4GLsCYRAIR?si=yhiaJtWHSgKfuKTaEp19bg",
       "apple": "https://podcasts.apple.com/fr/podcast/s2e1-genevi%C3%A8ve-pons-on-fighting-global-warming-and/id1551075626?i=1000792153291",
       "deezer": "https://link.deezer.com/s/34x8U6zqurGJmf0TL0BMv",
+      "youtube": "",
       "description": ""
     },
     "00ac3941-e736-4355-8961-4dafa4f41408": {
@@ -30,6 +36,7 @@
       "spotify": "https://open.spotify.com/episode/0VpCIqAkHEvLHGbbsVUbX1?si=bnO4Z-alSSauoF5RUo3cjg",
       "apple": "https://podcasts.apple.com/ch/podcast/s1e7-sofia-on-our-relations-with-others/id1551075626?i=1000567956487&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kRhBxUAVXVVtZ0iaqg",
+      "youtube": "",
       "description": ""
     },
     "18c191ca-8124-43a5-a993-5f6066e0ef7b": {
@@ -37,6 +44,7 @@
       "spotify": "https://open.spotify.com/episode/6GLLTmw4ZsmojC209JUmSl?si=8j9pPtUiRaafxdWwMebdgA",
       "apple": "https://podcasts.apple.com/ch/podcast/e06-fabio-on-our-relations-with-objects/id1551075626?i=1000556450636&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kTGpmhTGNkYWcitw12",
+      "youtube": "",
       "description": ""
     },
     "184bd2fa-b9b2-4191-acad-51fdbc2dda23": {
@@ -44,6 +52,7 @@
       "spotify": "https://open.spotify.com/episode/6lGBErGtrqFUbTW1H2E6ha?si=0K3Y6PChT2WcBp_tdDcHxg",
       "apple": "https://podcasts.apple.com/ch/podcast/e05-alexia-on-our-daily-impact/id1551075626?i=1000528088155&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kUlF8FX4dx3YsXqTvz",
+      "youtube": "",
       "description": ""
     },
     "669e3aee-b558-448f-baee-33bfec716d74": {
@@ -51,6 +60,7 @@
       "spotify": "https://open.spotify.com/episode/46pbQg5NHuWsTUFqH7n42p?si=0WWd7Ed6QdSgJoHVsMFoEg",
       "apple": "https://podcasts.apple.com/ch/podcast/s1e4-philippine-on-our-production-models/id1551075626?i=1000521414084&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kUR8oWcnkKLDQYGN0p",
+      "youtube": "",
       "description": ""
     },
     "b771fa37-700d-466d-9fbc-e8caea5c7043": {
@@ -58,6 +68,7 @@
       "spotify": "https://open.spotify.com/episode/7KqYddvPrbZyMD30qHr7TA?si=M9CHOD2BSjSv8Dju63djQA",
       "apple": "https://podcasts.apple.com/ch/podcast/e03-ronald-on-our-economy/id1551075626?i=1000515397189&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kVuU3HAQzlE7thb62i",
+      "youtube": "",
       "description": ""
     },
     "59bc1a56-96d5-49d2-9f65-a20c6ecffe8e": {
@@ -65,6 +76,7 @@
       "spotify": "https://open.spotify.com/episode/5RCKFunDVISST2QfsIWmOP?si=aHDoxZg9SD-O2pRv3aZ9Ug",
       "apple": "https://podcasts.apple.com/ch/podcast/e02-michael-on-our-resources/id1551075626?i=1000515036760&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kVZKOD5pt1cvE4x9CL",
+      "youtube": "",
       "description": ""
     },
     "253407a4-337f-4d65-9c40-4047ff90ab13": {
@@ -72,6 +84,7 @@
       "spotify": "https://open.spotify.com/episode/5fPhySxsMVC3fTxa8zsTso?si=ErbPVBhZQ4-B0gzgjWOEqQ",
       "apple": "https://podcasts.apple.com/ch/podcast/e01-nina-on-our-rhythms-of-life/id1551075626?i=1000514022290&l=en-GB",
       "deezer": "https://link.deezer.com/s/349kWDfdW9jbvgZ4xHTEB",
+      "youtube": "",
       "description": ""
     }
   }

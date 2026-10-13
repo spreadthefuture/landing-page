@@ -391,17 +391,20 @@ a { color: inherit; text-decoration: none; }
 .platform-icon--spotify { -webkit-mask-image: url(/assets/platforms/spotify.svg); mask-image: url(/assets/platforms/spotify.svg); }
 .platform-icon--apple { -webkit-mask-image: url(/assets/platforms/apple-podcasts.svg); mask-image: url(/assets/platforms/apple-podcasts.svg); }
 .platform-icon--deezer { -webkit-mask-image: url(/assets/platforms/deezer.svg); mask-image: url(/assets/platforms/deezer.svg); }
+.platform-icon--youtube { -webkit-mask-image: url(/assets/platforms/youtube.svg); mask-image: url(/assets/platforms/youtube.svg); }
 
-/* Spotify green, Apple Podcasts purple, Deezer purple. */
+/* Spotify green, Apple Podcasts purple, Deezer purple, YouTube red. */
 .platforms a:hover .platform-icon--spotify,
 .episode-listen:hover .platform-icon--spotify { background-color: #1ED760; }
 .platforms a:hover .platform-icon--apple,
 .episode-listen:hover .platform-icon--apple { background-color: #A945E3; }
 .platforms a:hover .platform-icon--deezer,
 .episode-listen:hover .platform-icon--deezer { background-color: #A238FF; }
+.platforms a:hover .platform-icon--youtube,
+.episode-listen:hover .platform-icon--youtube { background-color: #FF0000; }
 
 /* The site's one breakpoint, 46rem (736px), shared by every page. Full names
-   wrap to 2 lines below ~582px (measured in-browser), so this leaves margin. Icon-only stays on one line down to ~300px. The rule
+   wrap to 2 lines below ~582px (measured in-browser), so this leaves margin. Icon-only stays on one line down to 320px (see the 22rem gap below). The rule
    is unscoped on purpose: the header nav and the per-episode listen links both
    mark their label with .platform-name, so they drop to icons together. */
 @media (max-width: 46rem) {
@@ -810,6 +813,12 @@ a { color: inherit; text-decoration: none; }
   .platforms {
     justify-content: flex-start;
     gap: 1.25rem;
+  }
+
+  /* Four icons and the label only just fit a 320px phone at 1.25rem, so the
+     gap tightens below 22rem to keep YouTube on the row. */
+  @media (max-width: 22rem) {
+    .platforms { gap: 0.75rem; }
   }
 
   .platforms > .platforms-label { font-size: 1.5em; }
@@ -1624,6 +1633,7 @@ a { color: inherit; text-decoration: none; }
 .episode-page-link:hover .platform-icon--spotify { background-color: #1ED760; }
 .episode-page-link:hover .platform-icon--apple { background-color: #A945E3; }
 .episode-page-link:hover .platform-icon--deezer { background-color: #A238FF; }
+.episode-page-link:hover .platform-icon--youtube { background-color: #FF0000; }
 
 .episode-page .episode-description { margin-top: var(--space-m); }
 
@@ -1673,6 +1683,10 @@ a { color: inherit; text-decoration: none; }
     margin-top: var(--space-m);
   }
 
+  /* A fourth platform (YouTube) would push a third-wide column off the screen,
+     so with four links each takes a quarter. */
+  .episode-page-links:has(> li:nth-child(4)) { grid-auto-columns: 25%; }
+
   .episode-page-link {
     flex-direction: column;
     gap: 0.5rem;
@@ -1682,13 +1696,17 @@ a { color: inherit; text-decoration: none; }
   .episode-page-link .platform-icon { width: 8vw; height: 8vw; }
   /* The name, brought back from the unscoped .platform-name rule, at the
      footer's mobile size and weight in sentence case, in --muted so it reads
-     as a caption. "Apple Podcasts" fits one line in a third of the width. */
+     as a caption. "Apple Podcasts" fits one line in a third of the width; in
+     a quarter, below about 400px, it wraps under its logo rather than
+     running into Deezer's caption. */
   .episode-page-link .platform-name {
     position: static;
     width: auto;
     height: auto;
     overflow: visible;
     clip-path: none;
+    white-space: normal;
+    text-align: center;
     color: var(--muted);
     font-size: 0.8rem;
     font-weight: 400;

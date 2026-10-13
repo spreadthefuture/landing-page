@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = ROOT / "episodes.json"
 PAGE_FILE = ROOT / "index.html"
 # Hand-maintained, never written by this script: the feed only carries one link per
-# episode, and we want our own Spotify / Apple / Deezer URLs instead.
+# episode, and we want our own Spotify / Apple / Deezer / YouTube URLs instead.
 LINKS_FILE = ROOT / "links.json"
 
 START = "<!-- episodes:start -->"

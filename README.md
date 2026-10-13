@@ -52,3 +52,4 @@ feed update, locally or with the "Update episode pages" workflow (also manual).
 - [Spotify](https://open.spotify.com/show/0YZIGNBGAS4zwkeFbmh4ZY)
 - [Apple Podcasts](https://podcasts.apple.com/fr/podcast/spread-the-future/id1551075626)
 - [Deezer](https://www.deezer.com/fr/show/2252082)
+- [YouTube](https://www.youtube.com/@spreadthefuture)

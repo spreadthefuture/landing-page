@@ -46,7 +46,7 @@ near-duplicate.
 | Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the credit and copyright line |
 
 Brand colors appear on hover only, on platform icons: Spotify `#1ED760`, Apple
-Podcasts `#A945E3`, Deezer `#A238FF`.
+Podcasts `#A945E3`, Deezer `#A238FF`, YouTube `#FF0000`.
 
 ## Typography
 
@@ -113,7 +113,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
 | mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
-| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide (so one or two links sit centred, not beside an empty column), `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 700 | 1.2 | 0.01em |
+| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 700 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
 | label | `clamp(0.875rem, 1.2vw, 1rem)` | 700 | 1.2 | |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |
@@ -223,7 +223,9 @@ script in each page's head hides the nav before first paint, so without JS the n
 stays open and the plus never shows.
 
 ### Platform bar
-"LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER". Bold uppercase at the label size,
+"LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER / YOUTUBE". YouTube is also in the
+footer's LISTEN column, and in links.json, so an episode shows its YouTube link once
+that URL is filled in. Bold uppercase at the label size,
 normal letter spacing, the label in gray. Icons are CSS masks, so they inherit
 `currentColor` and shift to brand color on hover. Below 46rem the names are visually
 hidden, the icons enlarge to 1.5em, and "Listen on" takes the same 1.5em so label
@@ -545,7 +547,7 @@ heading does. A bottom-aligned version was tried and read as hanging in the spac
 The mark is wrapped in `.footer-brand` (`max-width: 24rem`) so it stays a distinct
 item in the band and the columns stay against the right edge.
 Pushed to the right edge, `.footer-cols`, two columns `clamp(2.5rem, 7vw, 7rem)`
-apart: **LISTEN** (Spotify, Apple Podcasts, Deezer) and **THE PODCAST** (About,
+apart: **LISTEN** (Spotify, Apple Podcasts, Deezer, YouTube) and **THE PODCAST** (About,
 Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
 above their list. The links are the same size and weight in `--muted`, `0.75rem`
 apart, lifting to `--fg` and then glowing like every other gray link. Both bands wrap
