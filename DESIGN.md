@@ -223,9 +223,9 @@ script in each page's head hides the nav before first paint, so without JS the n
 stays open and the plus never shows.
 
 ### Platform bar
-"LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER / YOUTUBE". YouTube is also in
-links.json, so an episode shows its YouTube link once that URL is filled in; the
-footer's LISTEN column does not list it. Bold uppercase at the label size,
+"LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER / YOUTUBE". YouTube is also in the
+footer's LISTEN column, and in links.json, so an episode shows its YouTube link once
+that URL is filled in. Bold uppercase at the label size,
 normal letter spacing, the label in gray. Icons are CSS masks, so they inherit
 `currentColor` and shift to brand color on hover. Below 46rem the names are visually
 hidden, the icons enlarge to 1.5em, and "Listen on" takes the same 1.5em so label
@@ -547,7 +547,7 @@ heading does. A bottom-aligned version was tried and read as hanging in the spac
 The mark is wrapped in `.footer-brand` (`max-width: 24rem`) so it stays a distinct
 item in the band and the columns stay against the right edge.
 Pushed to the right edge, `.footer-cols`, two columns `clamp(2.5rem, 7vw, 7rem)`
-apart: **LISTEN** (Spotify, Apple Podcasts, Deezer) and **THE PODCAST** (About,
+apart: **LISTEN** (Spotify, Apple Podcasts, Deezer, YouTube) and **THE PODCAST** (About,
 Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
 above their list. The links are the same size and weight in `--muted`, `0.75rem`
 apart, lifting to `--fg` and then glowing like every other gray link. Both bands wrap
