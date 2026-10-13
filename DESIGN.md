@@ -46,7 +46,7 @@ near-duplicate.
 | Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the credit and copyright line |
 
 Brand colors appear on hover only, on platform icons: Spotify `#1ED760`, Apple
-Podcasts `#A945E3`, Deezer `#A238FF`.
+Podcasts `#A945E3`, Deezer `#A238FF`, YouTube `#FF0000`.
 
 ## Typography
 
@@ -223,7 +223,8 @@ script in each page's head hides the nav before first paint, so without JS the n
 stays open and the plus never shows.
 
 ### Platform bar
-"LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER". Bold uppercase at the label size,
+"LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER / YOUTUBE". YouTube is header only: it
+is not in links.json, so the per-episode links and the footer's LISTEN column skip it. Bold uppercase at the label size,
 normal letter spacing, the label in gray. Icons are CSS masks, so they inherit
 `currentColor` and shift to brand color on hover. Below 46rem the names are visually
 hidden, the icons enlarge to 1.5em, and "Listen on" takes the same 1.5em so label
