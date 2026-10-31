@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-10-07
+> Last updated: 2026-10-31
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -230,7 +230,10 @@ normal letter spacing, the label in gray. Icons are CSS masks, so they inherit
 `currentColor` and shift to brand color on hover. Below 46rem the names are visually
 hidden, the icons enlarge to 1.5em, and "Listen on" takes the same 1.5em so label
 and icons read as one line. There the icons are `--muted` like the label. The same `.platform-name` rule drives the per-episode
-listen links.
+listen links, which below 46rem open with the same "Listen on" label (`.episode-links::before`), at the same size and gaps.
+Below 46rem only, the row ends with the Instagram glyph (`.platforms-instagram`), at the
+icons' 1.5em and in `--muted`, lifting to `--fg` with the glow on hover like the footer's. Its gap is
+fluid, up to 1.25rem, so the six items stay on one line down to 320px.
 
 ### Tagline
 The homepage's one sentence, bold, in sentence case and all `--fg`, wrapping edge
