@@ -201,11 +201,13 @@ a { color: inherit; text-decoration: none; }
 
 .logo svg,
 .footer-wordmark svg,
-.footer-social a { transition: color 0.2s ease, filter 0.2s ease; }
+.footer-social a,
+.platforms a.platforms-instagram { transition: color 0.2s ease, filter 0.2s ease; }
 
 .logo a:hover svg,
 .footer-wordmark:hover svg,
-.footer-social a:hover { color: var(--fg); filter: var(--glow-filter); }
+.footer-social a:hover,
+.platforms a.platforms-instagram:hover { color: var(--fg); filter: var(--glow-filter); }
 
 /* The quote bars are shapes, not type, so they keep the old dim. */
 .quote-dot { transition: opacity 0.2s ease; }
@@ -372,6 +374,11 @@ a { color: inherit; text-decoration: none; }
 
 .platforms a { display: inline-flex; align-items: center; gap: 0.5em; }
 
+/* Phones only: wider screens reach Instagram from the footer. */
+@media not (max-width: 46rem) {
+  .platforms a.platforms-instagram { display: none; }
+}
+
 /* A masked shape (not an <img>) so its color can follow currentColor at rest and
    shift to the platform's brand color on hover, without swapping source files. */
 .platform-icon {
@@ -404,7 +411,7 @@ a { color: inherit; text-decoration: none; }
 .episode-listen:hover .platform-icon--youtube { background-color: #FF0000; }
 
 /* The site's one breakpoint, 46rem (736px), shared by every page. Full names
-   wrap to 2 lines below ~582px (measured in-browser), so this leaves margin. Icon-only stays on one line down to 320px (see the 22rem gap below). The rule
+   wrap to 2 lines below ~582px (measured in-browser), so this leaves margin. Icon-only stays on one line down to 320px (see the fluid gap below). The rule
    is unscoped on purpose: the header nav and the per-episode listen links both
    mark their label with .platform-name, so they drop to icons together. */
 @media (max-width: 46rem) {
@@ -812,13 +819,9 @@ a { color: inherit; text-decoration: none; }
      the icons' size (1.5em, below), so the row reads as one line of type. */
   .platforms {
     justify-content: flex-start;
-    gap: 1.25rem;
-  }
-
-  /* Four icons and the label only just fit a 320px phone at 1.25rem, so the
-     gap tightens below 22rem to keep YouTube on the row. */
-  @media (max-width: 22rem) {
-    .platforms { gap: 0.75rem; }
+    /* Five icons and the label need 13.5rem plus the 3rem of gutters, so the five
+       gaps share what is left, up to 1.25rem. Keeps Instagram on the row at 320px. */
+    gap: min(1.25rem, (100vw - 16.6rem) / 5);
   }
 
   .platforms > .platforms-label { font-size: 1.5em; }
@@ -831,6 +834,22 @@ a { color: inherit; text-decoration: none; }
      platform links on a phone reads at one size. */
   .platforms .platform-icon,
   .episode-listen .platform-icon { width: 1.5em; height: 1.5em; }
+
+  .platforms .social-icon { width: 1.5em; height: 1.5em; }
+
+  /* The icons lose their names on a phone, so the row takes the header's label,
+     at the header's size and gaps. */
+  .episode-links { gap: 1.25rem; }
+
+  @media (max-width: 22rem) {
+    .episode-links { gap: 0.75rem; }
+  }
+
+  .episode-links::before {
+    content: "Listen on";
+    font-size: 1.5em;
+    color: var(--muted);
+  }
 
   /* align-items reset to stretch: flex-start (the desktop value) only sizes a
      column's cross axis to content, so the list would shrink to its content
