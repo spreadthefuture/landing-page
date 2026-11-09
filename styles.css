@@ -564,6 +564,12 @@ a { color: inherit; text-decoration: none; }
   top: var(--gutter);
 }
 
+/* script.js adds this on real hover devices, where a click on the cover opens
+   the row it shows. */
+.episode-art-panel.is-clickable {
+  cursor: pointer;
+}
+
 .episode-art-frame {
   position: relative;
   aspect-ratio: 1;

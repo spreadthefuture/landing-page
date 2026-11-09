@@ -223,6 +223,8 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
   let activeLayer = 0;
   let currentSrc = null;
   let openSrc = null;
+  // The row whose cover the panel shows, so a click on the cover opens that row.
+  let shownRow = episodes[0];
 
   // Seasons render newest first and rows newest first within a season, so the
   // first cover in the markup is the latest episode's.
@@ -279,6 +281,7 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
     const cover = details.querySelector('.episode-art');
     details.addEventListener('toggle', () => {
       if (details.open) {
+        shownRow = details;
         openSrc = cover ? cover.src : null;
         showArt(openSrc || defaultSrc);
       } else if (cover && cover.src === openSrc) {
@@ -292,8 +295,17 @@ for (const layout of document.querySelectorAll('.episodes-layout')) {
       const cover = summary.closest('.episode').querySelector('.episode-art');
       // No leave handler: the panel holds the last cover the pointer visited
       // rather than snapping back to the newest episode between rows.
-      summary.addEventListener('mouseenter', () => showArt(cover.src));
+      summary.addEventListener('mouseenter', () => {
+        shownRow = summary.closest('.episode');
+        showArt(cover.src);
+      });
     }
+
+    // Clicking the cover acts as a click on its row's summary: opens the row, or
+    // closes it if it is the open one. Mouse only: the rows themselves stay the
+    // keyboard and screen reader way in.
+    artPanel.classList.add('is-clickable');
+    artPanel.addEventListener('click', () => shownRow?.querySelector('.episode-summary').click());
   }
 }
 

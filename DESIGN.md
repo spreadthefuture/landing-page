@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-10-31
+> Last updated: 2026-11-09
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -302,6 +302,10 @@ the newest, so the panel reads as a record of where the reader has been. Two sta
 hidden layer, then swaps `.is-active` for a 0.4s crossfade, with no scale. At most
 one swap per frame, because leave and enter fire together when moving between rows
 and swapping on both skipped the crossfade. Hidden below 46rem.
+
+On the same hover devices the cover is clickable (`.is-clickable`, pointer cursor):
+a click acts as a click on the row whose cover is showing: it opens that row, or
+closes it if it is the open one. Mouse only; the rows stay the keyboard way in.
 
 While an incoming cover is still downloading its layer carries `.is-loading` and stays
 at opacity 0, so the frame's own `--surface` square shows instead: an `<img>` keeps
