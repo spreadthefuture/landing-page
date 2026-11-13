@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-11-09
+> Last updated: 2026-11-13
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -153,8 +153,9 @@ height so the last element sits the same distance off the bottom on every page.
 **Page structure.** `body` is a flex column at `min-height: 100svh`, padded by
 `--gutter`. No max-width container, except credits, whose `main` is capped at 85rem
 and centered. Every page is standalone: the head block, wordmark SVG and footer are
-repeated in all four files (the three pages and `404.html`), and since the footer carries
-the wordmark too, that SVG now sits twice in each. Change one, change all eight.
+repeated in all five files (the three pages, `404.html` and
+`scripts/episode-template.html`, which renders `episode/`), and since the footer carries
+the wordmark too, that SVG sits twice in each. Change one, change all ten.
 
 **Border radius:** 6px on cover art, 50% on credit portraits, 0 everywhere else.
 
