@@ -139,6 +139,9 @@ body {
      @font-face rules fail outright. */
   font-family: 'ABC Areal', 'STF Sans', Arial, Helvetica, sans-serif;
   font-weight: 400;
+  /* The prose size, the episode description's, so any text without a size of
+     its own reads at that size rather than the browser's 16px. */
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
   /* One of the site's three line heights: 1 for the nav, 1.6 for prose, and
      this 1.2 for everything else, headings and labels included. */
   line-height: 1.2;
@@ -163,6 +166,15 @@ body {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* General body text in soft white, for any page: the prose size and line
+   height, with no measure of its own, so it fills its container. Use it where
+   a paragraph should read at full strength rather than in --prose gray. */
+.body-text {
+  color: var(--fg);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -440,14 +452,24 @@ a { color: inherit; text-decoration: none; }
    the page's left edge under it, wrapping naturally edge to edge like the
    wordmark above it. */
 .tagline {
-  /* A full --space-xl down from the platform links, and --space-xl plus
-     --space-m here, plus the --space-m that .episodes-layout pads in above the
-     list, so the sentence stands clear of both the masthead and the cover. */
-  margin: var(--space-xl) 0 calc(var(--space-xl) + var(--space-m));
-  font-size: clamp(1.35rem, 3vw, 3.75rem);
-  font-weight: 650;
+  /* A full --space-xl down from the platform links, and only --space-s below:
+     .tagline-sub sits close under it and carries the gap down to the list. */
+  margin: var(--space-xl) 0 var(--space-s);
+  /* Sized so the sentence runs to about two and a half lines across a desktop
+     window. */
+  font-size: clamp(1.75rem, 3.9vw, 5rem);
+  font-weight: 700;
   line-height: 1.2;
   letter-spacing: var(--tracking);
+}
+
+/* The line under the tagline, in the prose size, gray and line height, like the
+   episode description. It carries the gap down to the list that the tagline used to. */
+.tagline-sub {
+  margin: 0 0 calc(var(--space-xl) + var(--space-m));
+  color: var(--prose);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
 }
 
 /* Below this width the sentence is sized off the viewport instead of the clamp
@@ -514,6 +536,7 @@ a { color: inherit; text-decoration: none; }
    3.05s. The layout's transform ends at none, so the sticky cover is
    unaffected after. */
 .tagline,
+.tagline-sub,
 .episodes-layout {
   animation:
     fade-in 1.2s var(--ease-fade) both,
@@ -526,13 +549,15 @@ a { color: inherit; text-decoration: none; }
 /* Back on the homepage later in the visit (.is-return, see .logo--intro) the
    wordmark is already there, so nothing waits for it: the tagline and list
    take the other pages' tempo, 0.15s and 0.4s, settled by about 1.6s. */
-.is-return .tagline { animation-delay: 0.15s; }
+.is-return .tagline,
+.is-return .tagline-sub { animation-delay: 0.15s; }
 .is-return .episodes-layout { animation-delay: 0.4s; }
 
 /* Removed outright, as on the other pages: the global rule shortens durations
    but not delays. */
 @media (prefers-reduced-motion: reduce) {
   .tagline,
+  .tagline-sub,
   .episodes-layout { animation: none; }
 }
 
@@ -937,6 +962,63 @@ a { color: inherit; text-decoration: none; }
    folds away. */
 .is-list-moving { overflow-anchor: none; }
 
+/* ---- Institutions ---- */
+
+/* The logos of institutions the guests lead, between the list and the quotes,
+   --space-xl above like every block break. The heading is the season title's
+   size, uppercase and centred, with a gray line under it; the logos sit --space-m
+   below in a row that wraps. */
+.institutions {
+  /* A block break plus an in-block gap on each side: the padding stacks on the
+     --space-xl margin here and on .quotes, so the logos sit apart from both. */
+  margin-top: var(--space-xl);
+  padding-block: var(--space-m);
+  text-align: center;
+}
+
+.institutions-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 3.25rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+/* The tagline-sub's size and prose gray, pinned to the heading with --space-s. */
+.institutions-sub {
+  margin: var(--space-s) 0 0;
+  color: var(--prose);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+/* Every logo gets the same height and a width cap, so wide wordmarks and the
+   squarer crests read at one weight. Soft white at rest, like the type. */
+.institutions-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-m) var(--space-xl);
+  margin: var(--space-m) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.institutions-logos img {
+  display: block;
+  width: auto;
+  height: clamp(3rem, 6vw, 5.5rem);
+  max-width: min(60vw, 18rem);
+  object-fit: contain;
+  opacity: 0.85;
+}
+
+@media (max-width: 46rem) {
+  .institutions-logos { gap: var(--space-m) var(--space-m); }
+}
+
 /* ---- Quotes ---- */
 
 /* The homepage's closing block, after the episode list. --space-xl above is the
@@ -1188,7 +1270,14 @@ a { color: inherit; text-decoration: none; }
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 50%;
+  /* Black and white at rest; the card's hover (or keyboard focus) brings the
+     colour back, alongside the glow on the name and role. */
+  filter: grayscale(1);
+  transition: filter 0.6s var(--ease-drift);
 }
+
+.credit-link:hover .credit-portrait,
+.credit-link:focus-visible .credit-portrait { filter: none; }
 
 .credit-name {
   margin: 1rem 0 0;

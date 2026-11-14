@@ -66,6 +66,7 @@ try {
 
   <main>
     <p class="tagline">A podcast where we welcome political leaders, decision-makers and scientists to explore possible tomorrows.</p>
+    <p class="tagline-sub">We welcome guests from all over the world and draw from their personal experience to better understand essential questions for the future.</p>
 
     <!-- One episode row. scripts/build.py fills this per episode at build time.
          Escaped placeholders: label, season, number, title, title_full, link,
@@ -374,6 +375,20 @@ try {
         <!-- episodes:end -->
       </div>
     </div>
+
+    <!-- Institutions the guests lead. Add a logo by adding an <li>; files live in
+         assets/institutions-logos/ (white on transparent). -->
+    <section class="institutions" aria-labelledby="institutions-title">
+      <h2 class="institutions-title" id="institutions-title">Executive-level speakers</h2>
+      <p class="institutions-sub">Our guests lead key institutions for the future</p>
+      <ul class="institutions-logos">
+        <li><img src="assets/institutions-logos/WWF%20v3.webp" alt="WWF European Policy Office" width="3337" height="1124" loading="lazy"></li>
+        <li><img src="assets/institutions-logos/EJDI-W.webp" alt="Europe Jacques Delors" width="3337" height="1124" loading="lazy"></li>
+        <li><img src="assets/institutions-logos/IHP-W.webp" alt="Institut Henri Poincaré" width="323" height="235" loading="lazy"></li>
+        <li><img src="assets/institutions-logos/TGL-W.webp" alt="The Good Lobby" width="389" height="133" loading="lazy"></li>
+        <li><img src="assets/institutions-logos/ALB%20MEFA-W.webp" alt="Ministry for Europe and Foreign Affairs of Albania" width="3840" height="2867" loading="lazy"></li>
+      </ul>
+    </section>
 
     <!-- Without JS these simply stack. script.js adds .is-rotating, which lays them
          in one grid cell and crossfades between them, and appends the row of

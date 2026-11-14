@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-11-13
+> Last updated: 2026-11-15
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -25,7 +25,7 @@ near-duplicate.
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
 | Label size (platform bar, episode listen links, quote source, contact field labels and submit, footer column headings and links, the episode page's "Discover more episodes"; the footer links and "Discover more episodes" are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
 | Row size (episode row, "Coming soon.", credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
-| Prose size (about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
+| Prose size (the `body` base size, about text, credits team line and contact line, contact intro and inputs, episode description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
 | Measure (max line length) | `48ch` about principles, `60ch` episode description, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
@@ -39,11 +39,14 @@ near-duplicate.
 |------|-------|-------|------|
 | Near black | `--bg` | `#0A0A0A` | The page canvas. Never pure black |
 | Soft white | `--fg` | `#F4F4F2` | Primary text, the wordmark, icons at rest, the focus ring. Never pure white |
-| Prose gray | `--prose` | `#B0B0B0` | Paragraphs meant to be read: episode descriptions, the credits lede and contact line, the contact overlay's intro and sent line. 9.1:1 on `--bg` |
+| Prose gray | `--prose` | `#B0B0B0` | Paragraphs meant to be read: episode descriptions, the credits lede and contact line, the contact overlay's intro and sent line, the homepage sublines under the tagline and the institutions heading. 9.1:1 on `--bg` |
 | Gray | `--muted` | `#8A8A8A` | Secondary text that recedes (5.7:1 on `--bg`): episode numbers, meta, per-episode listen links, the "Listen on" label, credit locations, the unlit words of the about statement, footer social and column links, the mobile header's platform icons, "Coming soon." |
 | Rule | `--rule` | `#2A2A2A` | The 1px line under every episode row above 46rem, and the one across the footer. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the credit and copyright line |
+
+For body text in soft white anywhere, use `.body-text`: `--fg`, the prose size
+(`clamp(1rem, 1.5vw, 1.125rem)`), line height 1.6, no max width.
 
 Brand colors appear on hover only, on platform icons: Spotify `#1ED760`, Apple
 Podcasts `#A945E3`, Deezer `#A238FF`, YouTube `#FF0000`.
@@ -90,7 +93,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 
 ### Rules
 
-- **Weights:** 400 (body, meta, prose) and 700 (everything else). Nothing else.
+- **Weights:** 400 (body, meta, prose) and 650 (everything else), with one exception: the homepage tagline is 700, on purpose, so the one sentence reads heavier. The fallback fonts show 650 and 700 with the same bold file, declared as 700 in `@font-face`. Nothing else.
 - **Case:** uppercase for the site nav, platform labels, episode rows, credit names and
   about headings, written in sentence case in the markup and uppercased in CSS so
   screen readers read words. Not uppercased: the homepage tagline, the about statement,
@@ -105,17 +108,18 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 
 | Role | Size | Weight | Line height | Tracking |
 |------|------|--------|-------------|----------|
-| wordmark | `clamp(250px, 34vw, 520px)` wide | 700 | 0 (reset) | |
-| site nav | `clamp(2rem, 5vw, 4rem)` · `8vw` below 46rem | 700 | 1 | |
-| tagline | `clamp(1.35rem, 3vw, 3.75rem)` · `6vw` below 46rem | 700 | 1.2 | 0.01em |
-| about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 700 | 1.2 | 0.01em |
-| heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` · season title `10vw` below 46rem | 700 | 1.2 | 0.01em |
-| sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 700 | 1.2 | 0.01em |
-| row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 700 | 1.2 | 0.01em |
-| mobile open episode heading | `1.15rem` | 700 | 1.2 | 0.01em |
-| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 700 | 1.2 | 0.01em |
+| wordmark | `clamp(250px, 34vw, 520px)` wide | 650 | 0 (reset) | |
+| site nav | `clamp(2rem, 5vw, 4rem)` · `8vw` below 46rem | 650 | 1 | |
+| tagline | `clamp(1.75rem, 3.9vw, 5rem)` (about 2.5 lines on desktop) · `8vw` below 46rem | 700 | 1.2 | 0.01em |
+| tagline subline | `clamp(1rem, 1.5vw, 1.125rem)` | 400 | 1.6 | |
+| about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 650 | 1.2 | 0.01em |
+| heading: credits intro / season title / quote | `clamp(1.6rem, 4vw, 3.25rem)` · season title `10vw` below 46rem | 650 | 1.2 | 0.01em |
+| sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 650 | 1.2 | 0.01em |
+| row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 650 | 1.2 | 0.01em |
+| mobile open episode heading | `1.15rem` | 650 | 1.2 | 0.01em |
+| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 650 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
-| label | `clamp(0.875rem, 1.2vw, 1rem)` | 700 | 1.2 | |
+| label | `clamp(0.875rem, 1.2vw, 1rem)` | 650 | 1.2 | |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |
 
 ## Spacing & layout
@@ -240,6 +244,8 @@ fluid, up to 1.25rem, so the six items stay on one line down to 320px.
 The homepage's one sentence, bold, in sentence case and all `--fg`, wrapping edge
 to edge. No lit phrases.
 
+**Subline (`.tagline-sub`).** One sentence under the tagline in `--prose`, at the prose size, full width, prose line height 1.6. It sits `--space-s` under the tagline and carries the gap down to the list, so the tagline's bottom margin is `--space-s` and the subline's is `--space-xl` plus `--space-m`. It enters with the tagline, on the same beat.
+
 Above: `--space-xl`, or `--space-xl` plus `--space-m` under 46rem. Below: `--space-xl`
 plus `--space-m`, plus `.episodes-layout`'s `--space-m` padding, so the sentence stands clear of both the masthead and the cover.
 
@@ -337,7 +343,8 @@ native accordion just toggles.
 
 ### Credit card
 The whole card links to that person's LinkedIn: circular portrait
-(`clamp(150px, 24vw, 360px)`, `object-fit: cover`), bold uppercase name, role in
+(`clamp(150px, 24vw, 360px)`, `object-fit: cover`), shown in black and white
+(`grayscale(1)`) and turning to full colour over 0.6s (`--ease-drift`) on hover or keyboard focus, bold uppercase name, role in
 `--fg` and country in `--muted`. Three across, one below 46rem.
 
 **Team line.** `.credits-lede` introduces the grid: "Meet the people behind the
@@ -514,6 +521,17 @@ absolute `https://spreadthefuture.com/credits/#sent`; Web3Forms requires a
 full URL on the same domain. A failed `fetch` falls back to that ordinary post,
 so a written message is never lost to a network error. Closing the panel clears
 `.is-sent` and resets the form, so the next message starts clean.
+
+### Institutions
+A `<section class="institutions">` between the episode list and the quotes,
+`--space-xl` margin above plus `--space-m` padding above and below, so it sits
+`--space-xl` + `--space-m` clear of the episode list and the quotes. Centred heading "Executive-level speakers" at the season title's size, bold uppercase,
+then a line at the prose size in `--prose` `--space-s` below, then `--space-m` down to a wrapping, centred flex row of white logos from
+`assets/institutions-logos/` (`<ul class="institutions-logos">`, one `<li><img>` each).
+Every logo has the same height, `clamp(3rem, 6vw, 5.5rem)`, a width cap of
+`min(60vw, 18rem)` and `0.85` opacity; gaps are `--space-m` by `--space-xl` (`--space-m`
+both ways below 46rem). To add one, add an `<li>`; no CSS change. Currently WWF EPO,
+Europe Jacques Delors, IHP, The Good Lobby and the Albanian ministry.
 
 ### Quotes
 The homepage's closing block, `--space-xl` below the list. A `<section class="quotes">`
