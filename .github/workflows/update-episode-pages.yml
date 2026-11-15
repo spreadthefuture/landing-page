@@ -1,9 +1,18 @@
 name: Update episode pages
 
-# Manual only. Rebuilds the share pages in episode/ from scripts/episode-template.html,
-# episodes.json and links.json. Run "Update episodes" first when a new episode is out.
+# Rebuilds every share page in episode/ from scripts/episode-template.html,
+# episodes.json and episode-details.json. Runs automatically when any of those
+# (or the script) change on main, and can also be run by hand.
+# Run "Update episodes" first when a new episode is out.
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/episode-template.html
+      - scripts/episode_pages.py
+      - episodes.json
+      - episode-details.json
 
 permissions:
   contents: write

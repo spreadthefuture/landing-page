@@ -11,19 +11,19 @@ at deploy time.
 
 ```
 .
-├── index.html              # home: episode list and accordion
+├── index.html              # home: episode carousel
 ├── credits/index.html      # the people behind the podcast, served at /credits/
 ├── about/index.html        # about page, served at /about/
 ├── 404.html                # not found page, served by GitHub Pages for any missing path
 ├── CNAME                   # custom domain for GitHub Pages, do not delete
 ├── favicon.ico             # browser tab icon, 16 to 64px, rendered from assets/logos/favicon.svg
 ├── styles.css              # all styling, for every page
-├── script.js               # optional enhancements: row slides, cover crossfade, quote rotation
+├── script.js               # optional enhancements: carousel, quote rotation, phone menu, contact form
 ├── episodes.json           # generated episode data, do not hand edit
-├── links.json              # hand maintained per-episode platform URLs
+├── episode-details.json    # hand maintained per-episode platform URLs, share descriptions and roles
 ├── episode/                # generated share page per episode, e.g. /episode/s1e7/, do not hand edit
 ├── scripts/
-│   ├── build.py            # fetches the RSS feed and generates the episode list
+│   ├── build.py            # fetches the RSS feed and generates the homepage carousel
 │   ├── episode_pages.py    # renders episode/ from the template
 │   └── episode-template.html  # the episode page, with its last updated date
 ├── assets/
@@ -32,8 +32,9 @@ at deploy time.
 │   ├── platforms/          # streaming platform icons
 │   ├── social/             # footer social icons
 │   ├── credits-photos/     # portraits for the credits page
+│   ├── institutions-logos/ # logos of the institutions guests lead, on the homepage
 │   └── about-photos/       # photos for the about page
-└── .github/workflows/      # feed and episode page workflows (manual trigger)
+└── .github/workflows/      # feed and episode page workflows
 ```
 
 ## Episodes
@@ -44,8 +45,10 @@ Episode content is generated from the podcast RSS feed
 A GitHub Actions workflow fetches the feed and commits the generated output. The workflow is triggered manually (`workflow_dispatch`), meaning new episodes appear only when someone runs it.
 
 Each episode also gets a standalone share page in `episode/`, rendered by
-`scripts/episode_pages.py` from `scripts/episode-template.html`. Run it after the
-feed update, locally or with the "Update episode pages" workflow (also manual).
+`scripts/episode_pages.py` from `scripts/episode-template.html`. The "Update episodes"
+workflow runs it right after the feed update. To run it on its own, use it locally or
+start the "Update episode pages" workflow, which also runs by itself when a push to `main` changes the template, the script, `episodes.json` or
+`episode-details.json`, so every page picks up template edits.
 
 ## Listen to it here
 

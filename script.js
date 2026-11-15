@@ -1,9 +1,6 @@
-// Enhancement only: the site is complete with this file absent, the page just
-// jumps on open, the covers pop instead of crossfading, and the quotes stack.
-//
-// One .episodes-layout holds the page's single cover panel and, beside it, every
-// season's list. The panel answers to any row in any of those lists; the loop is
-// still written per layout so a second one would work on its own.
+// Enhancement only: the site is complete with this file absent. The homepage's
+// covers sit in a row that scrolls sideways, the quotes stack, and the phone
+// menu and contact overlay simply open.
 
 // No right-click "Save image" on any image (styles.css also turns off dragging
 // and the iOS long-press menu).
@@ -11,306 +8,385 @@ document.addEventListener('contextmenu', (event) => {
   if (event.target instanceof HTMLImageElement) event.preventDefault();
 });
 
-// Rows slide open and closed. In the mobile feed (styles.css, below 46rem) every
-// row is a cover, and a tap also brings that episode's title a third of the way
-// down the screen.
-const feed = window.matchMedia('(max-width: 46rem)');
+// Phones (styles.css, below 46rem), reduced motion, and the one fold the site
+// uses to slide things open and shut: the phone menu here, on a cubic ease in
+// and out, so the fold starts as gently as it lands.
+const phone = window.matchMedia('(max-width: 46rem)');
 const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
-const FEED_DURATION = 500;
-// Ease in and out, so the fold starts as gently as it lands.
-const feedEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
+const FOLD_DURATION = 500;
+const foldEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
 
-for (const layout of document.querySelectorAll('.episodes-layout')) {
-  const lists = layout.querySelectorAll('.episodes');
-  const artPanel = layout.querySelector('.episode-art-panel');
-  const episodes = [...layout.querySelectorAll('.episode')];
-  if (!lists.length) continue;
+// The homepage's carousel of episode covers. One float, `pos`, is the
+// carousel's whole state: the cover nearest to it is centred. Every cover is
+// drawn from its signed distance `d` to `pos`, so dragging, gliding and
+// snapping are all just `pos` changing. It loops: distances wrap, so the last
+// cover sits beside the first.
+//
+// Motion is a damped spring rather than a timed curve. A spring starts from
+// whatever speed the covers already have, so a flick hands its momentum
+// straight to the glide and an interrupted glide never jerks; and, slightly
+// under-damped, it passes the cover by a hair and settles back onto it.
+(() => {
+  const root = document.querySelector('.carousel');
+  if (!root) return;
+  const stage = root.querySelector('.carousel-stage');
+  const slides = [...stage.children];
+  const captionBox = root.querySelector('.carousel-captions');
+  const n = slides.length;
+  const reduce = calm.matches;
 
-  // The accordion is exclusive (<details name="episode">), but the browser closes
-  // the other row instantly, which would cut its closing slide short. So with
-  // this file present, exclusivity is done here instead: the name comes off, and
-  // the click handler below closes the open row itself, with the slide.
-  let current = null;
-
-  for (const details of episodes) {
-    details.removeAttribute('name');
-    details.addEventListener('toggle', () => {
-      if (details.open) {
-        current = details;
-      } else if (current === details) {
-        current = null;
-      }
-    });
-  }
-
-  // One motion at a time drives every sliding panel and the scroll together,
-  // from a single frame loop on a single curve, so the page never moves on one
-  // clock and the panels on another. A tap mid-motion starts a new one from
-  // wherever everything currently is. Closing only clears `open` once the fold
-  // has finished, so the text stays visible while it folds; .is-closing marks
-  // that fold, so the toggle turns back at the tap, not at the end.
-  const root = document.documentElement;
-  let motion = null;
-  let frame = null;
-
-  const measure = (details, opening) => {
-    const panel = details.querySelector('.episode-panel');
-    const from = details.open ? panel.getBoundingClientRect().height : 0;
-    details.open = true;
-    details.classList.toggle('is-closing', !opening);
-    panel.style.height = '';
-    // The laid-out height, not scrollHeight: that also counts the text's
-    // drift-in offset, so the fold overshot and snapped back a few pixels.
-    const to = opening ? panel.getBoundingClientRect().height : 0;
-    panel.style.overflow = 'hidden';
-    panel.style.height = `${from}px`;
-    return { panel, from, to };
-  };
-
-  const tick = (now) => {
-    const m = motion;
-    m.start ??= now;
-    const t = calm.matches ? 1 : Math.min((now - m.start) / FEED_DURATION, 1);
-    const e = feedEase(t);
-
-    for (const { panel, from, to } of m.panels.values()) {
-      panel.style.height = `${from + (to - from) * e}px`;
-    }
-
-    // The focus's place on screen is what eases, from where it was tapped to
-    // topTo, so it travels one way only however the rows above it fold. Read after the heights are written, so this frame's fold counts.
-    // Scrolled to a whole pixel, worked out from the page position rather than
-    // nudged by the fractional difference: browsers round the scroll, and those
-    // sub-pixel nudges made the slow end of the ease shiver up and down. Floored,
-    // so the list only ever lands a fraction low, never high enough to pull the
-    // sticky cover up with it.
-    if (m.focus) {
-      const top = m.focus.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo(0, Math.floor(top - (m.topFrom + (m.topTo - m.topFrom) * e)));
-    }
-
-    if (t < 1) {
-      frame = requestAnimationFrame(tick);
-      return;
-    }
-    for (const [details, { panel, to }] of m.panels) {
-      panel.style.height = '';
-      panel.style.overflow = '';
-      if (!to) details.open = false;
-      details.classList.remove('is-closing');
-    }
-    motion = null;
-    frame = null;
-    root.classList.remove('is-list-moving');
-  };
-
-  // The cover is sticky inside this layout, and lets go once the list beside it
-  // ends above its bottom, which easing one of the last rows up to the cover's
-  // top would do. So the focus stops as far down as it takes for the cover to
-  // stay where it is (or to reach its pinned place and stop there, if it is
-  // still below it). `most` is how far the page may scroll up: until the list's
-  // bottom, once every panel has reached its height, meets the cover's bottom,
-  // or until the cover's own place in the flow meets it, when the list is the
-  // shorter of the two (a tall cover on a big screen).
-  // Measured in fractional pixels, and a cover within a pixel of its sticky
-  // offset counts as pinned, so a sub-pixel slip is never taken as the new place
-  // to hold: that ratcheted it up a little every open.
-  const seasonsColumn = layout.querySelector('.seasons');
-  const coverFloor = (focus, panels) => {
-    let before = 0;
-    let all = 0;
-    for (const { panel, from, to } of panels.values()) {
-      all += to - from;
-      if (focus.compareDocumentPosition(panel) & Node.DOCUMENT_POSITION_PRECEDING) before += to - from;
-    }
-    const pinTop = parseFloat(getComputedStyle(artPanel).top) || 0;
-    const cover = artPanel.getBoundingClientRect();
-    const hold = cover.top > pinTop - 1 ? pinTop : cover.top;
-    const flowTop = layout.getBoundingClientRect().top + parseFloat(getComputedStyle(layout).paddingTop);
-    const listBottom = seasonsColumn.getBoundingClientRect().bottom + all;
-    const most = Math.max(listBottom - cover.height, flowTop) - hold;
-    return focus.getBoundingClientRect().top + before - most;
-  };
-
-  // changes: [details, opening] pairs. focus: the element whose place on screen
-  // eases to topTo while everything moves.
-  const run = (changes, focus, topTo) => {
-    const targets = new Map();
-    if (motion) for (const [details, { to }] of motion.panels) targets.set(details, to > 0);
-    for (const [details, opening] of changes) targets.set(details, opening);
-    const panels = new Map([...targets].map(([details, opening]) => [details, measure(details, opening)]));
-    if (focus && artPanel && !feed.matches) topTo = Math.max(topTo, coverFloor(focus, panels));
-    motion = {
-      panels,
-      focus,
-      topFrom: focus ? focus.getBoundingClientRect().top : 0,
-      topTo,
-      start: null,
-    };
-    root.classList.add('is-list-moving');
-    frame ??= requestAnimationFrame(tick);
-  };
-
-  // Where an opening row's motion ends: which element eases, and to what height
-  // on screen.
-  const landing = (details) => {
-    const summary = details.querySelector('.episode-summary');
-
-    // The feed: the open text's title is what lands at its scroll-margin-top (a
-    // third of the way down), not the cover above it.
-    if (feed.matches) {
-      const heading = details.querySelector('.episode-heading');
-      return [heading, parseFloat(getComputedStyle(heading).scrollMarginTop) || 0];
-    }
-
-    // Desktop: the opening row eases up until its top rule lines up with the top
-    // of the cover, which is the panel's sticky offset. The first row already sits
-    // level with the cover, so that offset is exactly where the panel pins, and
-    // every row below it lands on the same line. Without a panel there is nothing
-    // to line up with, so the row just holds still under the pointer.
-    if (!artPanel) return [summary, Math.max(summary.getBoundingClientRect().top, 0)];
-    return [summary, parseFloat(getComputedStyle(artPanel).top) || 0];
-  };
-
-  // Opens a row, closing whichever one is open. On a row that is already open it
-  // only brings it into place.
-  const open = (details) => {
-    const changes = current && current !== details ? [[current, false], [details, true]] : [[details, true]];
-    current = details;
-    run(changes, ...landing(details));
-  };
-
-  layout.addEventListener('click', (event) => {
-    const summary = event.target.closest('.episode-summary');
-    if (!summary) return;
-    const details = summary.closest('.episode');
-
-    event.preventDefault();
-    // Closing holds the row where it is, except near the end of the list on
-    // desktop, where the rows ease down just enough that the cover stays put.
-    if (current === details) {
-      current = null;
-      if (feed.matches) run([[details, false]], null);
-      else run([[details, false]], summary, summary.getBoundingClientRect().top);
-      return;
-    }
-    open(details);
+  // Caption per slide, moved out of the slide into the shared block.
+  const captions = slides.map((slide) => {
+    const c = slide.querySelector('.caption');
+    captionBox.appendChild(c);
+    return c;
   });
 
-  // A link elsewhere on the page to a row (a quote's, by the row's label, e.g.
-  // #S2E1) opens that row and carries the page up to it on the same motion,
-  // instead of jumping to a closed row. The hash stays out of the address bar.
-  document.addEventListener('click', (event) => {
-    const link = event.target.closest('a[href^="#"]');
-    const details = link && document.getElementById(link.hash.slice(1));
-    if (!details || !episodes.includes(details)) return;
-    event.preventDefault();
-    open(details);
-  });
+  // Shape of the fan. A cover shrinks by SCALE per step away from the centre,
+  // and its centre sits at S * REACH * (1 - EASE^a), so outer covers tuck behind
+  // the inner ones and only a sliver of each shows.
+  const SCALE = 0.8, REACH = 2.4, EASE = 0.8, FADE_FROM = 3.6, FADE_TO = 5;
 
-  if (!artPanel) continue;
+  // HOLD: how long a cover rests, once settled, before autoplay moves on.
+  const HOLD = 3000;
 
-  // Row hover swaps the panel's cover only on pointer devices with real hover;
-  // touch would otherwise leave the wrong cover showing after a tap.
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  // Springs. OMEGA sets the speed (higher is quicker); DAMPING below 1 lets the
+  // covers overshoot, measured from rest: 0.863 passes the cover by 0.4% of a
+  // step, 0.81 by 1.2%. Autoplay is the slower, calmer of the two; a gesture
+  // answers the hand more briskly and lands with a touch more give.
+  const SPRING_AUTO = { omega: 7.5, damping: 0.863 };
+  const SPRING_HAND = { omega: 10, damping: 0.81 };
+  // A slow gesture settles with no bounce at all: the same speed, critically
+  // damped. Only a fast one (past FAST, below) earns SPRING_HAND's 1.2%.
+  const SPRING_SOFT = { omega: 10, damping: 1 };
+  // While a trackpad swipe is under way the covers follow it continuously on
+  // a stiff spring that only smooths the events, never steering to a cover.
+  const SPRING_FOLLOW = { omega: 30, damping: 1, follow: true };
 
-  // The persistent cover to the left of the list: the newest episode's art until
-  // the pointer visits a row, then that row's, held after the pointer leaves, and
-  // the open row's whenever one is expanded. Two stacked <img> layers so a change crossfades instead of
-  // popping: the incoming cover loads into the hidden layer, then swap which one
-  // carries .is-active and CSS transitions the opacity.
-  const layers = artPanel.querySelectorAll('.episode-art-layer');
-  let activeLayer = 0;
-  let currentSrc = null;
-  let openSrc = null;
-  // The row whose cover the panel shows, so a click on the cover opens that row.
-  let shownRow = episodes[0];
+  // A gesture can travel as many covers as it likes, but always lands on one.
+  // Leaving the cover you are on is easy: STEP (a fraction of a cover) or a
+  // quick flick is enough, and short of that the covers spring back. Every
+  // cover after that has to be earned: the gesture must pass the halfway
+  // point to it, so a swipe meant for one cover does not slip into a second.
+  // THROW is how far a release's speed carries, in seconds of that speed.
+  // Going past more than one cover takes speed: below FAST (covers per
+  // second) a release does not throw and a trackpad swipe moves one cover at
+  // most, however long its inertia runs. A slow drag still lands wherever the
+  // hand took it.
+  const STEP = 0.15, FLICK = 0.6, THROW = 0.1, FAST = 3;
 
-  // Seasons render newest first and rows newest first within a season, so the
-  // first cover in the markup is the latest episode's.
-  const firstCover = layout.querySelector('.episode-art');
-  const defaultSrc = firstCover ? firstCover.src : null;
-
-  // Applied once per frame, with the last cover asked for. Moving from one row
-  // to the next fires leave and enter together; swapping on both would flip the
-  // layers back before the browser draws, so the new cover would replace the old
-  // one in place, with no crossfade.
-  let pendingSrc = null;
-  let swapFrame = null;
-
-  const showArt = (src) => {
-    if (!src) return;
-    pendingSrc = src;
-    swapFrame ??= requestAnimationFrame(() => {
-      swapFrame = null;
-      if (pendingSrc === currentSrc) return;
-      currentSrc = pendingSrc;
-      const next = layers[1 - activeLayer];
-      // An <img> keeps painting its old image until the new src decodes, so the
-      // incoming layer would fade in carrying the cover from two hovers ago.
-      // .is-loading hides its pixels until then, leaving the frame's own dark
-      // square visible, and the load handler brings the real cover back.
-      next.classList.add('is-loading');
-      next.src = currentSrc;
-      const reveal = () => {
-        if (next.src === currentSrc) next.classList.remove('is-loading');
-      };
-      if (next.complete && next.naturalWidth) reveal();
-      else next.addEventListener('load', reveal, { once: true });
-      next.classList.add('is-active');
-      layers[activeLayer].classList.remove('is-active');
-      activeLayer = 1 - activeLayer;
-    });
+  // Whole covers travelled for a gesture that has gone `i` covers (signed).
+  const stepsFor = (i) => {
+    const a = Math.abs(i);
+    return a < STEP ? 0 : Math.sign(i) * Math.max(1, Math.round(a));
   };
 
-  showArt(defaultSrc);
+  let S = stage.clientHeight;
+  let pos = 0, vel = 0, target = 0, spring = null, running = false;
+  let active = -1, timer = 0, dragging = false;
 
-  // The covers live on a remote CDN and every row's own <img> is display: none
-  // on desktop, so nothing is in cache when the pointer arrives. Once the page
-  // is idle, fetch them all so the dark square is a blink at most.
-  const warmCovers = () => {
-    for (const cover of layout.querySelectorAll('.episode-art')) {
-      const img = new Image();
-      img.src = cover.src;
-    }
-  };
-  if ('requestIdleCallback' in window) requestIdleCallback(warmCovers, { timeout: 3000 });
-  else setTimeout(warmCovers, 1200);
+  // Entrance. Every cover waits, stacked and invisible behind the centre one,
+  // until the homepage's own entrance reaches the carousel (ENTRANCE_AT, the
+  // beat styles.css gives the tagline's next block: 1.85s on arrival, after the
+  // wordmark, and 0.4s back on the page later in the visit) and a quarter of it
+  // is in view. Then they fan out to their places, the centre first and each
+  // step outward INTRO_STAGGER behind, on a long ease-out; the caption follows
+  // as they land. Gestures and autoplay wait for the fan to open (`ready`).
+  const INTRO_DUR = 1100, INTRO_STAGGER = 60, INTRO_FADE = 500, CAPTION_AT = 550;
+  const ENTRANCE_AT = reduce ? 0 : document.documentElement.classList.contains('is-return') ? 400 : 1850;
+  let introT0 = -1, introOn = !reduce, ready = false, captionsOn = false;
+  const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5);
+  const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
-  for (const details of layout.querySelectorAll('.episode')) {
-    const cover = details.querySelector('.episode-art');
-    details.addEventListener('toggle', () => {
-      if (details.open) {
-        shownRow = details;
-        openSrc = cover ? cover.src : null;
-        showArt(openSrc || defaultSrc);
-      } else if (cover && cover.src === openSrc) {
-        openSrc = null;
+  const mod = (v) => ((v % n) + n) % n;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const dist = (i) => mod(i - pos + n / 2) - n / 2; // signed, -n/2 .. n/2
+
+  function draw() {
+    const now = performance.now();
+    slides.forEach((slide, i) => {
+      const d = dist(i);
+      const a = Math.abs(d);
+      let x = Math.sign(d) * S * REACH * (1 - Math.pow(EASE, a));
+      let op = 1 - clamp((a - FADE_FROM) / (FADE_TO - FADE_FROM), 0, 1);
+      let y = 0;
+      if (introOn) {
+        // Before the entrance starts introT0 is -1 and everything sits at 0.
+        const t = introT0 < 0 ? 0 : now - introT0 - Math.round(a) * INTRO_STAGGER;
+        const p = easeOutQuint(clamp(t / INTRO_DUR, 0, 1));
+        x *= p;
+        y = (1 - p) * 6; // the site's 0.375rem drift
+        op *= easeInOut(clamp(t / INTRO_FADE, 0, 1));
       }
+      slide.style.transform = `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0) scale(${Math.pow(SCALE, a).toFixed(4)})`;
+      slide.style.opacity = op.toFixed(3);
+      slide.style.zIndex = String(1000 - Math.round(a * 20));
+      slide.style.visibility = op === 0 ? 'hidden' : 'visible';
     });
+    // The caption follows where the covers are going, not where they are, so
+    // it changes the moment a glide starts and the overshoot cannot flick it.
+    setCaption(mod(Math.round(spring ? target : pos)));
   }
 
-  if (finePointer.matches) {
-    for (const summary of layout.querySelectorAll('.episode-summary')) {
-      const cover = summary.closest('.episode').querySelector('.episode-art');
-      // No leave handler: the panel holds the last cover the pointer visited
-      // rather than snapping back to the newest episode between rows.
-      summary.addEventListener('mouseenter', () => {
-        shownRow = summary.closest('.episode');
-        showArt(cover.src);
+  function setCaption(i) {
+    if (!captionsOn || i === active) return;
+    active = i;
+    captions.forEach((c, j) => c.classList.toggle('is-active', j === active));
+    slides.forEach((sl, j) => sl.classList.toggle('is-active', j === active));
+  }
+
+  function introFrame() {
+    draw();
+    const total = INTRO_DUR + Math.ceil(FADE_TO) * INTRO_STAGGER;
+    if (performance.now() - introT0 < total) { requestAnimationFrame(introFrame); return; }
+    introOn = false; ready = true;
+    draw();
+    schedule();
+  }
+
+  function start() {
+    if (introT0 >= 0) return;
+    introT0 = performance.now();
+    if (reduce) {
+      // Under reduced motion the fan is simply there, faded in.
+      root.style.opacity = '';
+      root.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, easing: 'ease-in-out' });
+      ready = captionsOn = true;
+      draw();
+      return;
+    }
+    requestAnimationFrame(introFrame);
+    setTimeout(() => { captionsOn = true; draw(); }, CAPTION_AT);
+  }
+
+  // One frame loop, stepping the spring in small fixed slices so it behaves
+  // the same at 60Hz and 120Hz and survives a dropped frame.
+  let last = 0;
+  function frame(now) {
+    if (!spring) { running = false; return; }
+    const dt = Math.min(0.05, (now - last) / 1000 || 1 / 60);
+    last = now;
+    const { omega, damping } = spring;
+    const h = 1 / 480;
+    for (let t = 0; t < dt; t += h) {
+      const acc = -omega * omega * (pos - target) - 2 * damping * omega * vel;
+      vel += acc * h;
+      pos += vel * h;
+    }
+    // Settled once within a fraction of a pixel and all but still, so the
+    // 3s hold starts when the eye sees the cover stop, not after the tail.
+    if (Math.abs(pos - target) < 0.001 && Math.abs(vel) < 0.01) {
+      pos = target; vel = 0; spring = null;
+      draw();
+      running = false;
+      schedule();
+      return;
+    }
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  function go(to, preset = SPRING_HAND, v = vel, instant = false) {
+    clearTimeout(timer);
+    if (reduce) { jump(to, instant); return; }
+    target = to;
+    vel = clamp(v, -6, 6);
+    // A critically damped spring can still pass its target if it starts
+    // towards it with more speed than omega times the distance left; cap it
+    // so "no bounce" holds for every release. Speed away from the target is
+    // kept: the covers ease to a halt and come back, without a jolt.
+    if (preset.damping >= 1 && !preset.follow && Math.sign(vel) === Math.sign(to - pos)) {
+      const cap = preset.omega * Math.abs(to - pos) * 0.9;
+      vel = clamp(vel, -cap, cap);
+    }
+    spring = preset;
+    draw();
+    if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+  }
+
+  // Reduced motion: no sliding. The covers and caption dip out, the carousel
+  // jumps, and they come back up: a crossfade, run with the Web Animations API
+  // because the site's global reduced-motion rule cuts CSS transitions. Only
+  // whole covers: the lean of a short swipe is skipped. Presses that land
+  // mid-fade just move the destination.
+  let fading = null;
+  function jump(to, instant) {
+    if (to !== Math.round(to)) return;
+    target = to;
+    if (fading) return;
+    if (instant || mod(to) === mod(Math.round(pos))) { pos = to; vel = 0; draw(); return; }
+    const els = [stage, captionBox];
+    fading = els.map((el) => el.animate([{ opacity: 1 }, { opacity: 0 }],
+      { duration: 180, easing: 'ease-in', fill: 'forwards' }));
+    fading[0].finished.then(() => {
+      pos = target; vel = 0;
+      draw();
+      els.forEach((el, k) => {
+        fading[k].cancel();
+        el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 360, easing: 'ease-out' });
       });
-    }
-
-    // Clicking the cover acts as a click on its row's summary: opens the row, or
-    // closes it if it is the open one. Mouse only: the rows themselves stay the
-    // keyboard and screen reader way in.
-    artPanel.classList.add('is-clickable');
-    artPanel.addEventListener('click', () => shownRow?.querySelector('.episode-summary').click());
+      fading = null;
+    });
   }
-}
+
+  // End of a gesture: spring to cover `to`, carrying speed `v`. The spring is
+  // softened to match that speed, so the handover neither brakes nor kicks:
+  // the covers coast on into the cover and settle, with no stop and restart.
+  function land(to, preset, v, instant = false) {
+    const d = Math.abs(to - pos);
+    const omega = d > 0.01 && Math.sign(v) === Math.sign(to - pos)
+      ? clamp(2 * preset.damping * Math.abs(v) / d, 6, preset.omega) : preset.omega;
+    go(to, { ...preset, omega }, v, instant);
+  }
+
+  // Stop the spring where it is, for the hand to take over.
+  function hold() { spring = null; vel = 0; clearTimeout(timer); }
+
+  // Autoplay: rest, then move one cover. Paused under the pointer, during a
+  // drag and while the tab is hidden; never runs under reduced motion.
+  function schedule() {
+    clearTimeout(timer);
+    if (reduce || !ready || dragging || spring || document.hidden) return;
+    timer = setTimeout(() => go(Math.round(pos) + 1, SPRING_AUTO, 0), HOLD);
+  }
+
+  // Drag: the covers track the pointer one to one (the centre cover moves
+  // under the finger), as far as it goes. On release the pointer's speed is
+  // projected a short way ahead and the covers spring to the cover that
+  // lands on, carrying that speed.
+  let startX = 0, startPos = 0, lastX = 0, lastT = 0, dragVel = 0, moved = 0;
+  const pxPerCover = () => S * REACH * (1 - EASE);
+
+  stage.addEventListener('pointerdown', (e) => {
+    if (!ready || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    hold();
+    // Press: the fan gives slightly under the hand (CSS, .is-pressed).
+    if (!reduce) stage.classList.add('is-pressed');
+    dragging = true; moved = 0; dragVel = 0;
+    startX = lastX = e.clientX; startPos = pos; lastT = performance.now();
+    stage.classList.add('is-dragging');
+  });
+  stage.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const now = performance.now();
+    const dx = e.clientX - startX;
+    moved = Math.max(moved, Math.abs(dx));
+    // Capture only once it is a drag: a captured pointer's click lands on the
+    // stage, not on the cover's link, and a plain click must reach the link.
+    if (moved > 5 && !stage.hasPointerCapture(e.pointerId)) stage.setPointerCapture(e.pointerId);
+    pos = startPos - dx / pxPerCover();
+    const dt = Math.max(1, now - lastT);
+    dragVel = 0.75 * dragVel + 0.25 * (-(e.clientX - lastX) / pxPerCover() / dt * 1000); // covers per second
+    lastX = e.clientX; lastT = now;
+    draw();
+  });
+  const release = () => {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove('is-dragging', 'is-pressed');
+    // A pointer that stopped before letting go has no speed left to hand on.
+    if (performance.now() - lastT > 80) dragVel = 0;
+    const base = Math.round(startPos);
+    const thrown = Math.abs(dragVel) > FAST ? clamp(dragVel, -6, 6) * THROW : 0;
+    let steps = stepsFor(pos + thrown - base);
+    if (!steps && Math.abs(dragVel) > FLICK) steps = Math.sign(dragVel);
+    const to = base + steps;
+    // Speed pointing away from the cover chosen (a flick back) is dropped, so
+    // the covers never lurch the wrong way first.
+    land(to, Math.abs(dragVel) > FAST ? SPRING_HAND : SPRING_SOFT,
+      Math.sign(dragVel) === Math.sign(to - pos) ? dragVel : 0, true);
+  };
+  stage.addEventListener('pointerup', release);
+  stage.addEventListener('pointercancel', release);
+
+  // A click on the centre cover follows its link to the episode page. A click
+  // on a side cover brings it to the centre instead, and a drag never clicks.
+  stage.addEventListener('click', (e) => {
+    const li = e.target.closest('.slide');
+    if (!li) return;
+    if (!ready || moved > 5) { e.preventDefault(); return; }
+    const d = dist(slides.indexOf(li));
+    if (Math.abs(d) > 0.5) { e.preventDefault(); go(Math.round(pos + d), SPRING_AUTO); }
+  });
+
+  // Trackpad swipes. While the swipe runs, the covers follow it smoothly and
+  // freely, through as many covers as it carries, never steering to one on
+  // the way (steering to each cover in turn made a long swipe brake at every
+  // cover and set off again). The landing is chosen once: when a fast swipe's
+  // inertia has died down, or when a slow one ends. The covers then spring to
+  // that cover with the speed they already have, and the rest of the inertia
+  // is ignored. Short of STEP they spring back. Below FAST a swipe moves one
+  // cover at most.
+  let wheelIdle = 0, wheelActive = false, wheelBase = 0, wheelAcc = 0;
+  let wheelT = 0, wheelSpeed = 0, wheelFast = false, wheelDone = false;
+  const LAND = 1.5; // covers per second: a fast swipe lands once it slows to this
+  function wheelLand(dir) {
+    wheelDone = true;
+    let steps = stepsFor(wheelAcc + (wheelFast ? dir * wheelSpeed * THROW : 0));
+    if (!wheelFast) steps = clamp(steps, -1, 1);
+    const to = wheelBase + steps;
+    land(to, wheelFast ? SPRING_HAND : SPRING_SOFT, vel);
+  }
+  stage.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    if (!ready) return;
+    clearTimeout(wheelIdle);
+    wheelIdle = setTimeout(() => {
+      wheelActive = false;
+      if (!wheelDone) wheelLand(0);
+    }, 160);
+    const now = performance.now();
+    const delta = e.deltaX / (S * 1.5);
+    const fresh = !wheelActive;
+    if (fresh) { wheelT = now - 16; wheelSpeed = 0; }
+    // Smoothed speed, so a single large event does not count as fast.
+    wheelSpeed = 0.7 * wheelSpeed + 0.3 * Math.abs(delta) / Math.max(8, now - wheelT) * 1000;
+    wheelT = now;
+    // A new swipe: a first event, or fingers speeding up again after landing.
+    if (fresh || (wheelDone && wheelSpeed > FAST)) {
+      wheelActive = true; wheelDone = false; wheelAcc = 0;
+      wheelFast = wheelSpeed > FAST;
+      wheelBase = Math.round(spring ? target : pos);
+      clearTimeout(timer);
+    }
+    if (wheelDone) return; // the tail of inertia after landing
+    if (wheelSpeed > FAST) wheelFast = true;
+    wheelAcc += delta;
+    // A slow swipe's surplus is not banked, so turning back answers at once.
+    if (!wheelFast) wheelAcc = clamp(wheelAcc, -1.4, 1.4);
+    if (wheelFast && wheelSpeed < LAND) { wheelLand(Math.sign(delta)); return; }
+    go(wheelBase + wheelAcc, SPRING_FOLLOW);
+  }, { passive: false });
+
+  root.addEventListener('keydown', (e) => {
+    if (!ready) return;
+    const from = Math.round(spring || fading ? target : pos);
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(from + 1, SPRING_SOFT); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(from - 1, SPRING_SOFT); }
+    // Enter on the carousel itself opens the centre cover's episode.
+    if (e.key === 'Enter' && e.target === root) location.href = slides[mod(from)].querySelector('a').href;
+  });
+
+  document.addEventListener('visibilitychange', schedule);
+  addEventListener('resize', () => { S = stage.clientHeight; draw(); });
+  stage.addEventListener('dragstart', (e) => e.preventDefault());
+
+  draw();
+  if (reduce) root.style.opacity = '0';
+  const begin = () => setTimeout(start, Math.max(0, ENTRANCE_AT - performance.now()));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((en) => en.isIntersecting)) { io.disconnect(); begin(); }
+    }, { threshold: 0.25 });
+    io.observe(root);
+  } else {
+    begin();
+  }
+})();
 
 // The phone header's menu (below 46rem): the plus beside the wordmark slides
-// About and Credits open under it, on the feed's duration and curve, and folds
+// About and Credits open under it, on the site's fold, and folds
 // them away again. A second tap mid-motion turns it from wherever it is.
 // Without this file the nav simply stays open.
 const menuToggle = document.querySelector('.menu-toggle');
@@ -332,8 +408,8 @@ if (menuToggle && siteNav) {
     let start = null;
     const tick = (now) => {
       start ??= now;
-      const t = calm.matches ? 1 : Math.min((now - start) / FEED_DURATION, 1);
-      siteNav.style.height = `${from + (to - from) * feedEase(t)}px`;
+      const t = calm.matches ? 1 : Math.min((now - start) / FOLD_DURATION, 1);
+      siteNav.style.height = `${from + (to - from) * foldEase(t)}px`;
       if (t < 1) {
         menuFrame = requestAnimationFrame(tick);
         return;
@@ -355,7 +431,7 @@ if (menuToggle && siteNav) {
   });
 }
 
-// Quotes after the episode list. Without this they stack; with it they share one
+// Quotes at the end of the homepage. Without this they stack; with it they share one
 // spot and rotate. Each bar's fill animation (styles.css) is the timer: when the
 // active one finishes, the next quote comes up, so hover, focus and reduced motion
 // pause or stop the rotation from CSS alone.
@@ -467,7 +543,7 @@ if (contactOverlay && contactOpeners.length) {
     const opening = contactOverlay.classList.contains('is-sent')
       ? contactOverlay.querySelector('.contact-close')
       : firstField;
-    if (open && !feed.matches) opening?.focus({ preventScroll: true });
+    if (open && !phone.matches) opening?.focus({ preventScroll: true });
     else lastOpener.focus({ preventScroll: true });
   };
 

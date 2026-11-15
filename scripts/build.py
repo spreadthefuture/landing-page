@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch the STF podcast RSS feed, write episodes.json, render it into index.html.
+"""Fetch the STF podcast RSS feed, write episodes.json, render its carousel into index.html.
 
 Standard library only. Run manually or via .github/workflows/update-episodes.yml:
 
@@ -23,9 +23,10 @@ FEED_URL = "https://anchor.fm/s/469ddf8c/podcast/rss"
 ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = ROOT / "episodes.json"
 PAGE_FILE = ROOT / "index.html"
-# Hand-maintained, never written by this script: the feed only carries one link per
-# episode, and we want our own Spotify / Apple / Deezer / YouTube URLs instead.
-LINKS_FILE = ROOT / "links.json"
+# Hand-maintained, never written by this script: what the feed does not carry about
+# each episode. Our own Spotify / Apple / Deezer / YouTube URLs (the feed has one link
+# only), the share description, and the role line under the carousel title.
+DETAILS_FILE = ROOT / "episode-details.json"
 
 START = "<!-- episodes:start -->"
 END = "<!-- episodes:end -->"
@@ -35,16 +36,10 @@ PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
 
 ITUNES = "{http://www.itunes.com/dtds/podcast-1.0.dtd}"
 
-# Seasons the site announces before the feed has anything for them: they render
-# through #season-upcoming-template as a heading ending in "coming soon", with
-# no cover and no rows. A season listed here that does have episodes renders as
-# normal, so this only ever needs pruning once a season has landed.
-ANNOUNCED_SEASONS = ()
-
 # Titles carry their own season and display number ahead of the colon, e.g.
 # "S1E6: Fabio on our Relations with Objects". The season is optional so the older
 # "E06: ..." form still parses. The prefix is the source of truth for both the
-# label and the season grouping, and its season wins over itunes:season when both
+# label and the season, and its season wins over itunes:season when both
 # are present; itunes:episode is not used at all.
 NUMBER_PREFIX = re.compile(r"^\s*(?:S(?P<season>\d+))?E(?P<number>\d+)\s*[:.\-]\s*", re.IGNORECASE)
 
@@ -96,7 +91,7 @@ def parse_episode(item):
     season = match.group("season") if match else None
     if season is None:
         season = text(item, f"{ITUNES}season")
-    # The season groups the page, so every episode needs one. Season 1 predates the
+    # Every episode needs a season. Season 1 predates the
     # S#E# prefix ("E06: ...") and carries no itunes:season either, so an episode
     # with a season nowhere is one of those; anything newer always labels its own.
     if not season:
@@ -148,21 +143,9 @@ def build_data(feed_bytes):
         "feed_url": FEED_URL,
         "title": text(channel, "title"),
         "episode_count": len(episodes),
-        "seasons": sorted({e["season"] for e in episodes} | set(ANNOUNCED_SEASONS), reverse=True),
+        "seasons": sorted({e["season"] for e in episodes}, reverse=True),
         "episodes": episodes,
     }
-
-
-def group_by_season(data):
-    """[(season, episodes)] newest season first, each season newest episode first.
-
-    An announced season with nothing in the feed yet comes back with an empty
-    list, which is what render() turns into the "coming soon" block.
-    """
-    return [
-        (season, [e for e in data["episodes"] if e["season"] == season])
-        for season in data["seasons"]
-    ]
 
 
 def read_template(page, name):
@@ -178,31 +161,14 @@ def read_template(page, name):
     return textwrap.dedent(match.group(1)).strip("\n")
 
 
-def load_links():
-    if not LINKS_FILE.exists():
-        raise SystemExit(f"{LINKS_FILE.name} is missing: it holds the per-episode platform URLs")
-    return json.loads(LINKS_FILE.read_text(encoding="utf-8"))
-
-
-def build_links(episode, links, template):
-    """Render one platform link per non-empty URL in links.json, in listed order."""
-    entry = links["episodes"].get(episode["guid"])
-    if entry is None:
-        print(f"  no links.json entry for {episode['title_full']} ({episode['guid']})")
-        return ""
-    rows = [
-        fill(template, {"url": url, "name": platform["name"], "icon": platform["icon"], "key": platform["key"]})
-        for platform in links["platforms"]
-        for url in [(entry.get(platform["key"]) or "").strip()]
-        if url
-    ]
-    if not rows:
-        print(f"  no platform URLs yet for {episode['title_full']}")
-    return "\n" + "\n".join("  " + row for row in rows) + "\n" if rows else ""
+def load_details():
+    if not DETAILS_FILE.exists():
+        raise SystemExit(f"{DETAILS_FILE.name} is missing: it holds the per-episode platform URLs, share descriptions and roles")
+    return json.loads(DETAILS_FILE.read_text(encoding="utf-8"))
 
 
 def fill(template, values):
-    """Substitute placeholders against one dict, an episode or a season.
+    """Substitute placeholders against one dict, usually an episode.
 
     {{key}}   escaped, safe anywhere including attributes.
     {{{key}}} raw, for values that are already HTML such as description_html.
@@ -224,25 +190,36 @@ def fill(template, values):
     return PLACEHOLDER.sub(lambda m: html.escape(lookup(m), quote=True), filled)
 
 
-def render(seasons, templates):
-    """One <section> per season, newest first. inject() handles the indentation."""
-    blocks = []
-    for season, episodes in seasons:
-        if episodes:
-            rows = "\n".join(fill(templates["episode"], episode) for episode in episodes)
-            blocks.append(fill(templates["season"], {"season": season, "episodes": rows}))
-        else:
-            print(f"  season {season} has no episodes yet, rendering the coming-soon block")
-            blocks.append(fill(templates["season-upcoming"], {"season": season}))
-    return "\n".join(blocks)
+def render(episodes, details, templates):
+    """One carousel slide per episode, newest first. inject() handles the indentation.
+
+    Each slide links to its share page in episode/, so an episode with no S#E#
+    label (and so no page) is left out. The line under the title is the
+    episode's "role" in episode-details.json, dropped entirely when that is empty.
+    """
+    slides = []
+    for episode in episodes:
+        if not episode["label"]:
+            print(f"  no S#E# label on {episode['title_full']!r}, leaving it out of the carousel")
+            continue
+        entry = details["episodes"].get(episode["guid"])
+        if entry is None:
+            print(f"  no episode-details.json entry for {episode['title_full']} ({episode['guid']})")
+        role = ((entry or {}).get("role") or "").strip()
+        slides.append(fill(templates["slide"], {
+            **episode,
+            "slug": episode["label"].lower(),
+            "role": "\n" + fill(templates["slide-role"], {"role": role}) if role else "",
+        }))
+    return "\n".join(slides)
 
 
 def inject(page, markup):
-    """Drop the rendered seasons between the markers, at the markers' own depth.
+    """Drop the rendered slides between the markers, at the markers' own depth.
 
     The indent is read off the start marker's line rather than fixed here, so the
-    markers can be nested (they sit inside .episodes-layout, beside the page's one
-    cover) without this script needing to know how deep.
+    markers can be nested (they sit inside the carousel's stage) without this
+    script needing to know how deep.
     """
     if START not in page or END not in page:
         raise SystemExit(f"index.html is missing the {START} / {END} markers")
@@ -253,25 +230,18 @@ def inject(page, markup):
     PAGE_FILE.write_text(f"{before}{START}\n{body}\n{indent}{END}{after}", encoding="utf-8")
 
 
+def write_page(data):
+    """Render episodes.json's data into index.html, without touching the feed."""
+    page = PAGE_FILE.read_text(encoding="utf-8")
+    templates = {name: read_template(page, f"{name}-template") for name in ("slide", "slide-role")}
+    inject(page, render(data["episodes"], load_details(), templates))
+
+
 def main():
     data = build_data(fetch())
     DATA_FILE.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-
-    page = PAGE_FILE.read_text(encoding="utf-8")
-    links = load_links()
-    templates = {
-        name: read_template(page, f"{name}-template")
-        for name in ("episode", "episode-link", "season", "season-upcoming")
-    }
-    for episode in data["episodes"]:
-        episode["links"] = build_links(episode, links, templates["episode-link"])
-
-    seasons = group_by_season(data)
-    inject(page, render(seasons, templates))
-    print(
-        f"{data['episode_count']} episodes across {len(seasons)} seasons "
-        f"written to {DATA_FILE.name} and {PAGE_FILE.name}"
-    )
+    write_page(data)
+    print(f"{data['episode_count']} episodes written to {DATA_FILE.name} and {PAGE_FILE.name}")
 
 
 if __name__ == "__main__":

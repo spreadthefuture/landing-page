@@ -88,9 +88,8 @@
   /* The vw terms step up by 2.5 each (2, 5, 12.5), so the three sizes keep one
      ratio to each other as the viewport changes. */
   --space-xl: clamp(5rem, 12.5vw, 9rem);
-  /* Not a fourth gap: the air above and below the text of an episode row (and
-     the "Coming soon." row). A named value only so a season heading can take
-     it back off its own --space-s, see .season-title. */
+  /* Not a fourth gap: the air above and below each platform's column on a
+     phone's episode page, see .episode-page-link. */
   --row-pad: clamp(1.1rem, 2.2vw, 1.6rem);
   --tracking: 0.015em;
   /* The site's one motion, as two curves: opacity on ease-in-out so it fades up
@@ -182,31 +181,29 @@ a { color: inherit; text-decoration: none; }
 /* The only hover state on the site: white things glow. Every link-like thing
    takes --glow over the same 0.2s, so hovering reads identically wherever you
    are on the page. Gray never glows: where a gray link has a hover, it lifts to
-   --fg first (the per-episode listen links, prose links, the footer icons), and
-   in a row or card only the white text glows, not the gray number or country.
+   --fg first (prose links, the footer icons), and in a title or card only the
+   white text glows, not the gray number or country.
    The platform icons also shift to their brand colour (see .platform-icon). */
 .site-nav a,
 .platforms a,
-.episode-title,
+.caption-title a,
 .credit-name,
 .credit-role,
 .contact-line a,
 .episode-description a,
 .footer-links a,
-.episode-listen,
 .episode-page-link,
 .quote-link,
 .quote-source { transition: color 0.2s ease, text-shadow 0.2s ease; }
 
 .site-nav a:hover,
 .platforms a:hover,
-.episode-summary:hover .episode-title,
+.caption-title a:hover,
 .credit-link:hover .credit-name,
 .credit-link:hover .credit-role,
 .contact-line a:hover,
 .episode-description a:hover,
 .footer-links a:hover,
-.episode-listen:hover,
 .episode-page-link:hover,
 .quote-link:hover,
 .quote:has(.quote-link:hover) .quote-source { text-shadow: var(--glow); }
@@ -247,7 +244,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Sized like the about page's own section headings (§4.2 in PROJECT-CONTEXT), a step
-   up from the episode rows, since this nav is the same weight as a page heading
+   up from the row size, since this nav is the same weight as a page heading
    rather than a list item. .header-top's align-items: flex-start keeps this
    top-aligned with the wordmark. */
 .site-nav {
@@ -299,7 +296,7 @@ a { color: inherit; text-decoration: none; }
    curves are the Lottie's own (30fps keyframes, shifted to start at 1s: the
    header holds a beat without the mark before it arrives), which is why they
    are not --ease-fade / --ease-drift. The logo is the page's first beat: the
-   tagline and list below wait for its letters to land. Settled by about 2.77s.
+   tagline and carousel below wait for its letters to land. Settled by about 2.77s.
 
    The footer carries the same SVG, so there are no wrapper groups to hook onto:
    the selectors walk the SVG's structure instead (the first six letter groups
@@ -376,7 +373,7 @@ a { color: inherit; text-decoration: none; }
   gap: 0.75rem 1.75rem;
   margin-top: var(--space-m);
   font-size: clamp(0.875rem, 1.2vw, 1rem);
-  /* Bold uppercase at normal spacing, like the nav and episode rows: thin,
+  /* Bold uppercase at normal spacing, like the nav and the row size: thin,
      widely tracked small caps read as a generic template label. */
   font-weight: 650;
   text-transform: uppercase;
@@ -413,29 +410,21 @@ a { color: inherit; text-decoration: none; }
 .platform-icon--youtube { -webkit-mask-image: url(/assets/platforms/youtube.svg); mask-image: url(/assets/platforms/youtube.svg); }
 
 /* Spotify green, Apple Podcasts purple, Deezer purple, YouTube red. */
-.platforms a:hover .platform-icon--spotify,
-.episode-listen:hover .platform-icon--spotify { background-color: #1ED760; }
-.platforms a:hover .platform-icon--apple,
-.episode-listen:hover .platform-icon--apple { background-color: #A945E3; }
-.platforms a:hover .platform-icon--deezer,
-.episode-listen:hover .platform-icon--deezer { background-color: #A238FF; }
-.platforms a:hover .platform-icon--youtube,
-.episode-listen:hover .platform-icon--youtube { background-color: #FF0000; }
+.platforms a:hover .platform-icon--spotify { background-color: #1ED760; }
+.platforms a:hover .platform-icon--apple { background-color: #A945E3; }
+.platforms a:hover .platform-icon--deezer { background-color: #A238FF; }
+.platforms a:hover .platform-icon--youtube { background-color: #FF0000; }
 
 /* The site's one breakpoint, 46rem (736px), shared by every page. Full names
    wrap to 2 lines below ~582px (measured in-browser), so this leaves margin. Icon-only stays on one line down to 320px (see the fluid gap below). The rule
-   is unscoped on purpose: the header nav and the per-episode listen links both
-   mark their label with .platform-name, so they drop to icons together. */
+   is unscoped on purpose: every platform link marks its name with
+   .platform-name, so they all drop to icons together. */
 @media (max-width: 46rem) {
   .platform-icon { width: 1.25em; height: 1.25em; }
   /* Kept out of the flex flow rather than display: none, so the link keeps an
      accessible name while the 0.5em icon-to-name gap does not linger as empty
-     space. Same declarations as .visually-hidden, for the reason noted there.
-     The episode summary's number and title ride along: in the mobile feed the
-     summary shows only its cover, but still needs to be named. */
-  .platform-name,
-  .episode-summary > .episode-number,
-  .episode-summary > .episode-title {
+     space. Same declarations as .visually-hidden, for the reason noted there. */
+  .platform-name {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -447,13 +436,13 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- Tagline ---- */
 
-/* The paragraph that opens the home page, between the header and the episode
-   list. Sentence case in soft white, set nearly as large as the wordmark and on
+/* The paragraph that opens the home page, between the header and the
+   carousel. Sentence case in soft white, set nearly as large as the wordmark and on
    the page's left edge under it, wrapping naturally edge to edge like the
    wordmark above it. */
 .tagline {
   /* A full --space-xl down from the platform links, and only --space-s below:
-     .tagline-sub sits close under it and carries the gap down to the list. */
+     .tagline-sub sits close under it and carries the gap down to the carousel. */
   margin: var(--space-xl) 0 var(--space-s);
   /* Sized so the sentence runs to about two and a half lines across a desktop
      window. */
@@ -464,7 +453,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* The line under the tagline, in the prose size, gray and line height, like the
-   episode description. It carries the gap down to the list that the tagline used to. */
+   episode description. It carries the gap down to the carousel. */
 .tagline-sub {
   margin: 0 0 calc(var(--space-xl) + var(--space-m));
   color: var(--prose);
@@ -483,198 +472,212 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* ---- Seasons ---- */
-
-/* One section per season: the heading, then that season's rows. The seasons are
-   stacked in the column beside the cover, so the first one starts flush with the
-   top of that column (.episodes-layout owns the --space-m above it),
-   and season to season is --space-m. Not --space-xl: that gap is the break
-   between blocks of the page, and inside one column it opens a hole beside the
-   cover. The pairing is what carries the hierarchy instead: --space-s from a
-   heading to its own rows, --space-m from one season to the next. */
-.season + .season { margin-top: var(--space-m); }
-
-/* The credits page's "Our Team" heading at the same size and weight, just left
-   aligned on the page edge under the wordmark instead of centred: both are the one
-   line of type that names the block below it. The one departure is case: this is
-   the only heading on the site set in sentence case rather than uppercased, so
-   "Season 1" carries a single capital and reads as a label on the list rather than
-   a second masthead. No text-transform, so the markup's case is what renders.
-   No top margin, so the first heading starts level with the top of the cover
-   beside it; --space-s below pins it to its own rows, the "label to its subject"
-   gap, which also keeps it tighter to its list than to the next season. The rows
-   carry --row-pad of air above their text with no rule to show it, so that is
-   taken back off here: the visible gap is exactly --space-s, the same as from an
-   about page heading to its text. */
-.season-title {
-  margin: 0 0 calc(var(--space-s) - var(--row-pad));
-  font-size: clamp(1.6rem, 4vw, 3.25rem);
-  font-weight: 650;
-  line-height: 1.2;
-  letter-spacing: var(--tracking);
-}
-
-/* A season with nothing in the feed yet: the heading alone, then "Coming soon."
-   as its own row below, sized and weighted like an episode number so it reads
-   as the row this season doesn't have yet rather than a caption under the
-   heading. */
-.season-coming {
-  margin: 0;
-  padding: var(--row-pad) 0;
-  color: var(--muted);
-  font-weight: 650;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
-  letter-spacing: var(--tracking);
-  text-transform: uppercase;
-}
-
-/* Entrance, the about page's fade, drift and tempo: the tagline, then the cover
-   and every season together as one block, 250ms apart. Both wait for the
-   wordmark's entrance (.logo--intro): the tagline starts at 1.6s, as the
-   letters finish landing, while the bar is still drawing, 0.2s behind the rest
-   of the header (see .logo--intro above). The page is settled by about
-   3.05s. The layout's transform ends at none, so the sticky cover is
-   unaffected after. */
+/* Entrance, the about page's fade, drift and tempo: the tagline and its
+   subline, then the carousel, 250ms apart. Both wait for the wordmark's
+   entrance (.logo--intro): the tagline starts at 1.6s, as the letters finish
+   landing, while the bar is still drawing, 0.2s behind the rest of the header
+   (see .logo--intro above). With JS the carousel runs its own entrance on the
+   same beat, the covers fanning out from the centre (script.js), so this fade
+   is only for the plain row of covers it is without JS. */
 .tagline,
 .tagline-sub,
-.episodes-layout {
+:root:not(.js) .carousel {
   animation:
     fade-in 1.2s var(--ease-fade) both,
     drift-in 1.2s var(--ease-drift) both;
   animation-delay: 1.6s;
 }
 
-.episodes-layout { animation-delay: 1.85s; }
+:root:not(.js) .carousel { animation-delay: 1.85s; }
 
 /* Back on the homepage later in the visit (.is-return, see .logo--intro) the
-   wordmark is already there, so nothing waits for it: the tagline and list
-   take the other pages' tempo, 0.15s and 0.4s, settled by about 1.6s. */
+   wordmark is already there, so nothing waits for it: the tagline takes the
+   other pages' tempo, 0.15s, and the carousel follows at 0.4s (script.js). */
 .is-return .tagline,
 .is-return .tagline-sub { animation-delay: 0.15s; }
-.is-return .episodes-layout { animation-delay: 0.4s; }
 
 /* Removed outright, as on the other pages: the global rule shortens durations
    but not delays. */
 @media (prefers-reduced-motion: reduce) {
   .tagline,
   .tagline-sub,
-  .episodes-layout { animation: none; }
+  :root:not(.js) .carousel { animation: none; }
 }
 
-/* ---- Episode list ---- */
+/* ---- Carousel ---- */
 
-/* The persistent cover on the left and every season's rows on the right, once
-   for the page. The panel is a fixed width, the seasons column takes what's
-   left. Sticky is bounded by this container, so the cover travels the whole list
-   and releases at the end of the last season. No rule over the list: the
-   tagline's --space-xl + --space-m is the break, plus --space-m down to the cover and the
-   first heading. */
-.episodes-layout {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-m);
-  padding-top: var(--space-m);
-}
-
-/* Shows its own season's latest cover at rest, swaps to whichever row of that
-   season is hovered or open. script.js crossfades between the two stacked layers
-   below, and keeps each panel wired only to the list beside it; this panel never
-   has an opinion of its own about which image that is. */
-/* The cap is 620px or a third of the viewport, whichever is larger, so on very
-   wide screens the cover keeps growing instead of stopping at 620px. */
-.episode-art-panel {
-  flex: 0 0 clamp(240px, 47vw, max(620px, 100vw / 3));
-  position: sticky;
-  top: var(--gutter);
-}
-
-/* script.js adds this on real hover devices, where a click on the cover opens
-   the row it shows. */
-.episode-art-panel.is-clickable {
-  cursor: pointer;
-}
-
-.episode-art-frame {
-  position: relative;
-  aspect-ratio: 1;
+/* Every episode, newest first, as a fan of covers: the current one in the
+   centre at full size, the others shrinking and tucking behind it to each
+   side, its caption centred below. --space-xl + --space-m clear of the
+   tagline's subline above and of the institutions below. --s is the centre
+   cover's side, and every other measure of the fan is drawn from it. */
+.carousel {
+  --s: clamp(260px, min(32vw, 54vh), 520px);
+  /* Edge to edge, past the body's gutter, so the fan runs off both sides of
+     the window. Clipped sideways only, so the side covers never widen the
+     page and the covers' small vertical drift is never cut. */
+  margin-inline: calc(var(--gutter) * -1);
   overflow: hidden;
+  overflow: clip visible;
+}
+
+/* The site's focus ring (the arrow keys move the carousel, Enter opens the
+   centre episode), drawn inside the edges since the section meets the window. */
+.carousel:focus-visible { outline-offset: -2px; }
+
+/* Without JS: a row of covers that scrolls sideways, snapping to each, every
+   caption under its own cover. */
+.carousel-stage {
+  display: flex;
+  gap: var(--space-m);
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+}
+
+.slide {
+  flex: 0 0 var(--s);
+  scroll-snap-align: start;
+}
+
+.slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
   border-radius: 6px;
   background: var(--surface);
 }
 
-/* Two stacked copies of whatever cover is current. script.js loads the next
-   image into the hidden layer, then swaps which one is .is-active so the
-   opacity transition crossfades between real pixels instead of flashing
-   through an empty frame. */
-.episode-art-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.4s var(--ease-fade);
-}
+.slide .caption { margin-top: var(--space-s); }
 
-.episode-art-layer.is-active {
-  opacity: 1;
-}
-
-/* While a layer's new cover is still downloading it holds the previous image in
-   its pixels, so script.js marks it .is-loading and it stays at zero: the frame's
-   --surface square shows through instead, and the cover fades up over it the
-   moment it lands. The placeholder is the frame itself, so it costs no request
-   and is on screen before anything else. */
-.episode-art-layer.is-loading {
-  opacity: 0;
-}
-
-/* The column beside the cover: every season heading and every row. min-width: 0
-   so a long episode title wraps inside it rather than widening the flex item and
-   squeezing the cover. */
-.seasons {
-  flex: 1;
-  min-width: 0;
-}
-
-/* No horizontal bleed, so the row rules line up with the cover's left edge on one
-   side and the page gutter on the other. */
-.episodes {
-  margin: 0;
+/* With JS (the .js class is set in the head, before first paint): the stage
+   is only as tall as the centre cover, and every cover is placed from its
+   centre by script.js, so the layout never moves while they slide. */
+.js .carousel-stage {
+  display: block;
+  position: relative;
+  height: var(--s);
   padding: 0;
-  list-style: none;
+  overflow: visible;
+  cursor: grab;
+  touch-action: pan-y;
+  /* Press: the whole fan gives to 98% under the hand, quickly, and on release
+     springs back with a hair of overshoot, the carousel's own spring in CSS.
+     Off under reduced motion (script.js never adds the class). */
+  transition: transform 0.6s cubic-bezier(0.3, 1.35, 0.5, 1);
 }
 
-.episode { border-bottom: 1px solid var(--rule); }
+.js .carousel-stage.is-pressed {
+  transform: scale(0.98);
+  transition: transform 0.25s var(--ease-drift);
+}
 
-.episode-summary {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: var(--row-pad) 0;
-  cursor: pointer;
-  list-style: none;
-  font-weight: 650;
+.js .carousel-stage.is-dragging { cursor: grabbing; }
+
+.js .slide {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--s);
+  height: var(--s);
+  margin-left: calc(var(--s) / -2);
+  /* Hidden until script.js places them, so the covers never show stacked for
+     a moment before the deferred script runs. Its inline opacity takes over. */
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Each slide's text lives in its own markup and is lifted into the shared
+   captions block below by script.js. */
+.js .slide .caption { display: none; }
+
+/* Each cover links to its episode. The centre one shows it with a pointer;
+   side covers keep the grab hand, since a click only brings them to centre. */
+.slide-link {
+  display: block;
+  height: 100%;
+}
+
+.js .slide.is-active .slide-link { cursor: pointer; }
+.js .carousel-stage.is-dragging .slide-link { cursor: grabbing; }
+
+/* Captions share one grid cell, so the block is as tall as the longest and the
+   page never jumps. Out: the whole caption fades quickly. In, once the old one
+   has gone: title and role each fade and drift up, 80ms apart. The site's one
+   gesture, on its two curves. */
+.carousel-captions {
+  display: grid;
+  justify-items: center;
+  margin-top: var(--space-m);
+  padding-inline: var(--gutter);
+  text-align: center;
+}
+
+.carousel-captions:empty { display: none; }
+
+.carousel-captions .caption {
+  grid-area: 1 / 1;
+  max-width: 60ch;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s var(--ease-fade), visibility 0s linear 0.3s;
+}
+
+.carousel-captions .caption.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+.carousel-captions .caption.is-active > * {
+  animation:
+    fade-in 0.7s var(--ease-fade) 0.3s both,
+    drift-in 0.7s var(--ease-drift) 0.3s both;
+}
+
+.carousel-captions .caption.is-active > :nth-child(2) { animation-delay: 0.38s; }
+
+/* The row size: number in gray, title in --fg, the title glowing on hover. */
+.caption-title {
+  margin: 0;
   font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+  font-weight: 650;
+  line-height: 1.2;
   letter-spacing: var(--tracking);
   text-transform: uppercase;
 }
 
-.episode-summary::-webkit-details-marker { display: none; }
-
-.episode-number { flex: none; color: var(--muted); }
-
-/* Wrap instead of truncating: the full title must stay legible at every
-   width, so a long one takes a second line (or more) rather than being cut. */
-.episode-title {
-  flex: 1;
-  min-width: 0;
+.caption-label {
+  margin-right: 0.35em;
+  color: var(--muted);
 }
 
-/* The open/close affordance from the mockup. Sized and weighted in em so it
-   scales with the row's own bold text instead of sitting at a fixed size. */
-.episode-toggle,
+/* The guest's position, at the prose size in --prose, pinned to the title
+   with --space-s like the tagline's subline. */
+.caption-role {
+  margin: var(--space-s) 0 0;
+  color: var(--prose);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+@media (max-width: 46rem) {
+  /* Most of the phone's width, so the neighbours still peek in at each side. */
+  .carousel { --s: min(70vw, 54svh); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-captions .caption.is-active > * { animation: none; }
+}
+
+/* The site nav's plus, from the mockup (see .menu-toggle below 46rem). Sized
+   and weighted in em so it scales with its label instead of sitting at a fixed
+   size; the second bar turns away to leave a minus while the nav is open. */
 .menu-toggle-icon {
   flex: none;
   position: relative;
@@ -682,8 +685,6 @@ a { color: inherit; text-decoration: none; }
   height: 0.85em;
 }
 
-.episode-toggle::before,
-.episode-toggle::after,
 .menu-toggle-icon::before,
 .menu-toggle-icon::after {
   content: "";
@@ -694,90 +695,11 @@ a { color: inherit; text-decoration: none; }
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-.episode-toggle::after,
 .menu-toggle-icon::after { transform: rotate(90deg); }
-.episode[open]:not(.is-closing) .episode-toggle::after,
 .menu-toggle[aria-expanded="true"] .menu-toggle-icon::after { transform: rotate(0deg); opacity: 0; }
 
-/* One text column: the persistent art panel beside the list already shows the
-   open row's cover, so the row itself carries no image (see .episode-art).
-   script.js slides the panel's height, so its air sits on the body inside it:
-   padding on the panel would stop the fold short and then snap shut. */
-.episode-panel {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.episode-body { padding: 0.5rem 0 clamp(2.5rem, 5vw, 4rem); }
-
-/* Each row's own cover, inside its summary, and the source the art panel reads
-   its covers from. Hidden on desktop, where showing it would be a cover beside
-   the cover; below 46rem it is the row itself (see the mobile feed block). */
-.episode-art { display: none; }
-
-/* The row's number and title, repeated at the top of the open text. Only the
-   mobile feed shows it, since there the summary is a cover with no words. */
-.episode-heading { display: none; }
-
-.episode-meta {
-  margin: 0;
-  color: var(--muted);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
-}
-
-.episode-description {
-  max-width: 60ch;
-  color: var(--prose);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
-  line-height: 1.6;
-  text-align: justify;
-  hyphens: auto;
-}
-
-.episode-description p { margin: 0 0 0.85em; }
-.episode-description a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
-.episode-description a:hover { color: var(--fg); }
-
-.episode-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 1.75rem;
-  margin-top: 1.75rem;
-  padding: 0;
-  list-style: none;
-  font-size: clamp(0.875rem, 1.2vw, 1rem);
-  font-weight: 650;
-  text-transform: uppercase;
-}
-
-/* Gray like the description above them, icon included (it follows
-   currentColor). On hover the name lifts to --fg, like the description's own
-   links, and the icon takes its brand colour. */
-.episode-listen {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  color: var(--muted);
-}
-
-.episode-listen:hover { color: var(--fg); }
-
-/* Desktop only: while script.js slides a row open, its text comes in on the
-   site's fade and drift, 0.6s with no delay, so it is readable almost at once.
-   The mobile feed's covers carry that moment instead. */
-@media not (max-width: 46rem) {
-  .episode[open] .episode-body {
-    animation:
-      fade-in 0.6s var(--ease-fade),
-      drift-in 0.6s var(--ease-drift);
-  }
-}
-
 /* Below the point where the platform names already drop to icons, the top-right
-   nav and the persistent cover no longer have room to sit beside anything: the
-   nav moves under the masthead, and the cover gives way to the mobile feed
-   below, where every row is its own cover. */
+   nav no longer has room beside the wordmark and moves under the masthead. */
 @media (max-width: 46rem) {
   /* A grid, not a wrapping row: the wordmark and "More" share the first line
      and the nav takes the whole second. On the narrowest phones (iPhone SE)
@@ -803,7 +725,7 @@ a { color: inherit; text-decoration: none; }
 
   .site-nav-links { padding-top: var(--space-s); }
 
-  /* "More" and the episode row's plus, set vertically up the right edge
+  /* "More" and its plus, set vertically up the right edge
      beside the wordmark: a word says what it does where a lone plus left
      people guessing. At 1.25rem it runs about the wordmark's height, and its
      top meets the top of "SPREAD". The plus is a box, not
@@ -861,111 +783,15 @@ a { color: inherit; text-decoration: none; }
      hover still lights each one in its brand colour. */
   .platforms a { color: var(--muted); }
 
-  /* The per-episode listen icons match the header's, so every icon-only row of
-     platform links on a phone reads at one size. */
-  .platforms .platform-icon,
-  .episode-listen .platform-icon { width: 1.5em; height: 1.5em; }
+  .platforms .platform-icon { width: 1.5em; height: 1.5em; }
 
   .platforms .social-icon { width: 1.5em; height: 1.5em; }
-
-  /* The icons lose their names on a phone, so the row takes the header's label,
-     at the header's size and gaps. */
-  .episode-links { gap: 1.25rem; }
-
-  @media (max-width: 22rem) {
-    .episode-links { gap: 0.75rem; }
-  }
-
-  .episode-links::before {
-    content: "Listen on";
-    font-size: 1.5em;
-    color: var(--muted);
-  }
-
-  /* align-items reset to stretch: flex-start (the desktop value) only sizes a
-     column's cross axis to content, so the list would shrink to its content
-     instead of filling the page width. */
-  .episodes-layout { flex-direction: column; align-items: stretch; }
 }
-
-/* ---- Mobile feed ---- */
-
-/* Below 46rem the list becomes a feed of covers: nothing pinned, no rows, no
-   rules. Each summary is its episode's cover, and tapping it opens the text
-   underneath, pushing the covers below it down. The season headings and the
-   coming-soon row stay; the page's one cover panel
-   goes, since every row now carries its own cover. Titles are still in the summary for screen
-   readers (see the .platform-name rule), and shown on screen at the top of the
-   open text. script.js slides the text open and closed and brings the tapped
-   cover to the top; without it the text simply appears. */
-@media (max-width: 46rem) {
-  .episode-art-panel,
-  .episode-toggle { display: none; }
-
-  .episode { border-bottom: 0; }
-
-  /* --gutter between covers, the same air as either side of them, so the
-     feed reads as one even grid of cover and margin. */
-  .episodes > li + li { margin-top: var(--gutter); }
-
-  /* Where script.js stops the page when it opens a cover: its title a third
-     of the way down the screen, so the bottom of the cover stays in view above
-     it and the description runs on below. svh, so the spot does not shift as
-     the browser bars show and hide. */
-  .episode-heading { scroll-margin-top: calc(100svh / 3); }
-
-  .episode-summary {
-    display: block;
-    padding: 0;
-  }
-
-  /* The rows lose their padding here, so the heading keeps its full --space-s
-     down to the first cover, and "Coming soon." drops its top padding to sit the
-     same --space-s under its heading. Sized in vw off the tagline's 8vw, as
-     on desktop where it sits about a fifth above the tagline: the clamp's
-     1.6rem floor would otherwise leave it smaller than the text above it. */
-  .season-title {
-    margin-bottom: var(--space-s);
-    font-size: 10vw;
-  }
-  .season-coming { padding-top: 0; }
-
-  .episode-summary .episode-art {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 6px;
-    background: var(--surface);
-  }
-
-  /* --gutter above the text, the same air as beside the cover, and --space-m
-     below, which with the --gutter before the next cover makes a clearly
-     bigger break than the one between two closed covers, so the next episode
-     reads as a new one. On the body, not the panel, as on desktop. */
-  .episode-body { padding: var(--gutter) 0 var(--space-m); }
-
-  /* The episode row's type, a step larger, number in gray, above the description. */
-  .episode-heading {
-    display: block;
-    margin: 0 0 0.75rem;
-    font-weight: 650;
-    font-size: 1.15rem;
-    letter-spacing: var(--tracking);
-    text-transform: uppercase;
-  }
-}
-
-/* Set by script.js only while rows slide and the page scrolls with them.
-   Scroll anchoring would otherwise fight that scroll as the text above
-   folds away. */
-.is-list-moving { overflow-anchor: none; }
 
 /* ---- Institutions ---- */
 
-/* The logos of institutions the guests lead, between the list and the quotes,
-   --space-xl above like every block break. The heading is the season title's
+/* The logos of institutions the guests lead, between the carousel and the
+   quotes, --space-xl above like every block break. The heading is the quotes'
    size, uppercase and centred, with a gray line under it; the logos sit --space-m
    below in a row that wraps. */
 .institutions {
@@ -1015,13 +841,18 @@ a { color: inherit; text-decoration: none; }
   opacity: 0.85;
 }
 
+/* Optical sizing: a tall crest with small type reads lighter than the wide
+   wordmarks at the shared height, so it gets 1.4x. Add the class to any logo
+   that looks undersized beside the rest. */
+.institutions-logos img.is-tall { height: clamp(4.2rem, 8.4vw, 7.7rem); }
+
 @media (max-width: 46rem) {
   .institutions-logos { gap: var(--space-m) var(--space-m); }
 }
 
 /* ---- Quotes ---- */
 
-/* The homepage's closing block, after the episode list. --space-xl above is the
+/* The homepage's closing block, after the institutions. --space-xl above is the
    break between blocks, the same one under the tagline; the footer's own 6rem
    carries the space below. */
 .quotes {
@@ -1038,9 +869,9 @@ a { color: inherit; text-decoration: none; }
 }
 .quote + .quote { margin-top: var(--space-m); }
 
-/* The credits intro / season title scale: big enough to hold the page after the
-   list, a step under the tagline so it does not read as a second one. Sentence
-   case like the season heading, since these are someone's words and uppercase
+/* The credits intro scale: big enough to hold the page near its
+   end, a step under the tagline so it does not read as a second one. Sentence
+   case, since these are someone's words and uppercase
    would shout them. Capped in ch so a long quote breaks into a comfortable
    block instead of running out to the gutter, and centred in the page. */
 .quote-text { margin: 0; }
@@ -1054,9 +885,8 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: var(--tracking);
 }
 
-/* A quote from an episode links to that episode's row in the list above
-   (script.js opens it). It keeps the quote's own color, and its hit area
-   stretches over the whole figure, so the source line under it is part of the
+/* A quote from an episode links to that episode's page. It keeps the quote's
+   own color, and its hit area stretches over the whole figure, so the source line under it is part of the
    same target and glows with it. */
 .quote-link {
   color: inherit;
@@ -1082,7 +912,7 @@ a { color: inherit; text-decoration: none; }
 /* With script.js: every quote in one grid cell, so the block is as tall as the
    longest one and never jumps as they change. Each quote sits on the bottom of
    that cell, so the source line keeps one fixed distance to the bars below and
-   a shorter quote gives up space above it, where the gap from the episode list
+   a shorter quote gives up space above it, where the gap from the institutions
    is already large, rather than opening a hole between the quote and its
    controls. The hidden ones keep visibility until their fade out finishes, then
    drop out of the accessibility tree. */
@@ -1467,7 +1297,7 @@ a { color: inherit; text-decoration: none; }
   flex-direction: row-reverse;
 }
 
-/* The homepage cover's size, so the two pages share one image scale. */
+/* The episode page cover's size, so the two pages share one image scale. */
 .about-figure {
   position: relative;
   flex: 0 0 clamp(240px, 47vw, max(620px, 100vw / 3));
@@ -1519,7 +1349,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* The credit name's type. The number sits on its own line above the words in
-   gray, the episode row's number and title stacked instead of side by side, so
+   gray, like a carousel caption's number and title but stacked instead of side by side, so
    the three headings start level however their words wrap. */
 .about-heading {
   margin: 0;
@@ -1547,8 +1377,7 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.6;
 }
 
-/* One column: every band is photo, caption, then text, like the homepage's
-   mobile feed of covers. The mirrored band keeps its text right aligned, so
+/* One column: every band is photo, caption, then text. The mirrored band keeps its text right aligned, so
    the alternation still reads down the column. */
 @media (max-width: 46rem) {
   .about-section,
@@ -1658,8 +1487,7 @@ a { color: inherit; text-decoration: none; }
 /* ---- Episode page ---- */
 
 /* One episode on a page of its own, the link to share when a single platform
-   link would choose for the reader. The homepage's cover and list, reduced to
-   one: the cover at the panel's size on the left, sticky the same way, and the
+   link would choose for the reader. The cover on the left, sticky, and the
    episode's words beside it, starting level with its top. */
 .episode-page {
   display: flex;
@@ -1690,6 +1518,27 @@ a { color: inherit; text-decoration: none; }
   min-width: 0;
 }
 
+.episode-number { color: var(--muted); }
+
+.episode-description {
+  max-width: 60ch;
+  color: var(--prose);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.episode-description p { margin: 0 0 0.85em; }
+.episode-description a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+.episode-description a:hover { color: var(--fg); }
+
+.episode-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+}
+
 /* The row's number and title, stacked like an about heading, the title at the
    sub-heading size ("Videographers"): the full heading scale was too loud in
    uppercase beside the cover. */
@@ -1709,7 +1558,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* The reason the page exists, so it comes straight under the title rather than
-   after the description: the platforms as rows at the episode row's type, with
+   after the description: the platforms as rows at the row size, with
    no hairlines (spacing separates them), in --fg with the icon beside the name.
    Same hover as the header's platform bar: the name glows, the icon takes its brand colour. */
 .episode-page-listen { margin-top: var(--space-m); }
@@ -1720,7 +1569,7 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
-/* Without hairlines the episode row's --row-pad left each platform floating in
+/* Without hairlines a --row-pad above and below left each platform floating in
    its own band, so the rows sit --space-s apart, the same gap that pins the
    label above them, and read as one list. */
 .episode-page-links {
@@ -1751,8 +1600,8 @@ a { color: inherit; text-decoration: none; }
 
 .episode-page .episode-description { margin-top: var(--space-m); }
 
-/* Date and length under the description, as in the episode row's open text:
-   the description's last paragraph margin is the only gap. */
+/* Date and length under the description: the description's last paragraph
+   margin is the only gap. */
 
 /* The way back to every episode, "Discover more episodes": a white label at the
    label size, which carries a phrase that long where the row size did not,
@@ -1909,7 +1758,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: inherit;
 }
 
-/* The way out, at the episode row's size rather than the label size: a label
+/* The way out, at the row size rather than the label size: a label
    under the statement's type read as a footnote. White, uppercase, glowing on
    hover. --space-m under the sentence, and --space-xl below so the block
    keeps clear of the footer when the screen is short. */
@@ -1997,8 +1846,8 @@ body.is-locked { overflow: hidden; }
   background: rgb(10 10 10 / 0.92);
 }
 
-/* No card: a hairline --rule box on the page's own background, the same border
-   the episode rows use, and the only flat surface the system allows. */
+/* No card: a hairline --rule box on the page's own background, the same
+   border as the footer's, and the only flat surface the system allows. */
 .contact-panel {
   position: relative;
   width: min(34rem, 100%);
@@ -2014,7 +1863,7 @@ body.is-locked { overflow: hidden; }
 .contact-overlay:target .contact-panel,
 .contact-overlay.is-open .contact-panel { transform: translateY(0); }
 
-/* The episode row's plus, turned 45 degrees into a close cross, so the page has
+/* The site nav's plus, turned 45 degrees into a close cross, so the page has
    one toggle glyph rather than two. */
 /* A 2.75rem box for the thumb, with the glyph centred in it. The offsets take
    half the box back off --space-s, so the cross itself still sits where the
@@ -2278,8 +2127,8 @@ body.is-locked { overflow: hidden; }
   text-transform: uppercase;
 }
 
-/* Gray links that lift to --fg and then glow, the same two-step the per-episode
-   listen links and the footer icons already use. */
+/* Gray links that lift to --fg and then glow, the same two-step the footer icons
+   already use. */
 .footer-links {
   display: flex;
   flex-direction: column;

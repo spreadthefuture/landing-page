@@ -6,17 +6,17 @@ Standard library only. Run manually, after build.py, or via
 
     python3 scripts/episode_pages.py
 
-Reads episodes.json (written by build.py) and links.json, fills
+Reads episodes.json (written by build.py) and episode-details.json, fills
 scripts/episode-template.html, and rebuilds every page on every run. Pages are
 generated output: never edit them by hand, edit the template and bump its
-"last updated" line instead. Nothing on the site links to these pages; they exist
-to be shared.
+"last updated" line instead. The homepage's carousel and quotes link to these
+pages, and they are the link to share for a single episode.
 """
 
 import json
 import re
 
-from build import DATA_FILE, ROOT, fill, load_links
+from build import DATA_FILE, ROOT, fill, load_details
 
 TEMPLATE_FILE = ROOT / "scripts" / "episode-template.html"
 OUT_DIR = ROOT / "episode"
@@ -48,16 +48,16 @@ def share_description(episode, entry):
     if description:
         return description
     guest = episode["title"].split(" on ", 1)[0]
-    print(f"  no description in links.json for {episode['label']}, using the fallback")
+    print(f"  no description in episode-details.json for {episode['label']}, using the fallback")
     return f"A conversation with {guest}, on SPREAD THE FUTURE: a podcast about possible tomorrows."
 
 
-def render_listen(block, episode, entry, links):
+def render_listen(block, episode, entry, details):
     """The listen nav with one row per platform URL, or nothing when there are none."""
     link = LINK_BLOCK.search(block)
     rows = "".join(
         fill(link.group(1), {"url": url, "name": platform["name"], "key": platform["key"]})
-        for platform in links["platforms"]
+        for platform in details["platforms"]
         for url in [(entry.get(platform["key"]) or "").strip()]
         if url
     )
@@ -67,10 +67,10 @@ def render_listen(block, episode, entry, links):
     return LINK_BLOCK.sub(lambda _: rows, block)
 
 
-def render(template, stamp, episode, links):
-    entry = links["episodes"].get(episode["guid"], {})
+def render(template, stamp, episode, details):
+    entry = details["episodes"].get(episode["guid"], {})
     if not entry:
-        print(f"  no links.json entry for {episode['title_full']} ({episode['guid']})")
+        print(f"  no episode-details.json entry for {episode['title_full']} ({episode['guid']})")
     slug = episode["label"].lower()
     values = {
         **episode,
@@ -80,7 +80,7 @@ def render(template, stamp, episode, links):
     }
 
     listen = LISTEN_BLOCK.search(template)
-    listen_markup = render_listen(listen.group(1), episode, entry, links)
+    listen_markup = render_listen(listen.group(1), episode, entry, details)
     if listen_markup:
         listen_markup += listen.group(2)
 
@@ -113,14 +113,14 @@ def main():
             raise SystemExit(f"{TEMPLATE_FILE.name} is missing the {marker}:start / {marker}:end markers")
 
     data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
-    links = load_links()
+    details = load_details()
 
     for episode in data["episodes"]:
         if not episode["label"]:
             print(f"  no S#E# label on {episode['title_full']!r}, skipping it")
             continue
         page_file = OUT_DIR / episode["label"].lower() / "index.html"
-        new = render(template, stamp, episode, links)
+        new = render(template, stamp, episode, details)
         old = page_file.read_text(encoding="utf-8") if page_file.exists() else None
         if old != new:
             page_file.parent.mkdir(parents=True, exist_ok=True)
