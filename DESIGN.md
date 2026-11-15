@@ -23,8 +23,8 @@ near-duplicate.
 | Breakpoint | `46rem`, always written `max-width: 46rem` |
 | Vertical gaps | `--space-s` / `--space-m` / `--space-xl`, on every page |
 | Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
-| Label size (platform bar, quote source, contact field labels and submit, footer column headings and links, the episode page's "Discover more episodes"; the footer links and "Discover more episodes" are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
-| Row size (carousel caption title, credit name, about heading, contact title) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
+| Label size (platform bar, quote source, contact field labels and submit, footer column headings and links; the footer links are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
+| Row size (carousel caption title, credit name, about heading, contact title, the episode page's platform links and "Discover more episodes"; the latter is `1.25rem` below 46rem) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
 | Prose size (the `body` base size, about text, credits team line and contact line, contact intro and inputs, carousel role line, episode page description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
 | Measure (max line length) | `48ch` about principles, `60ch` episode description and carousel caption, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
@@ -145,7 +145,7 @@ Credits uses `--space-xl` where the others use `s` or `m` because the portraits 
 large and a tighter gap crowds them. `--portrait` and `--col-gap` are widths and stay
 page-local.
 
-On an episode page, "Discover more episodes" is a white label `--space-m` under the
+On an episode page, "Discover more episodes" is white, at the row size like the platform links above it, `--space-m` under the
 date line on desktop, the same gap as between the text column's other blocks. Below
 46rem it sits `--space-xl` under it, centred, so it reads as a way out rather than
 part of the description.
@@ -484,11 +484,16 @@ A `<section class="institutions">` between the carousel and the quotes,
 `--space-xl` + `--space-m` clear of the carousel and the quotes. Centred heading "Executive-level speakers" at the heading size, bold uppercase,
 then a line at the prose size in `--prose` `--space-s` below, then `--space-m` down to a wrapping, centred flex row of white logos from
 `assets/institutions-logos/` (`<ul class="institutions-logos">`, one `<li><img>` each).
-Every logo has the same height, `clamp(3rem, 6vw, 5.5rem)`, a width cap of
-`min(60vw, 18rem)` and `0.85` opacity; gaps are `--space-m` by `--space-xl` (`--space-m`
-both ways below 46rem). Tall crests with small type (the Albanian ministry) take
-`.is-tall`, 1.4x the height (`clamp(4.2rem, 8.4vw, 7.7rem)`), so they read at the
-same weight as the wide wordmarks. To add one, add an `<li>`; no CSS change. Currently WWF EPO,
+Every logo shares a base height `--logo-h`, `clamp(3rem, 6vw, 5.5rem)`, and width cap
+`--logo-w`, `min(60vw, 18rem)`, at `0.85` opacity; gaps are `--space-m` by `--space-xl`
+(`--space-m` both ways below 46rem). Above 46rem the base is 1.2x (`clamp(3.6rem, 7.2vw, 6.6rem)`,
+cap `21.6rem`) and the logos break into three on the first row and the rest on the second, via a
+full-width `::before` flex item ordered after the third logo. Each `<img>` carries a
+`logo-<name>` class, and a list in `styles.css` gives each one a `--size` multiplier
+(1 = 100%, 0.8 = 80%) applied to both the height and the width cap, tuned by eye. The
+Albanian ministry's crest, with small type, is at 1.4 so it reads at the same weight as the
+wide wordmarks. To add a logo, add an `<li>` with a new class, plus a `--size` line if 1 does
+not look right. Currently WWF EPO,
 the Albanian ministry, Europe Jacques Delors, IHP and The Good Lobby.
 
 ### Quotes
