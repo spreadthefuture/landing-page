@@ -494,8 +494,8 @@ full-width `::before` flex item ordered after the third logo. Each `<img>` carri
 (1 = 100%, 0.8 = 80%) applied to both the height and the width cap, tuned by eye. The
 Albanian ministry's crest, with small type, is at 1.4 so it reads at the same weight as the
 wide wordmarks. To add a logo, add an `<li>` with a new class, plus a `--size` line if 1 does
-not look right. Currently WWF EPO,
-the Albanian ministry, Europe Jacques Delors, IHP and The Good Lobby.
+not look right. Currently, in order,
+Europe Jacques Delors, the Albanian ministry, IHP, WWF EPO and The Good Lobby.
 
 ### Audience
 A `<section class="audience">` between the institutions and the quotes, spaced like
