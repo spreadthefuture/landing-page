@@ -114,6 +114,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | tagline subline | `clamp(1rem, 1.5vw, 1.125rem)` | 400 | 1.6 | |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 650 | 1.2 | 0.01em |
 | heading: credits intro / institutions / quote | `clamp(1.6rem, 4vw, 3.25rem)` | 650 | 1.2 | 0.01em |
+| audience figure | `clamp(3rem, 7vw, 6rem)` | 400 | 1.2 | 0.015em |
 | sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 650 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 650 | 1.2 | 0.01em |
 | episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 650 | 1.2 | 0.01em |
@@ -501,8 +502,8 @@ A `<section class="audience">` between the institutions and the quotes, spaced l
 the institutions (`--space-xl` margin above plus `--space-m` padding above and below).
 Centred heading "A growing audience" at the heading size, bold uppercase, then
 `--space-m` down to three figures (`<ul class="audience-stats">`) in three equal columns,
-capped at 60rem, stacked `--space-m` apart below 46rem. Each figure is the number at the
-site nav size (`clamp(2rem, 5vw, 4rem)`, 650, tabular digits) over a label at the row
+capped at 72rem, stacked `--space-m` apart below 46rem. Each figure is the number at
+`clamp(3rem, 7vw, 6rem)`, weight 400, tabular digits (the largest type after the wordmark) over a label at the row
 size (650, `--fg`), `--space-s` below, capped at 16ch with balanced wrapping. Currently
 10K+ monthly social views (views on the social networks), 180h yearly combined listening time, 48 kHz sound
 sampling rate.

@@ -890,19 +890,20 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-m);
-  max-width: 60rem;
+  max-width: 72rem;
   margin: var(--space-m) auto 0;
   padding: 0;
   list-style: none;
 }
 
-/* The site nav's size: the figures are the block's subject, so they sit a step
-   above the heading. Tabular digits keep every digit the same width, so the
-   number does not jitter sideways while script.js counts it up. */
+/* The figures are the block's subject, so they are the largest type after the
+   wordmark, set in the regular weight so their size reads as light rather than
+   loud against the bold heading and labels. Tabular digits keep every digit the same width, so the number
+   does not jitter sideways while script.js counts it up. */
 .stat-value {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 650;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 400;
   line-height: 1.2;
   letter-spacing: var(--tracking);
   font-variant-numeric: tabular-nums;
