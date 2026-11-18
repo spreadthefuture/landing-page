@@ -495,19 +495,11 @@ if (audience && !calm.matches && 'IntersectionObserver' in window) {
   const countEase = (t) => 1 - (1 - t) ** 4;
   const counters = [...audience.querySelectorAll('.stat-count')];
 
-  // The digits go in .stat-num and the unit in .stat-unit, which styles.css sets
-  // smaller. data-format="k" shows thousands as 1.2K and whole thousands as
-  // 10K, so 10K+ ticks through every value on the way instead of eleven steps.
-  // Rounded down, so it never shows 10.0K on the way to 10K.
+  // The digits go in .stat-num, with a comma for thousands (10,000), and the
+  // unit in .stat-unit, which styles.css sets smaller.
   const show = (el, n) => {
-    let num = String(n), unit = el.dataset.suffix || '';
-    if (el.dataset.format === 'k' && n >= 1000) {
-      const k = Math.floor(n / 100) / 10;
-      num = Number.isInteger(k) ? String(k) : k.toFixed(1);
-      unit = 'K' + unit;
-    }
-    el.querySelector('.stat-num').textContent = num;
-    el.querySelector('.stat-unit').textContent = unit;
+    el.querySelector('.stat-num').textContent = n.toLocaleString('en-US');
+    el.querySelector('.stat-unit').textContent = el.dataset.suffix || '';
   };
 
   const runCounter = (el) => {

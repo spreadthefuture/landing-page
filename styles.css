@@ -909,7 +909,7 @@ a { color: inherit; text-decoration: none; }
   font-variant-numeric: tabular-nums;
 }
 
-/* The unit after the number (K+, h, kHz) at half its size, on the same
+/* The unit after the number (+, h, kHz) at half its size, on the same
    baseline, so the digits carry the figure and the unit reads as a note. */
 .stat-unit { font-size: 0.5em; }
 
