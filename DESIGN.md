@@ -504,8 +504,8 @@ Centred heading "A growing audience" at the heading size, bold uppercase, then
 `--space-m` down to three figures (`<ul class="audience-stats">`) in three equal columns,
 capped at 72rem, stacked `--space-m` apart below 46rem. Each figure is the number at
 `clamp(3rem, 7vw, 6rem)`, weight 400, tabular digits (the largest type after the wordmark), its unit (`.stat-unit`: +, h, kHz) at half that size on the same baseline, over a label at the row
-size (650, `--fg`), `--space-s` below, capped at 16ch with balanced wrapping. Currently
-10,000+ monthly social views (views on the social networks), 180h yearly combined listening time, 48 kHz sound
+size (400, `--fg`), `--space-s` below, capped at 16ch with balanced wrapping. Currently
+10,000+ monthly social views (views on the social networks), 180 h yearly combined listening time, 48 kHz sound
 sampling rate.
 
 Each number is in the markup at its final value, once visually hidden for screen readers
