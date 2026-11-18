@@ -495,16 +495,19 @@ if (audience && !calm.matches && 'IntersectionObserver' in window) {
   const countEase = (t) => 1 - (1 - t) ** 4;
   const counters = [...audience.querySelectorAll('.stat-count')];
 
-  // data-format="k" shows thousands as 1.2K and whole thousands as 10K, so
-  // 10K+ ticks through every value on the way instead of eleven steps. Rounded
-  // down, so it never shows 10.0K on the way to 10K.
-  const format = (el, n) => {
-    const suffix = el.dataset.suffix || '';
+  // The digits go in .stat-num and the unit in .stat-unit, which styles.css sets
+  // smaller. data-format="k" shows thousands as 1.2K and whole thousands as
+  // 10K, so 10K+ ticks through every value on the way instead of eleven steps.
+  // Rounded down, so it never shows 10.0K on the way to 10K.
+  const show = (el, n) => {
+    let num = String(n), unit = el.dataset.suffix || '';
     if (el.dataset.format === 'k' && n >= 1000) {
       const k = Math.floor(n / 100) / 10;
-      return (Number.isInteger(k) ? k : k.toFixed(1)) + 'K' + suffix;
+      num = Number.isInteger(k) ? String(k) : k.toFixed(1);
+      unit = 'K' + unit;
     }
-    return n + suffix;
+    el.querySelector('.stat-num').textContent = num;
+    el.querySelector('.stat-unit').textContent = unit;
   };
 
   const runCounter = (el) => {
@@ -513,14 +516,14 @@ if (audience && !calm.matches && 'IntersectionObserver' in window) {
     const step = (now) => {
       if (t0 === null) t0 = now;
       const t = Math.min(1, (now - t0) / COUNT_DURATION);
-      el.textContent = format(el, t < 1 ? Math.round(to * countEase(t)) : to);
+      show(el, t < 1 ? Math.round(to * countEase(t)) : to);
       if (t < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   };
 
   audience.classList.add('is-waiting');
-  counters.forEach((el) => { el.textContent = format(el, 0); });
+  counters.forEach((el) => show(el, 0));
 
   const observer = new IntersectionObserver((entries) => {
     if (!entries.some((entry) => entry.isIntersecting)) return;

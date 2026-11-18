@@ -909,6 +909,10 @@ a { color: inherit; text-decoration: none; }
   font-variant-numeric: tabular-nums;
 }
 
+/* The unit after the number (K+, h, kHz) at half its size, on the same
+   baseline, so the digits carry the figure and the unit reads as a note. */
+.stat-unit { font-size: 0.5em; }
+
 /* The row size and weight in soft white, pinned to its figure with --space-s:
    the label is part of the figure, not a note under it. Narrow enough to break
    into two short lines, balanced so neither line is left with a single word. */
