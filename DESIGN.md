@@ -500,7 +500,7 @@ the Albanian ministry, Europe Jacques Delors, IHP and The Good Lobby.
 ### Audience
 A `<section class="audience">` between the institutions and the quotes, spaced like
 the institutions (`--space-xl` margin above plus `--space-m` padding above and below).
-Centred heading "A sound that makes you come back" at the heading size, bold uppercase, then
+Centred heading "Come for the guest, stay for the sound" at the heading size, bold uppercase with balanced wrapping, then
 `--space-m` down to three figures (`<ul class="audience-stats">`) in three equal columns,
 capped at 72rem, stacked `--space-m` apart below 46rem. Each figure is the number at
 `clamp(3rem, 7vw, 6rem)`, weight 400, tabular digits (the largest type after the wordmark), its unit (`.stat-unit`: +, h, kHz) at half that size on the same baseline, over a label at the row
