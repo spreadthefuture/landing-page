@@ -495,10 +495,11 @@ if (audience && !calm.matches && 'IntersectionObserver' in window) {
   const countEase = (t) => 1 - (1 - t) ** 4;
   const counters = [...audience.querySelectorAll('.stat-count')];
 
-  // The digits go in .stat-num, with a comma for thousands (10,000), and the
-  // unit in .stat-unit, which styles.css sets smaller.
+  // The digits go in .stat-num, thousands split by a no-break space (10 000)
+  // so the number never wraps, and the unit in .stat-unit, which styles.css
+  // sets smaller.
   const show = (el, n) => {
-    el.querySelector('.stat-num').textContent = n.toLocaleString('en-US');
+    el.querySelector('.stat-num').textContent = String(n).replace(/\B(?=(\d{3})+$)/g, '\u00A0');
     el.querySelector('.stat-unit').textContent = el.dataset.suffix || '';
   };
 
