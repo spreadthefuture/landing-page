@@ -180,6 +180,28 @@ try {
       </ul>
     </section>
 
+    <!-- Audience figures. Each value is written out in full, so it reads right
+         with JS off and to screen readers (the visually hidden copy). script.js
+         counts the aria-hidden copy up from 0 to data-count, then adds
+         data-suffix; data-format="k" shows thousands as 1.2K, 10K. -->
+    <section class="audience" aria-labelledby="audience-title">
+      <h2 class="audience-title" id="audience-title">A growing audience</h2>
+      <ul class="audience-stats">
+        <li class="stat">
+          <p class="stat-value"><span class="visually-hidden">10K+</span><span class="stat-count" aria-hidden="true" data-count="10000" data-format="k" data-suffix="+">10K+</span></p>
+          <p class="stat-label">Monthly visitors on average</p>
+        </li>
+        <li class="stat">
+          <p class="stat-value"><span class="visually-hidden">180h</span><span class="stat-count" aria-hidden="true" data-count="180" data-suffix="h">180h</span></p>
+          <p class="stat-label">Yearly combined listening time</p>
+        </li>
+        <li class="stat">
+          <p class="stat-value"><span class="visually-hidden">48 kHz</span><span class="stat-count" aria-hidden="true" data-count="48" data-suffix="&nbsp;kHz">48&nbsp;kHz</span></p>
+          <p class="stat-label">Sound sampling rate</p>
+        </li>
+      </ul>
+    </section>
+
     <!-- Without JS these simply stack. script.js adds .is-rotating, which lays them
          in one grid cell and crossfades between them, and appends the row of
          progress bars that both times and navigates the rotation. -->

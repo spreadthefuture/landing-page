@@ -482,6 +482,55 @@ if (quotes.length > 1) {
   }
 }
 
+// Audience figures on the homepage. Each number counts up from 0 the first time
+// the block comes into view, 150ms after the one before (matching the fade in
+// styles.css), and eases out so it slows into its final value like an odometer
+// settling. The page already holds the final values, so with JS off or reduced
+// motion they are simply there.
+const audience = document.querySelector('.audience');
+
+if (audience && !calm.matches && 'IntersectionObserver' in window) {
+  const COUNT_DURATION = 1800;
+  const COUNT_STAGGER = 150;
+  const countEase = (t) => 1 - (1 - t) ** 4;
+  const counters = [...audience.querySelectorAll('.stat-count')];
+
+  // data-format="k" shows thousands as 1.2K and whole thousands as 10K, so
+  // 10K+ ticks through every value on the way instead of eleven steps. Rounded
+  // down, so it never shows 10.0K on the way to 10K.
+  const format = (el, n) => {
+    const suffix = el.dataset.suffix || '';
+    if (el.dataset.format === 'k' && n >= 1000) {
+      const k = Math.floor(n / 100) / 10;
+      return (Number.isInteger(k) ? k : k.toFixed(1)) + 'K' + suffix;
+    }
+    return n + suffix;
+  };
+
+  const runCounter = (el) => {
+    const to = Number(el.dataset.count);
+    let t0 = null;
+    const step = (now) => {
+      if (t0 === null) t0 = now;
+      const t = Math.min(1, (now - t0) / COUNT_DURATION);
+      el.textContent = format(el, t < 1 ? Math.round(to * countEase(t)) : to);
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  audience.classList.add('is-waiting');
+  counters.forEach((el) => { el.textContent = format(el, 0); });
+
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    audience.classList.replace('is-waiting', 'is-entering');
+    counters.forEach((el, i) => setTimeout(() => runCounter(el), i * COUNT_STAGGER));
+  }, { threshold: 0.4 });
+  observer.observe(audience);
+}
+
 // About page. Blocks below the fold at load (styles.css runs the rest on its
 // own) wait hidden and rise in as each scrolls into view, 250ms apart when
 // several arrive together. A block scrolled past too fast to be seen comes in

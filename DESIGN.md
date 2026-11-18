@@ -496,8 +496,27 @@ wide wordmarks. To add a logo, add an `<li>` with a new class, plus a `--size` l
 not look right. Currently WWF EPO,
 the Albanian ministry, Europe Jacques Delors, IHP and The Good Lobby.
 
+### Audience
+A `<section class="audience">` between the institutions and the quotes, spaced like
+the institutions (`--space-xl` margin above plus `--space-m` padding above and below).
+Centred heading "A growing audience" at the heading size, bold uppercase, then
+`--space-m` down to three figures (`<ul class="audience-stats">`) in three equal columns,
+capped at 60rem, stacked `--space-m` apart below 46rem. Each figure is the number at the
+site nav size (`clamp(2rem, 5vw, 4rem)`, 650, tabular digits) over a label at the prose
+size in `--prose`, `--space-s` below, capped at 16ch with balanced wrapping. Currently
+10K+ monthly visitors on average, 180h yearly combined listening time, 48 kHz sound
+sampling rate.
+
+Each number is in the markup at its final value, once visually hidden for screen readers
+and once `aria-hidden` (`.stat-count`, with `data-count`, `data-suffix`, and
+`data-format="k"` to show thousands as 1.2K). **Entrance:** `script.js` sets `.is-waiting`
+and zeroes the counters; once 40% of the block is in view, `.is-entering` runs the fade
+and drift on each figure 150ms apart, and each number counts up from 0 over 1.8s on an
+ease-out quart, so it slows into its final value. Thousands round down, so 10K+ never
+shows 10.0K. Without JS or under reduced motion the final values are simply there.
+
 ### Quotes
-The homepage's closing block, `--space-xl` below the institutions. A `<section class="quotes">`
+The homepage's closing block, `--space-xl` below the audience figures. A `<section class="quotes">`
 of `<figure>`s (`<blockquote>` + `<figcaption>`). Quote at the heading scale, capped
 at 38ch, centered, in sentence case. The source sits `--space-s` below as a gray label.
 A quote from an episode is a link to that episode's page (`<a class="quote-link"

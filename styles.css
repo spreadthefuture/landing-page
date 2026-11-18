@@ -865,9 +865,82 @@ a { color: inherit; text-decoration: none; }
   .institutions-logos li:nth-child(n + 4) { order: 2; }
 }
 
+/* ---- Audience ---- */
+
+/* Three figures between the institutions and the quotes, spaced like the
+   institutions block so it sits --space-xl + --space-m clear of both. The
+   heading is the institutions heading; the figures sit --space-m below in three
+   columns, stacked --space-m apart on a phone. */
+.audience {
+  margin-top: var(--space-xl);
+  padding-block: var(--space-m);
+  text-align: center;
+}
+
+.audience-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 3.25rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+.audience-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-m);
+  max-width: 60rem;
+  margin: var(--space-m) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The site nav's size: the figures are the block's subject, so they sit a step
+   above the heading. Tabular digits keep every digit the same width, so the
+   number does not jitter sideways while script.js counts it up. */
+.stat-value {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: var(--tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The prose size and gray, pinned to its figure with --space-s, and narrow
+   enough to break into two short lines under it, balanced so neither line is
+   left with a single word ("Monthly visitors / on average"). */
+.stat-label {
+  max-width: 16ch;
+  text-wrap: balance;
+  margin: var(--space-s) auto 0;
+  color: var(--prose);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+@media (max-width: 46rem) {
+  .audience-stats { grid-template-columns: 1fr; }
+}
+
+/* script.js sets .is-waiting (never under reduced motion), so without it the
+   figures are simply there. On arrival each one fades and drifts in, 150ms
+   after the one before, as its number starts counting. */
+.audience.is-waiting .stat { opacity: 0; }
+
+.audience.is-entering .stat {
+  animation:
+    fade-in 1.2s var(--ease-fade) both,
+    drift-in 1.2s var(--ease-drift) both;
+}
+
+.audience.is-entering .stat:nth-child(2) { animation-delay: 0.15s; }
+.audience.is-entering .stat:nth-child(3) { animation-delay: 0.3s; }
+
 /* ---- Quotes ---- */
 
-/* The homepage's closing block, after the institutions. --space-xl above is the
+/* The homepage's closing block, after the audience figures. --space-xl above is the
    break between blocks, the same one under the tagline; the footer's own 6rem
    carries the space below. */
 .quotes {
