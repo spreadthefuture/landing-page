@@ -243,10 +243,24 @@ const foldEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
   function hold() { spring = null; vel = 0; clearTimeout(timer); }
 
   // Autoplay: rest, then move one cover. Paused under the pointer, during a
-  // drag and while the tab is hidden; never runs under reduced motion.
+  // drag, while the tab is hidden and while the covers are not in view;
+  // never runs under reduced motion. The fan can open with only its top
+  // peeking above the fold, so autoplay waits until most of the covers
+  // (IN_VIEW of the stage) are on screen: the reader meets the first
+  // episode, not whichever one the carousel had cycled to while they read
+  // the tagline. Each return into view starts a fresh HOLD.
+  const IN_VIEW = 0.6;
+  let inView = !('IntersectionObserver' in window);
+  if (!inView) {
+    new IntersectionObserver(([en]) => {
+      const was = inView;
+      inView = en.intersectionRatio >= IN_VIEW;
+      if (inView !== was) schedule();
+    }, { threshold: [0, IN_VIEW] }).observe(stage);
+  }
   function schedule() {
     clearTimeout(timer);
-    if (reduce || !ready || dragging || spring || document.hidden) return;
+    if (reduce || !ready || dragging || spring || document.hidden || !inView) return;
     timer = setTimeout(() => go(Math.round(pos) + 1, SPRING_AUTO, 0), HOLD);
   }
 
