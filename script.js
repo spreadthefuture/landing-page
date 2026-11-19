@@ -48,7 +48,7 @@ const foldEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
   const SCALE = 0.8, REACH = 2.4, EASE = 0.8, FADE_FROM = 3.6, FADE_TO = 5;
 
   // HOLD: how long a cover rests, once settled, before autoplay moves on.
-  const HOLD = 3000;
+  const HOLD = 6000;
 
   // Springs. OMEGA sets the speed (higher is quicker); DAMPING below 1 lets the
   // covers overshoot, measured from rest: 0.863 passes the cover by 0.4% of a
@@ -174,7 +174,7 @@ const foldEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
       pos += vel * h;
     }
     // Settled once within a fraction of a pixel and all but still, so the
-    // 3s hold starts when the eye sees the cover stop, not after the tail.
+    // 6s hold starts when the eye sees the cover stop, not after the tail.
     if (Math.abs(pos - target) < 0.001 && Math.abs(vel) < 0.01) {
       pos = target; vel = 0; spring = null;
       draw();

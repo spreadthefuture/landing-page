@@ -282,9 +282,9 @@ clipped sideways only (`overflow: clip visible`), so the side covers never widen
 - **Motion (`script.js`):** one float, `pos`, is the whole state, driven by a damped
   spring: autoplay `omega 7.5, damping 0.863` (0.4% overshoot), a fast gesture
   `omega 10, damping 0.81` (1.2%), a slow one critically damped. Autoplay moves one
-  cover after a 3s rest, paused during a drag, while the tab is hidden and while
+  cover after a 6s rest, paused during a drag, while the tab is hidden and while
   less than 60% of the covers' stage is on screen (each return into view starts a
-  fresh 3s rest), so the reader meets the first episode, not one autoplay reached
+  fresh 6s rest), so the reader meets the first episode, not one autoplay reached
   while they read the tagline. Drag
   (pointer, one to one), trackpad swipe, arrow keys and a click on a side cover all
   move it; a click on the centre cover, or Enter on the focused carousel, opens the
