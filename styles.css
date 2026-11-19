@@ -877,8 +877,8 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
-/* Balanced, so a heading that runs past one line splits evenly (at the comma
-   in "Come for the guest, / stay for the sound") instead of leaving one word. */
+/* Balanced, so a heading that runs past one line splits into even lines
+   instead of leaving one word on the last. */
 .audience-title {
   margin: 0;
   text-wrap: balance;
