@@ -322,7 +322,7 @@ the contact line at 0.6s. Whole by about 1.8s. Removed under reduced motion.
 
 ### About statement
 `.about-statement`, the sentence that ends the homepage: bold sentence case at the
-tagline's scale, `--space-xl` above and nothing below. The sentence is `--muted`;
+tagline's scale, `--space-xl` + `--space-m` above and below. The sentence is `--muted`;
 only "the unexpected and the improbable" (a `<strong>` with weight reset) is `--fg`.
 There is no about page: the old `/about/` was removed on 2026-11-20, along with the
 site nav that linked to it.
