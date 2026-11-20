@@ -13,12 +13,11 @@ at deploy time.
 .
 ├── index.html              # home: episode carousel
 ├── credits/index.html      # the people behind the podcast, served at /credits/
-├── about/index.html        # about page, served at /about/
 ├── 404.html                # not found page, served by GitHub Pages for any missing path
 ├── CNAME                   # custom domain for GitHub Pages, do not delete
 ├── favicon.ico             # browser tab icon, 16 to 64px, rendered from assets/logos/favicon.svg
 ├── styles.css              # all styling, for every page
-├── script.js               # optional enhancements: carousel, quote rotation, phone menu, contact form
+├── script.js               # optional enhancements: carousel, quote rotation, contact form
 ├── episodes.json           # generated episode data, do not hand edit
 ├── episode-details.json    # hand maintained per-episode platform URLs, share descriptions and roles
 ├── episode/                # generated share page per episode, e.g. /episode/s1e7/, do not hand edit
@@ -33,7 +32,6 @@ at deploy time.
 │   ├── social/             # footer social icons
 │   ├── credits-photos/     # portraits for the credits page
 │   ├── institutions-logos/ # logos of the institutions guests lead, on the homepage
-│   └── about-photos/       # photos for the about page
 └── .github/workflows/      # feed and episode page workflows
 ```
 

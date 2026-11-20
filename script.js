@@ -1,6 +1,6 @@
 // Enhancement only: the site is complete with this file absent. The homepage's
-// covers sit in a row that scrolls sideways, the quotes stack, and the phone
-// menu and contact overlay simply open.
+// covers sit in a row that scrolls sideways, the quotes stack, and the contact
+// overlay simply opens.
 
 // No right-click "Save image" on any image (styles.css also turns off dragging
 // and the iOS long-press menu).
@@ -8,13 +8,9 @@ document.addEventListener('contextmenu', (event) => {
   if (event.target instanceof HTMLImageElement) event.preventDefault();
 });
 
-// Phones (styles.css, below 46rem), reduced motion, and the one fold the site
-// uses to slide things open and shut: the phone menu here, on a cubic ease in
-// and out, so the fold starts as gently as it lands.
+// Phones (styles.css, below 46rem) and reduced motion.
 const phone = window.matchMedia('(max-width: 46rem)');
 const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
-const FOLD_DURATION = 500;
-const foldEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
 
 // The homepage's carousel of episode covers. One float, `pos`, is the
 // carousel's whole state: the cover nearest to it is centred. Every cover is
@@ -399,52 +395,6 @@ const foldEase = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
   }
 })();
 
-// The phone header's menu (below 46rem): the plus beside the wordmark slides
-// About and Credits open under it, on the site's fold, and folds
-// them away again. A second tap mid-motion turns it from wherever it is.
-// Without this file the nav simply stays open.
-const menuToggle = document.querySelector('.menu-toggle');
-const siteNav = document.querySelector('.site-nav');
-
-if (menuToggle && siteNav) {
-  let menuFrame = null;
-
-  const setMenu = (opening) => {
-    const from = siteNav.classList.contains('is-open') ? siteNav.getBoundingClientRect().height : 0;
-    menuToggle.setAttribute('aria-expanded', opening);
-    siteNav.classList.add('is-open');
-    siteNav.style.height = '';
-    const to = opening ? siteNav.scrollHeight : 0;
-    siteNav.style.overflow = 'hidden';
-    siteNav.style.height = `${from}px`;
-
-    cancelAnimationFrame(menuFrame);
-    let start = null;
-    const tick = (now) => {
-      start ??= now;
-      const t = calm.matches ? 1 : Math.min((now - start) / FOLD_DURATION, 1);
-      siteNav.style.height = `${from + (to - from) * foldEase(t)}px`;
-      if (t < 1) {
-        menuFrame = requestAnimationFrame(tick);
-        return;
-      }
-      siteNav.style.height = '';
-      siteNav.style.overflow = '';
-      if (!opening) siteNav.classList.remove('is-open');
-    };
-    menuFrame = requestAnimationFrame(tick);
-  };
-
-  const isOpen = () => menuToggle.getAttribute('aria-expanded') === 'true';
-
-  menuToggle.addEventListener('click', () => setMenu(!isOpen()));
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !isOpen()) return;
-    setMenu(false);
-    menuToggle.focus();
-  });
-}
-
 // Quotes at the end of the homepage. Without this they stack; with it they share one
 // spot and rotate. Each bar's fill animation (styles.css) is the timer: when the
 // active one finishes, the next quote comes up, so hover, focus and reduced motion
@@ -541,12 +491,11 @@ if (audience && !calm.matches && 'IntersectionObserver' in window) {
   observer.observe(audience);
 }
 
-// About page. Blocks below the fold at load (styles.css runs the rest on its
-// own) wait hidden and rise in as each scrolls into view, 250ms apart when
-// several arrive together. A block scrolled past too fast to be seen comes in
-// anyway, so none is left hidden above the reader. Under reduced motion every
-// block is simply there.
-const aboutBlocks = document.querySelectorAll('.about-section, .about-statement');
+// About statement. Below the fold at load (styles.css runs it on its own
+// otherwise) it waits hidden and rises in as it scrolls into view. One scrolled
+// past too fast to be seen comes in anyway, so none is left hidden above the
+// reader. Under reduced motion it is simply there.
+const aboutBlocks = document.querySelectorAll('.about-statement');
 
 if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {

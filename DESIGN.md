@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-11-15
+> Last updated: 2026-11-20
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -22,12 +22,12 @@ near-duplicate.
 |-----|---------------|
 | Breakpoint | `46rem`, always written `max-width: 46rem` |
 | Vertical gaps | `--space-s` / `--space-m` / `--space-xl`, on every page |
-| Line heights | `1` (site nav), `1.6` (prose), `1.2` (everything else, set on `body`) |
+| Line heights | `1.6` (prose), `1.2` (everything else, set on `body`) |
 | Label size (platform bar, quote source, contact field labels and submit, footer column headings and links; the footer links are `1.25rem` below 46rem) | `clamp(0.875rem, 1.2vw, 1rem)` |
-| Row size (carousel caption title, credit name, about heading, contact title, the episode page's platform links and "Discover more episodes"; the latter is `1.25rem` below 46rem) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
-| Prose size (the `body` base size, about text, credits team line and contact line, contact intro and inputs, carousel role line, episode page description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
+| Row size (carousel caption title, credit name, contact title, the episode page's platform links and "Discover more episodes"; the latter is `1.25rem` below 46rem) | `clamp(1.05rem, 1.9vw, 1.5rem)` |
+| Prose size (the `body` base size, credits team line and contact line, contact intro and inputs, carousel role line, episode page description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
-| Measure (max line length) | `48ch` about principles, `60ch` episode description and carousel caption, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
+| Measure (max line length) | `60ch` episode description and carousel caption, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
 | Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
 | Brand name in copy | `SPREAD THE FUTURE`, uppercase in the markup |
@@ -94,12 +94,12 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 ### Rules
 
 - **Weights:** 400 (body, meta, prose) and 650 (everything else), with one exception: the homepage tagline is 700, on purpose, so the one sentence reads heavier. The fallback fonts show 650 and 700 with the same bold file, declared as 700 in `@font-face`. Nothing else.
-- **Case:** uppercase for the site nav, platform labels, carousel caption titles, credit names and
-  about headings, written in sentence case in the markup and uppercased in CSS so
+- **Case:** uppercase for platform labels, carousel caption titles, credit names,
+  written in sentence case in the markup and uppercased in CSS so
   screen readers read words. Not uppercased: the homepage tagline, the about statement,
   the carousel's role line, the quotes and the credits headings. The brand name
   is the one thing uppercase in the markup.
-- **Line height:** `1.2` on `body`, `1` on the site nav, `1.6` on prose.
+- **Line height:** `1.2` on `body`, `1.6` on prose.
   `line-height: 0` on the wordmark is a box reset.
 - **Letter spacing:** `0.01em` to `0.02em` on large bold type, normal on small labels.
   Nothing negative.
@@ -109,7 +109,6 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | Role | Size | Weight | Line height | Tracking |
 |------|------|--------|-------------|----------|
 | wordmark | `clamp(250px, 34vw, 520px)` wide | 650 | 0 (reset) | |
-| site nav | `clamp(2rem, 5vw, 4rem)` · `8vw` below 46rem | 650 | 1 | |
 | tagline | `clamp(1.75rem, 3.9vw, 5rem)` (about 2.5 lines on desktop) · `8vw` below 46rem | 700 | 1.2 | 0.01em |
 | tagline subline | `clamp(1rem, 1.5vw, 1.125rem)` | 400 | 1.6 | |
 | about statement | `clamp(1.35rem, 3vw, 3.75rem)` · `8vw` below 46rem | 650 | 1.2 | 0.01em |
@@ -117,7 +116,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | audience figure | `clamp(3rem, 7vw, 6rem)` | 400 | 1.2 | 0.015em |
 | sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 650 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 650 | 1.2 | 0.01em |
-| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo (the site nav's mobile size) over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 650 | 1.2 | 0.01em |
+| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 650 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
 | label | `clamp(0.875rem, 1.2vw, 1rem)` | 650 | 1.2 | |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |
@@ -135,12 +134,12 @@ block, **xl** is the break between blocks. Needing a fourth means the stack is w
 | `--space-xl` | `clamp(5rem, 12.5vw, 9rem)` | Break between blocks |
 | `--row-pad` | `clamp(1.1rem, 2.2vw, 1.6rem)` | Padding above and below each platform column on a phone's episode page |
 
-| Gap | Home | About | Credits |
-|-----|------|-------|---------|
-| Platform links to first block | `--space-xl` | `--space-xl` | `--space-xl` |
-| Heading to what it names | `--space-s` | `--space-s` | `--space-xl`, except the team line at `--space-s` and the videographers and special thanks at `--space-m` |
-| Items inside a block | `--space-m` cover to caption | `--space-m` between principles | `--space-xl` between card rows, `--space-m` between videographers (`--space-s` below 46rem) |
-| Block to block | `--space-xl` | `--space-xl` | `--space-xl` |
+| Gap | Home | Credits |
+|-----|------|---------|
+| Platform links to first block | `--space-xl` | `--space-xl` |
+| Heading to what it names | `--space-s` | `--space-xl`, except the team line at `--space-s` and the videographers and special thanks at `--space-m` |
+| Items inside a block | `--space-m` cover to caption | `--space-xl` between card rows, `--space-m` between videographers (`--space-s` below 46rem) |
+| Block to block | `--space-xl` | `--space-xl` |
 
 Credits uses `--space-xl` where the others use `s` or `m` because the portraits are
 large and a tighter gap crowds them. `--portrait` and `--col-gap` are widths and stay
@@ -167,10 +166,9 @@ the wordmark too, that SVG sits twice in each. Change one, change all ten.
 
 `46rem` (736px), shared by every page and by `script.js`'s `matchMedia`. Below it:
 
-- **Header:** platform names collapse to icons, with "Listen on" at their size; the
-  site nav folds behind a plus beside the wordmark.
+- **Header:** platform names collapse to icons, with "Listen on" at their size.
 - **Home:** the carousel's centre cover grows to `min(70vw, 54svh)`; the tagline switches to viewport sizing.
-- **About:** each band stacks photo then text, band 02's text right aligned; the statement switches to viewport sizing.
+- **About statement:** switches to viewport sizing.
 - **Credits:** grids drop to one column.
 - **Footer:** reduced to centred lines (page links, social row), then the credit and copyright as one tight two-line block.
 
@@ -213,20 +211,6 @@ because their selectors are too specific for the usual reduced-motion reset. Any
 new page must carry the same head script, or arriving home from it replays the
 entrance.
 
-### Site nav
-About / Credits, bold uppercase, stacked right-aligned beside the wordmark.
-
-**Below 46rem:** the links fold behind "MORE" and a plus
-(`.menu-toggle`), set vertically at `1.25rem` down the right edge beside the wordmark,
-reading bottom to top with the plus at the top and upright. The header is a
-two-column grid here, so on the narrowest phones (iPhone SE) the wordmark shrinks
-below its 250px floor rather than pushing "MORE" onto its own line. Tapping it slides About and
-Credits open under it, right aligned at `8vw`, `--space-s` below the wordmark, on the
-site's 500ms cubic ease-in-out fold; the words fade and drift in 0.1s and 0.18s
-behind. The plus turns to a minus; Escape closes. A `.js` class set by the small
-script in each page's head hides the nav before first paint, so without JS the nav
-stays open and the plus never shows.
-
 ### Platform bar
 "LISTEN ON: SPOTIFY / APPLE PODCASTS / DEEZER / YOUTUBE". YouTube is also in the
 footer's LISTEN column, and in episode-details.json, so an episode shows its YouTube link once
@@ -249,15 +233,13 @@ Above: `--space-xl`, or `--space-xl` plus `--space-m` under 46rem. Below: `--spa
 plus `--space-m`, the same gap the carousel keeps above the institutions, so the carousel sits evenly between the two.
 
 **Homepage entrance:** the wordmark goes first (see **Wordmark**), then `fade-in` and
-`drift-in` over 1.2s, in two beats 250ms apart, the about page's tempo: tagline at
+`drift-in` over 1.2s, in two beats 250ms apart, the site's tempo: tagline at
 1.6s, as the wordmark's letters finish landing and while its bar is still drawing,
-then the carousel at 1.85s (its covers fan out, see **Carousel**). The rest of the header (site nav, the
-phone's "More" toggle, platform bar) is held back so the wordmark arrives alone,
+then the carousel at 1.85s (its covers fan out, see **Carousel**). The rest of the header (the platform bar) is held back so the wordmark arrives alone,
 then fades in as one beat at 1.4s, 0.2s ahead of the tagline, over 1.2s on
 `--ease-fade`. Fade only, no drift: it is chrome, not content, and a vertical drift
 beside the letters' horizontal slide pulls against it. Keyed off `.logo--intro`, so
-other pages' headers stay still; the open phone nav is excluded, since it would
-replay the delay. Settled by about 3.4s, once the carousel's caption is in. Pure CSS apart from the carousel, removed under reduced motion.
+other pages' headers stay still. Settled by about 3.4s, once the carousel's caption is in. Pure CSS apart from the carousel, removed under reduced motion.
 
 ### Carousel
 Every episode, newest first, as a fan of square covers (`<section class="carousel">`),
@@ -308,7 +290,7 @@ The whole card links to that person's LinkedIn: circular portrait
 `--fg` and country in `--muted`. Three across, one below 46rem.
 
 **Team line.** `.credits-lede` introduces the grid: "Meet the people behind the
-episodes.", centred `--prose` at the prose size, `--space-s` under "Our team" so it
+episodes.", centred `--prose` at the prose size, capped at `70ch`, `--space-s` under "Our team" so it
 belongs to the heading rather than floating between it and the portraits.
 
 **Videographers.** `.credits-intro--sub`: the "Our team" heading a step down, at its
@@ -317,6 +299,8 @@ every screen and the videographers no longer read as the team's equals. Their na
 keep the card name's style, three across (one below 46rem), `--space-m` under the
 heading and `--space-m` apart (`--space-s` below 46rem, so the heading's gap stays
 the larger one).
+
+**Photographers line.** A second `.credits-lede` under "Special thanks", on the same 0.5s entrance beat as its heading.
 
 **Special thanks.** A second `.credits-intro--sub`, "Special thanks", `--space-xl`
 under the videographers, then a second `.thanks-list` laid out exactly as the
@@ -336,49 +320,22 @@ contact overlay. It is the site's one way into the form.
 each row of cards at 0.2s and 0.3s, the videographers at 0.4s, the special thanks at 0.5s,
 the contact line at 0.6s. Whole by about 1.8s. Removed under reduced motion.
 
-### About page
-A manifesto in three beats, the statement landing as the conclusion:
+### About statement
+`.about-statement`, the sentence that ends the homepage: bold sentence case at the
+tagline's scale, `--space-xl` above and nothing below. The sentence is `--muted`;
+only "the unexpected and the improbable" (a `<strong>` with weight reset) is `--fg`.
+There is no about page: the old `/about/` was removed on 2026-11-20, along with the
+site nav that linked to it.
 
-1. **Principles.** `.about-sections`, `--space-xl` below the masthead: three
-   alternating bands, `--space-xl` apart. Each band is a square photo
-   (`.about-figure`, the homepage cover's size, `object-fit: cover`, 6px radius over
-   `--surface`) with its credit caption set inside the bottom corner on the outer
-   edge (bottom right on band 02; below 46rem, opposite the text: bottom right on bands 01 and 03, bottom left on band 02),
-   `0.75rem` in, in `--muted` at `0.75rem` (`0.625rem` at 70% opacity below 46rem), and the principle beside it at
-   `--space-m`, centred on the photo's height. Band 02 is mirrored with `row-reverse`
-   and its text right aligned against the photo. Each heading has its number (`01` to
-   `03`, `aria-hidden`, `--muted`) on its own line above. Prose in `--fg`, `--space-s`
-   below, max **48ch**: the cap sits on the paragraph, so it is measured in the prose
-   size and every band reads the same width. Below 46rem every band stacks photo then
-   text, `--space-m` apart; band 02 keeps its text right aligned.
-2. **Statement.** `.about-statement`, bold sentence case at the tagline's scale,
-   `--space-xl` above and nothing below: it closes the page. The sentence is
-   `--muted`; only "the unexpected and the improbable" (a `<strong>` with weight
-   reset) is `--fg`. Credits are reached from the nav, not from the prose, and the
-   contact line lives at the end of the credits page.
-
-**Entrance:** in reading order, 1.2s per block (the other pages' tempo; 1.8s made the
-photos, and so their colour, feel late): opacity on `ease-in-out`
-and a 0.375rem drift on `--ease-drift`. Blocks on screen at load run in pure CSS,
-delays principles 0.15s / 0.4s / 0.65s, statement 1s. Blocks below
-the fold wait hidden (`.is-waiting`, set by `script.js`) and play the same entrance
-with no delay as each scrolls into view (`.is-entering`, 10% up from the bottom
-edge), 250ms apart when several arrive together. Under reduced motion the
-animations are removed, not shortened, because the global rule does not shorten
-delays, and nothing waits.
-
-**Scroll colour:** each band's photo goes from `grayscale(1)` to full colour and
-its heading and prose from `--muted` to `--fg` as it rises into view, holds through
-the middle of the screen, and goes back as it leaves (keyframes `band-photo` and
-`band-words`, gray at 0% and 100%, colour from 30% to 70%). Pure CSS, a view
-timeline per band (`view-timeline: --band`), linear, so the colour is always exactly
-where the scroll is at any speed; neighbouring bands crossfade in the gap. The
-number stays `--muted`. No hover state: a stale hover during scrolling held the
-colour back. Browsers without `animation-timeline` keep every band in colour.
+**Entrance:** `fade-in` 1.2s on `ease-in-out` and a 0.375rem `drift-in` on
+`--ease-drift`, after a 1s delay. Below the fold at load it waits hidden
+(`.is-waiting`, set by `script.js`) and plays the same entrance with no delay as it
+scrolls into view (`.is-entering`, 10% up from the bottom edge). Under reduced motion
+the animation is removed, not shortened, and nothing waits.
 
 ### Not found page
 `404.html` at the root, which GitHub Pages serves for any missing path at any depth,
-so every link and asset in it is absolute. It is the about page's frame (head script,
+so every link and asset in it is absolute. It is the credits page's frame (head script,
 header, footer) with one block in `main`, which grows (`flex: 1`) to keep the footer
 at the bottom and centres the block vertically between masthead and footer.
 
@@ -410,7 +367,7 @@ The contact form, on the credits page only, opened from that page's contact line
 card and no elevation: a `min(34rem, 100%)` panel on `--bg` inside a 1px `--rule`
 border,
 centred over a `rgb(10 10 10 / 0.92)` scrim, `--space-m` padding. The close
-control is the site nav's plus turned 45 degrees, `--muted` lifting to `--fg`.
+control is a plus turned 45 degrees, `--muted` lifting to `--fg`.
 Title at the row size, bold uppercase; intro in `--prose` capped at 48ch;
 fields are a bold uppercase `--muted` label over an input with no box, just a
 1px `--rule` underline that goes `--muted` on hover and `--fg` on focus.
@@ -456,10 +413,10 @@ the page scroll with `body.is-locked`. Both selectors drive the same rules.
 
 **One form, on the credits page.** The markup sits before that page's footer and
 nowhere else, so the contact line's `#contact` is a local anchor and the overlay
-opens where the reader already is. Home and about carry no form and no opener.
+opens where the reader already is. Home carries no form and no opener.
 
 A page arrived at with `#contact` already in the URL (an old `/about/#contact`
-link, or a shared one) still opens on arrival: `script.js` swaps the hash for
+link, or a shared one; the about page is gone, so that link now lands on the 404) still opens on arrival: `script.js` swaps the hash for
 the class state and drops it from the URL, and with JS off `:target` does the
 same on its own. An opener whose `href` points at another page is left to
 navigate.
@@ -502,7 +459,7 @@ Europe Jacques Delors, the Albanian ministry, IHP, WWF EPO and The Good Lobby.
 
 ### Audience
 A `<section class="audience">` between the institutions and the quotes, spaced like
-the institutions (`--space-xl` margin above plus `--space-m` padding above and below).
+the institutions but with more air above (`--space-xl` plus `--space-m` margin above, `--space-m` padding above and below).
 Centred heading "A sound that keeps you listening" at the heading size, bold uppercase with balanced wrapping, then
 `--space-m` down to three figures (`<ul class="audience-stats">`) in three equal columns,
 capped at 72rem, stacked `--space-m` apart below 46rem. Each figure is the number at
@@ -518,7 +475,7 @@ and drift on each figure 150ms apart, and each number counts up from 0 over 1.8s
 ease-out quart, so it slows into its final value. Thousands are split by a no-break space (10 000). Without JS or under reduced motion the final values are simply there.
 
 ### Quotes
-The homepage's closing block, `--space-xl` below the audience figures. A `<section class="quotes">`
+The homepage's closing block, `--space-xl` plus `--space-m` below the audience figures. A `<section class="quotes">`
 of `<figure>`s (`<blockquote>` + `<figcaption>`). Quote at the heading scale, capped
 at 38ch, centered, in sentence case. The source sits `--space-s` below as a gray label.
 A quote from an episode is a link to that episode's page (`<a class="quote-link"
@@ -555,14 +512,12 @@ heading does. A bottom-aligned version was tried and read as hanging in the spac
 The mark is wrapped in `.footer-brand` (`max-width: 24rem`) so it stays a distinct
 item in the band and the columns stay against the right edge.
 Pushed to the right edge, `.footer-cols`, two columns `clamp(2.5rem, 7vw, 7rem)`
-apart: **LISTEN** (Spotify, Apple Podcasts, Deezer, YouTube) and **THE PODCAST** (About,
-Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
+apart: **LISTEN** (Spotify, Apple Podcasts, Deezer, YouTube) and **THE PODCAST** (Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
 above their list. The links are the same size and weight in `--muted`, `0.75rem`
 apart, lifting to `--fg` and then glowing like every other gray link. Both bands wrap
 to a stack when they no longer fit side by side.
 
-Two columns, not three or four. The site has about ten destinations and two of them
-already sit in the header, so a wider grid would need invented links. No contact
+Two columns, not three or four. The site has about ten destinations, so a wider grid would need invented links. No contact
 column: the form is reached from the credits page's closing line (see **Contact
 overlay**). No episode links, which would mean new markup inside the generated block.
 
@@ -587,7 +542,7 @@ repo, unused.
 
 **Below 46rem the footer is a different object.** Not a columned block but three
 centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links side by
-side as one row at `1.25rem` (the header's "More" size), then the social row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
+side as one row at `1.25rem` (the platform row's mobile size), then the social row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
 `--space-xl` above, since three lines of type do not need a block's worth of air to
 read as the end. The wordmark, the two column headings and the whole LISTEN column
 are hidden, and the bottom band's rule with them: a second
@@ -625,8 +580,7 @@ footing, where a white thing only glows on hover instead of lifting first.
   `--ease-fade` (`ease-in-out`) for opacity, `--ease-drift`
   (`cubic-bezier(0.25, 0.46, 0.45, 0.94)`) for movement. One pair of keyframes,
   `fade-in` and `drift-in` (0.375rem rise). Opacity never goes on an ease-out: it snaps
-  on. Entrances start within 0.3s of load and settle by about 1.5s (the about page's
-  2.5s and the homepage's 3.4s, which starts with a 1s beat and then waits for the
+  on. Entrances start within 0.3s of load and settle by about 1.5s (the homepage's 3.4s, which starts with a 1s beat and then waits for the
   wordmark, are the exceptions). Two departures: the homepage wordmark's entrance,
   which keeps the motion designer's slides, wipe and curves (see **Wordmark**), and the
   carousel, which moves on a damped spring and fans out on an ease-out quint (see
@@ -641,8 +595,6 @@ footing, where a white thing only glows on hover instead of lifting first.
 
 - **Episode covers:** square, from the RSS feed, 6px radius over `--surface`,
   `object-fit: cover`. `build.py` writes one into every carousel slide.
-- **About photos:** `assets/about-photos/1.jpg` to `3.jpg`, in band order, served as
-  is and squared in CSS with `object-fit: cover`.
 - **Credit portraits:** 720x720, JPEG q68, from `assets/credits-photos/`, cropped to a
   circle.
 - **Icons:** only the three masked platform glyphs and the two masked social glyphs
@@ -683,8 +635,7 @@ Left as is, each waiting on a design call:
 
 - **Off-token values.** Carousel caption label gap `0.35em`, caption fades `0.3s` /
   `0.7s`, the press's own overshoot curve, credit name/role margins
-  `1rem` / `0.5rem`, about caption `0.75rem` type (`0.625rem` at `opacity: 0.7` on mobile) and
-  `0.75rem` inset, contact field
+  `1rem` / `0.5rem`, contact field
   label gap `0.5rem`, error message pull-up `-0.25rem`, close control
   `2.75rem` / `0.9rem`, submit padding `0.75rem 1.75rem`, footer link list gap `0.75rem`, brand column `24rem`,
   column gap

@@ -184,7 +184,6 @@ a { color: inherit; text-decoration: none; }
    --fg first (prose links, the footer icons), and in a title or card only the
    white text glows, not the gray number or country.
    The platform icons also shift to their brand colour (see .platform-icon). */
-.site-nav a,
 .platforms a,
 .caption-title a,
 .credit-name,
@@ -196,7 +195,6 @@ a { color: inherit; text-decoration: none; }
 .quote-link,
 .quote-source { transition: color 0.2s ease, text-shadow 0.2s ease; }
 
-.site-nav a:hover,
 .platforms a:hover,
 .caption-title a:hover,
 .credit-link:hover .credit-name,
@@ -243,31 +241,6 @@ a { color: inherit; text-decoration: none; }
   gap: var(--space-m);
 }
 
-/* Sized like the about page's own section headings (§4.2 in PROJECT-CONTEXT), a step
-   up from the row size, since this nav is the same weight as a page heading
-   rather than a list item. .header-top's align-items: flex-start keeps this
-   top-aligned with the wordmark. */
-.site-nav {
-  flex: none;
-  font-weight: 650;
-  font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-/* The links sit in their own box so that below 46rem script.js can slide the
-   nav's height while the air above the words (padding here) folds with it. */
-.site-nav-links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
-
-/* The plus that folds the nav away. Phones only, and only with script.js
-   (the .js class is set in each page's head, before first paint, so the nav
-   never flashes open and then shuts). */
-.menu-toggle { display: none; }
 
 .logo {
   display: block;
@@ -345,18 +318,12 @@ a { color: inherit; text-decoration: none; }
     animation: logo-bar 1.35s cubic-bezier(0.31, 0.13, 0.1, 0.81) 1.42s both;
   }
 
-  /* The rest of the header on the homepage (the nav, its phone toggle and the
-     platform links) holds back so the wordmark arrives alone, then comes in as
-     one beat at 1.4s, as the letters are landing and just ahead of the
-     tagline. A fade only, no drift: it is chrome, not content, and a vertical
-     drift beside the letters' horizontal slide would pull against it. The
-     toggle's rotate(180deg) is also a transform the drift would overwrite.
-     Keyed off .logo--intro so the other pages' headers stay still. The open
-     phone nav is left out (:not(.is-open)): it is display: none until opened,
-     and showing it would replay this delay; its links have their own
-     entrance. */
-  :root:not(.is-return) .logo--intro ~ .menu-toggle,
-  :root:not(.is-return) .logo--intro ~ .site-nav:not(.is-open),
+  /* The rest of the header on the homepage (the platform links) holds back so
+     the wordmark arrives alone, then comes in as one beat at 1.4s, as the
+     letters are landing and just ahead of the tagline. A fade only, no drift:
+     it is chrome, not content, and a vertical drift beside the letters'
+     horizontal slide would pull against it. Keyed off .logo--intro so the other
+     pages' headers stay still. */
   :root:not(.is-return) .header-top:has(.logo--intro) + .platforms {
     animation: fade-in 1.2s var(--ease-fade) 1.4s both;
   }
@@ -675,97 +642,11 @@ a { color: inherit; text-decoration: none; }
   .carousel-captions .caption.is-active > * { animation: none; }
 }
 
-/* The site nav's plus, from the mockup (see .menu-toggle below 46rem). Sized
-   and weighted in em so it scales with its label instead of sitting at a fixed
-   size; the second bar turns away to leave a minus while the nav is open. */
-.menu-toggle-icon {
-  flex: none;
-  position: relative;
-  width: 0.85em;
-  height: 0.85em;
-}
-
-.menu-toggle-icon::before,
-.menu-toggle-icon::after {
-  content: "";
-  position: absolute;
-  inset: 50% 0 auto 0;
-  height: 2px;
-  background: currentColor;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.menu-toggle-icon::after { transform: rotate(90deg); }
-.menu-toggle[aria-expanded="true"] .menu-toggle-icon::after { transform: rotate(0deg); opacity: 0; }
-
-/* Below the point where the platform names already drop to icons, the top-right
-   nav no longer has room beside the wordmark and moves under the masthead. */
+/* Below the point where the platform names already drop to icons. */
 @media (max-width: 46rem) {
-  /* A grid, not a wrapping row: the wordmark and "More" share the first line
-     and the nav takes the whole second. On the narrowest phones (iPhone SE)
-     the wordmark gives up width to its column (max-width) instead of pushing
-     "More" down a line. No row gap: the nav's air is its own padding, so it
-     folds with the nav. */
-  .header-top {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: var(--space-m);
-    row-gap: 0;
-  }
-
+  /* On the narrowest phones (iPhone SE) the wordmark gives up width instead of
+     overflowing. */
   .header-top .logo { max-width: 100%; }
-
-  /* About and Credits stack under the plus, right aligned to its edge, at the
-     about statement's mobile size (8vw). Without script.js they simply stay
-     open. */
-  .site-nav {
-    grid-column: 1 / -1;
-    font-size: 8vw;
-  }
-
-  .site-nav-links { padding-top: var(--space-s); }
-
-  /* "More" and its plus, set vertically up the right edge
-     beside the wordmark: a word says what it does where a lone plus left
-     people guessing. At 1.25rem it runs about the wordmark's height, and its
-     top meets the top of "SPREAD". The plus is a box, not
-     text, so it stays upright and still turns to a flat minus while the nav
-     is open. 0.75rem of padding, taken back out by the margins, makes the tap
-     target. */
-  .js .menu-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.4em;
-    margin: -0.75rem -0.75rem 0 0;
-    padding: 0.75rem;
-    border: 0;
-    background: none;
-    color: var(--fg);
-    font: inherit;
-    font-weight: 650;
-    font-size: 1.25rem;
-    line-height: 1;
-    text-transform: uppercase;
-    /* Turned the other way: reads bottom to top, "MORE" rising from the
-       wordmark's baseline side with the plus at the top. vertical-rl plus a
-       half turn, since sideways-lr is not yet everywhere. */
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    cursor: pointer;
-  }
-
-  .js .site-nav:not(.is-open) { display: none; }
-
-  /* While script.js slides the nav open, the words come in on the site's fade
-     and drift, one after the other, the way the page's blocks enter. */
-  .js .site-nav.is-open a {
-    animation:
-      fade-in 0.6s var(--ease-fade) backwards,
-      drift-in 0.6s var(--ease-drift) backwards;
-  }
-
-  .js .site-nav.is-open a:nth-child(1) { animation-delay: 0.1s; }
-  .js .site-nav.is-open a:nth-child(2) { animation-delay: 0.18s; }
 
   /* One line: the gray label, then the icons right after it, as on desktop,
      so the label reads as the start of the row it introduces. The label takes
@@ -872,7 +753,7 @@ a { color: inherit; text-decoration: none; }
    heading is the institutions heading; the figures sit --space-m below in three
    columns, stacked --space-m apart on a phone. */
 .audience {
-  margin-top: var(--space-xl);
+  margin-top: calc(var(--space-xl) + var(--space-m));
   padding-block: var(--space-m);
   text-align: center;
 }
@@ -953,7 +834,7 @@ a { color: inherit; text-decoration: none; }
    break between blocks, the same one under the tagline; the footer's own 6rem
    carries the space below. */
 .quotes {
-  margin-top: var(--space-xl);
+  margin-top: calc(var(--space-xl) + var(--space-m));
   text-align: center;
 }
 
@@ -1291,7 +1172,10 @@ a { color: inherit; text-decoration: none; }
    everywhere else: this line belongs to the heading above it, not to the grid,
    and an xl gap on both sides would leave it floating between the two. The
    grid keeps its own --space-xl below. */
-.credits-lede { margin-top: var(--space-s); }
+.credits-lede {
+  max-width: 70ch;
+  margin: var(--space-s) auto 0;
+}
 
 /* Lifted to --fg so it is the brightest thing in the line, with the same
    underline as the episode description's prose links. */
@@ -1323,6 +1207,7 @@ a { color: inherit; text-decoration: none; }
 .page-credits .credits-intro:nth-of-type(2),
 .thanks-list { animation-delay: 0.4s; }
 .page-credits .credits-intro:nth-of-type(3),
+.page-credits .credits-intro:nth-of-type(3) + .credits-lede,
 .thanks-list ~ .thanks-list { animation-delay: 0.5s; }
 .contact-line { animation-delay: 0.6s; }
 
@@ -1336,18 +1221,12 @@ a { color: inherit; text-decoration: none; }
   .contact-line { animation: none; }
 }
 
-/* ---- About ---- */
+/* ---- About statement ---- */
 
-/* A manifesto in three beats: three numbered principles in photo bands, one loud
-   statement that sums them up, one quiet line to close. The statement lands as
-   the conclusion rather than the opener, so the page has a shape of its own
-   rather than repeating the homepage's stack. */
-
-/* The page's one belief, as a poster, in the tagline's own type: sentence case
+/* The one belief, as a poster, in the tagline's own type: sentence case
    at the same scale as the home page's opening line, pulled a step back in gray
    so only the words the podcast is about light up in --fg. --space-xl above, so
-   it stands apart from the principles as a block. It closes the page, so the
-   page's bottom padding is the only thing under it. */
+   it stands apart from the quotes as a block. */
 .about-statement {
   margin: var(--space-xl) 0 0;
   color: var(--muted);
@@ -1372,213 +1251,26 @@ a { color: inherit; text-decoration: none; }
   font-weight: inherit;
 }
 
-/* Alternating bands: a square photo on one side, its principle on the other,
-   the text sitting on the photo's bottom edge. --space-xl down from the
-   masthead and between bands, --space-m between photo and text, the homepage
-   cover-to-list gap. The even band is mirrored with row-reverse rather than
-   reordered markup, so every band reads photo first on phones and to screen
-   readers. */
-.about-sections {
-  margin-top: var(--space-xl);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
-}
-
-.about-section {
-  display: flex;
-  gap: var(--space-m);
-}
-
-.about-section:nth-child(even) {
-  flex-direction: row-reverse;
-}
-
-/* The episode page cover's size, so the two pages share one image scale. */
-.about-figure {
-  position: relative;
-  flex: 0 0 clamp(240px, 47vw, max(620px, 100vw / 3));
-  margin: 0;
-}
-
-/* Squared here, not in the files: the photos keep their own crop and
-   object-fit cuts them to the frame. */
-.about-photo {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 6px;
-  background: var(--surface);
-}
-
-/* The photographer credit, set inside the photo's bottom corner on the page's
-   outer edge (left, or right on the mirrored band), 0.75rem in: smaller than
-   any label, so it reads as a caption and not as part of the text beside it. */
-.about-caption {
-  position: absolute;
-  left: 0.75rem;
-  bottom: 0.75rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-}
-
-.about-section:nth-child(even) .about-caption {
-  left: auto;
-  right: 0.75rem;
-}
-
-/* Centred on the photo's height. The mirrored band pushes
-   its text right, against the photo. */
-.about-copy {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.about-section:nth-child(even) .about-copy {
-  align-items: flex-end;
-  text-align: right;
-}
-
-/* The credit name's type. The number sits on its own line above the words in
-   gray, like a carousel caption's number and title but stacked instead of side by side, so
-   the three headings start level however their words wrap. */
-.about-heading {
-  margin: 0;
-  font-size: clamp(1.05rem, 1.9vw, 1.5rem);
-  font-weight: 650;
-  line-height: 1.2;
-  letter-spacing: var(--tracking);
-  text-transform: uppercase;
-}
-
-.about-number {
-  display: block;
-  color: var(--muted);
-}
-
-/* Capped at 48ch, roughly 55 to 60 rendered characters a line: the readable
-   measure, and narrower than the episode description's 60ch because these
-   paragraphs sit beside a large photo and a wide column read as a wall. The
-   cap is on the paragraph, not the column, so ch is measured in the prose
-   size and all three bands come out the same width. */
-.about-text {
-  max-width: 48ch;
-  margin: var(--space-s) 0 0;
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
-  line-height: 1.6;
-}
-
-/* One column: every band is photo, caption, then text. The mirrored band keeps its text right aligned, so
-   the alternation still reads down the column. */
-@media (max-width: 46rem) {
-  .about-section,
-  .about-section:nth-child(even) { flex-direction: column; }
-
-  .about-figure { flex: none; }
-
-  /* Full width photos have no outer edge, so each credit sits on the side
-     opposite its text, clear of the prose below: bottom right over the left
-     aligned bands, bottom left over the mirrored one. It drops a step smaller
-     and dimmer so it reads as a mark on the photo, not a line of type. */
-  .about-caption {
-    left: auto;
-    right: 0.75rem;
-    font-size: 0.625rem;
-    opacity: 0.7;
-  }
-
-  .about-section:nth-child(even) .about-caption {
-    left: 0.75rem;
-    right: auto;
-  }
-}
-
-/* Entrance, in the manifesto's reading order: the three principles one by
-   one, then the statement.
-
-   Opacity and movement are two animations on purpose. An ease-out on opacity
-   does most of its change in the first few hundred milliseconds, which reads as
-   the text snapping on; ease-in-out starts slowly, so the text genuinely fades
-   up out of the background. The drift is a separate, barely there 0.375rem on a
-   gentle ease-out, which is where ease-out belongs: motion that comes to rest.
-
-   The first principle waits 0.15s so the first paint (and on devices without Arial,
-   the font swap) is out of the way before anything moves. The principles follow
-   250ms apart, slow enough to read as a sequence, and the page is whole by about
-   2.5s. 1.2s per block, the other pages' tempo: at 1.8s the photos took so
-   long to appear that their colour (the reading light, below) felt late. Only
-   opacity and transform animate, which the browser composites without layout or
-   repaint. Pure CSS, so it runs with JS off; fill-mode both keeps each block
-   hidden only through its own delay. */
-.about-statement,
-.about-section {
+/* Entrance: the statement fades and drifts in on the site's pair of curves, 1.2s
+   after a 1s delay. Opacity and transform only. */
+.about-statement {
   animation:
-    fade-in 1.2s var(--ease-fade) both,
-    drift-in 1.2s var(--ease-drift) both;
+    fade-in 1.2s var(--ease-fade) 1s both,
+    drift-in 1.2s var(--ease-drift) 1s both;
 }
 
-.about-section:nth-child(1) { animation-delay: 0.15s; }
-.about-section:nth-child(2) { animation-delay: 0.4s; }
-.about-section:nth-child(3) { animation-delay: 0.65s; }
-.about-statement { animation-delay: 1s; }
-
-/* Blocks below the fold at load wait for the reader instead: script.js marks
-   them .is-waiting (never under reduced motion), then swaps in .is-entering as
-   each scrolls into view, which replays the same fade and drift with no delay.
-   Blocks arriving together are staggered 250ms apart by the script. */
-.about-statement.is-waiting,
-.about-section.is-waiting {
+/* Below the fold at load it waits for the reader: script.js marks it
+   .is-waiting (never under reduced motion), then swaps in .is-entering as it
+   scrolls into view, which replays the entrance with no delay. */
+.about-statement.is-waiting {
   animation: none;
   opacity: 0;
 }
 
-.about-statement.is-entering,
-.about-section.is-entering { animation-delay: 0s; }
+.about-statement.is-entering { animation-delay: 0s; }
 
-/* Removed outright rather than left to the global reduced-motion rule: that one
-   shortens durations but not delays, so the blocks would still blink in late. */
 @media (prefers-reduced-motion: reduce) {
-  .about-statement,
-  .about-section { animation: none; }
-}
-
-/* Colour follows the scroll: each band comes to colour as it rises into view,
-   holds it through the middle of the screen, and goes back to black and white
-   as it leaves, its words fading between --muted and --fg alongside. Tied to
-   the band's own place on screen (a view timeline), not switched by a script,
-   so it is always exactly where the scroll is, at any speed, with nothing to
-   wait for. Neighbouring bands overlap in the gap between them, so one fades
-   down as the next fades up. Browsers without scroll-driven animations keep
-   every band in colour. Linear, since the scroll itself supplies the pace. */
-@keyframes band-photo {
-  0%, 100% { filter: grayscale(1); }
-  30%, 70% { filter: none; }
-}
-
-@keyframes band-words {
-  0%, 100% { color: var(--muted); }
-  30%, 70% { color: var(--fg); }
-}
-
-@supports (animation-timeline: view()) {
-  .about-section { view-timeline: --band block; }
-
-  .about-photo {
-    animation: band-photo linear both;
-    animation-timeline: --band;
-  }
-
-  .about-heading,
-  .about-text {
-    animation: band-words linear both;
-    animation-timeline: --band;
-  }
+  .about-statement { animation: none; }
 }
 
 /* ---- Episode page ---- */
@@ -1960,8 +1652,6 @@ body.is-locked { overflow: hidden; }
 .contact-overlay:target .contact-panel,
 .contact-overlay.is-open .contact-panel { transform: translateY(0); }
 
-/* The site nav's plus, turned 45 degrees into a close cross, so the page has
-   one toggle glyph rather than two. */
 /* A 2.75rem box for the thumb, with the glyph centred in it. The offsets take
    half the box back off --space-s, so the cross itself still sits where the
    panel's own padding puts it. */
