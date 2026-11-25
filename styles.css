@@ -88,9 +88,6 @@
   /* The vw terms step up by 2.5 each (2, 5, 12.5), so the three sizes keep one
      ratio to each other as the viewport changes. */
   --space-xl: clamp(5rem, 12.5vw, 9rem);
-  /* Not a fourth gap: the air above and below each platform's column on a
-     phone's episode page, see .episode-page-link. */
-  --row-pad: clamp(1.1rem, 2.2vw, 1.6rem);
   --tracking: 0.015em;
   /* The site's one motion, as two curves: opacity on ease-in-out so it fades up
      rather than snapping on, and movement on a gentle ease-out so it comes to
@@ -1380,8 +1377,7 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
-/* Without hairlines a --row-pad above and below left each platform floating in
-   its own band, so the rows sit --space-s apart, the same gap that pins the
+/* No hairlines: the rows sit --space-s apart, the same gap that pins the
    label above them, and read as one list. */
 .episode-page-links {
   display: flex;
@@ -1451,11 +1447,17 @@ a { color: inherit; text-decoration: none; }
     grid-auto-columns: calc(100% / 3);
     justify-content: center;
     gap: 0;
-    /* The same air above the logos as below them: --space-m plus the link's
-       --row-pad on each side, mirroring the captions' --row-pad and the
-       description's --space-m under them. */
-    margin-top: var(--space-m);
   }
+
+  /* The label stays on the column's left edge, --space-s over the logos like
+     any label over its subject, and the row needs no padding of its own: the
+     logo over its caption is already a tap target over 50px tall. The block
+     then sits --space-m from the title above and the description below, like
+     every other block in the column. */
+
+  /* Justified text in a phone-width column opens uneven gaps between words,
+     so the description sets ragged right here. */
+  .episode-description { text-align: left; }
 
   /* A fourth platform (YouTube) would push a third-wide column off the screen,
      so with four links each takes a quarter. */
@@ -1464,7 +1466,6 @@ a { color: inherit; text-decoration: none; }
   .episode-page-link {
     flex-direction: column;
     gap: 0.5rem;
-    padding: var(--row-pad) 0;
   }
 
   .episode-page-link .platform-icon { width: 8vw; height: 8vw; }
@@ -1490,12 +1491,13 @@ a { color: inherit; text-decoration: none; }
 
   /* The footer's page links' size (1.25rem): at the label size it was the
      smallest link on a phone, smaller than the footer it sits above. On its own
-     line and centred, --space-xl under the date line so it reads as a way out
-     once the column is the whole page. */
+     line and centred, so it reads as a way out. --space-m under the date line,
+     as on desktop: it closes the article, and the --space-xl + --space-m to the
+     quotes below is what separates it from the next block. */
   .episode-page-back {
     display: block;
     width: fit-content;
-    margin: var(--space-xl) auto 0;
+    margin: var(--space-m) auto 0;
     font-size: 1.25rem;
   }
 }

@@ -113,7 +113,7 @@ PostScript name (`ArialMT`) keeps `local()` clear of the same aliases.
 | audience figure | `clamp(3rem, 7vw, 6rem)` | 400 | 1.2 | 0.015em |
 | sub-heading: "Videographers", "Special thanks" | `clamp(1.375rem, 2.6vw, 2.25rem)` | 650 | 1.2 | 0.01em |
 | row | `clamp(1.05rem, 1.9vw, 1.5rem)` | 650 | 1.2 | 0.01em |
-| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo over its name at `0.8rem` 400 `--muted`, sentence case, the same `--space-m` + `--row-pad` above and below | 650 | 1.2 | 0.01em |
+| episode page platform links | row size, no hairlines, rows `--space-s` apart and `--space-s` under the label · below 46rem a centred row of columns a third wide, a quarter wide when an episode has all four links (so one or two links sit centred, not beside an empty column; in a quarter, "Apple Podcasts" wraps to two lines below about 400px), `8vw` logo over its name at `0.8rem` 400 `--muted`, sentence case, label left aligned `--space-s` above the row, no padding on the links, `--space-m` to the title above and the description below |  650 | 1.2 | 0.01em |
 | prose | `clamp(1rem, 1.5vw, 1.125rem)` · credit role / location `1rem` below 46rem | 400 | 1.6 (1.2 on meta and credit lines) | |
 | label | `clamp(0.875rem, 1.2vw, 1rem)` | 650 | 1.2 | |
 | footer | `0.875rem` · `0.8rem` below 46rem | 400 | 1.2 | |
@@ -129,7 +129,6 @@ block, **xl** is the break between blocks. Needing a fourth means the stack is w
 | `--space-s` | `clamp(1rem, 2vw, 1.5rem)` | Label to its subject |
 | `--space-m` | `clamp(2rem, 5vw, 3.5rem)` | Gap inside a block |
 | `--space-xl` | `clamp(5rem, 12.5vw, 9rem)` | Break between blocks |
-| `--row-pad` | `clamp(1.1rem, 2.2vw, 1.6rem)` | Padding above and below each platform column on a phone's episode page |
 
 | Gap | Home | Credits |
 |-----|------|---------|
@@ -143,9 +142,11 @@ large and a tighter gap crowds them. `--portrait` and `--col-gap` are widths and
 page-local.
 
 On an episode page, "Discover more episodes" is white, at the row size like the platform links above it, `--space-m` under the
-date line on desktop, the same gap as between the text column's other blocks. Below
-46rem it sits `--space-xl` under it, centred, so it reads as a way out rather than
-part of the description.
+date line, the same gap as between the text column's other blocks. Below 46rem it is
+centred, so it reads as a way out, at the same `--space-m`: it closes the article,
+and the `--space-xl` + `--space-m` to the quotes is what separates it from the next
+block. The description is justified on desktop and ragged right below 46rem, where a
+justified phone-width column opens uneven word gaps.
 
 Bottom padding is `clamp(1.25rem, 5vh, var(--gutter))`, measured against viewport
 height so the last element sits the same distance off the bottom on every page.
