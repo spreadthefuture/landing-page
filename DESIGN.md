@@ -28,7 +28,7 @@ near-duplicate.
 | Prose size (the `body` base size, credits team line and contact line, contact intro and inputs, carousel role line, episode page description and meta, credit role and location) | `clamp(1rem, 1.5vw, 1.125rem)` |
 | Prose link (episode description, credits contact line) | underlined, `text-underline-offset: 0.2em`; the second is also `--fg` |
 | Measure (max line length) | `60ch` episode description and carousel caption, `38ch` quotes. Keep any new prose in that 45 to 60ch range |
-| Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark and footer icons |
+| Glow (white text on hover only) | `--glow`, or `--glow-filter` for the wordmark, footer icons and institution logos |
 | Entrance | `fade-in` + `drift-in` keyframes, on `--ease-fade` / `--ease-drift` |
 | Brand name in copy | `SPREAD THE FUTURE`, uppercase in the markup |
 | Page description (meta and Open Graph) | The same sentence on every page, matching the tagline (`404.html` carries the meta description but no Open Graph) |
@@ -446,7 +446,8 @@ A `<section class="institutions">` between the carousel and the quotes,
 then a line at the prose size in `--prose` `--space-s` below, then `--space-m` down to a wrapping, centred flex row of white logos from
 `assets/institutions-logos/` (`<ul class="institutions-logos">`, one `<li><img>` each).
 Every logo shares a base height `--logo-h`, `clamp(3rem, 6vw, 5.5rem)`, and width cap
-`--logo-w`, `min(60vw, 18rem)`, at `0.85` opacity; gaps are `--space-m` by `--space-xl`
+`--logo-w`, `min(60vw, 18rem)`, at full opacity, with `--glow-filter`
+on hover (they are not links); gaps are `--space-m` by `--space-xl`
 (`--space-m` both ways below 46rem). Above 46rem the base is 1.2x (`clamp(3.6rem, 7.2vw, 6.6rem)`,
 cap `21.6rem`) and the logos break into three on the first row and the rest on the second, via a
 full-width `::before` flex item ordered after the third logo. Each `<img>` carries a
@@ -569,8 +570,8 @@ footing, where a white thing only glows on hover instead of lifting first.
 
 - **One glow:** `--glow` (in `:root`), two `text-shadow` layers in `--fg`: a 0.2em
   core at 20% and a 0.8em haze at 10%, in em so it scales with the type.
-  `--glow-filter` is the same two layers as `drop-shadow()`, for the SVG wordmark and
-  the masked footer icons. Hover only: nothing glows at rest. Gray never glows.
+  `--glow-filter` is the same two layers as `drop-shadow()`, for the SVG wordmark,
+  the masked footer icons and the institution logos. Hover only: nothing glows at rest. Gray never glows.
 - **One hover state:** white things glow, over `0.2s ease`, declared once as a grouped
   rule near the top of `styles.css`. Add new hoverable things to that rule. Gray links
   lift to `--fg` first and then glow (episode description links, footer icons). In a

@@ -209,12 +209,14 @@ a { color: inherit; text-decoration: none; }
 .logo svg,
 .footer-wordmark svg,
 .footer-social a,
-.platforms a.platforms-instagram { transition: color 0.2s ease, filter 0.2s ease; }
+.platforms a.platforms-instagram,
+.institutions-logos img { transition: color 0.2s ease, filter 0.2s ease; }
 
 .logo a:hover svg,
 .footer-wordmark:hover svg,
 .footer-social a:hover,
-.platforms a.platforms-instagram:hover { color: var(--fg); filter: var(--glow-filter); }
+.platforms a.platforms-instagram:hover,
+.institutions-logos img:hover { color: var(--fg); filter: var(--glow-filter); }
 
 /* The quote bars are shapes, not type, so they keep the old dim. */
 .quote-dot { transition: opacity 0.2s ease; }
@@ -701,7 +703,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Every logo gets the same base height and width cap, so wide wordmarks and the
-   squarer crests read at one weight. Soft white at rest, like the type. Each
+   squarer crests read at one weight. Full white, glowing on hover. Each
    logo then multiplies both by its own --size, set in the list below. */
 .institutions-logos {
   --logo-h: clamp(3rem, 6vw, 5.5rem);
@@ -722,7 +724,6 @@ a { color: inherit; text-decoration: none; }
   height: calc(var(--logo-h) * var(--size, 1));
   max-width: calc(var(--logo-w) * var(--size, 1));
   object-fit: contain;
-  opacity: 0.85;
 }
 
 /* Per-logo size, tuned by eye: 1 is 100%, 0.8 is 80%, 1.4 is 140%. A logo
