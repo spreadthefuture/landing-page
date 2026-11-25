@@ -167,7 +167,7 @@ the wordmark too, that SVG sits twice in each. Change one, change all eight.
 - **Home:** the carousel's centre cover grows to `min(70vw, 54svh)`; the tagline switches to viewport sizing.
 - **About statement:** switches to viewport sizing.
 - **Credits:** grids drop to one column.
-- **Footer:** reduced to centred lines (page links, social row), then the credit and copyright as one tight two-line block.
+- **Footer:** reduced to centred lines (page links, one icon row of social then platform glyphs), then the credit and copyright as one tight two-line block.
 
 ## Components
 
@@ -528,9 +528,11 @@ column: Contact is a link in THE PODCAST, under Credits. It opens the form in pl
 overlay**). No episode links, which would mean new markup inside the generated block.
 
 **Bottom band (`.footer-bottom`).** A 1px `--rule` line, `--space-m` under the
-columns and `--space-s` above this row, then the social links on the left and the
-copyright on the right, right aligned against them. LinkedIn and Instagram,
-in `--muted` (no RSS link since 2026-09-28); the credit and the copyright on one line in
+columns and `--space-s` above this row, then the copyright alone, right aligned.
+The social icon row (`.footer-social`) and the platform icon row (`.footer-platforms`)
+are in the markup but phone only (`display: none` from 46rem up, since 2026-11-25): on
+desktop the LISTEN column and the LinkedIn and Instagram text links already carry them.
+The icons are in `--muted` (no RSS link since 2026-09-28); the credit and the copyright in
 `--muted-dim`. Neither sits in a badge or a container: LinkedIn is
 the bare "in", not the filled square it ships as, because a filled square reads as a
 block of light next to an outline and pulls the row off center. The glyphs are CSS
@@ -547,14 +549,14 @@ There is no contact glyph here.
 
 **Below 46rem the footer is a different object.** Not a columned block but three
 centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links (Credits, Contact) side by
-side as one row at `1.25rem` (the platform row's mobile size), then the LinkedIn and Instagram icon row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
+side as one row at `1.25rem` (the platform row's mobile size), then one icon row: LinkedIn and Instagram, then on the same line and at the same `1rem` gap the platform icons (Spotify, Apple Podcasts, Deezer, YouTube, the LISTEN column reduced to its glyphs, at the social glyphs' fixed `1.25rem` square, `--muted` lifting to each brand colour on hover like the header bar), then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
 `--space-xl` above, since three lines of type do not need a block's worth of air to
-read as the end. The wordmark, the two column headings, the whole LISTEN column
+read as the end. The wordmark, the two column headings, the LISTEN column's text links
 and the LinkedIn and Instagram text links (`.footer-link--social`, which the icon row repeats)
 are hidden, and the bottom band's rule with them: a second
 wordmark and a repeat of the header's platform bar read as a wall of small type on a
-phone. Nothing is lost that the page does not already carry, since the header's
-platform icons sit on every page. The links' row gap is the social row's `1.75rem`, so
+phone. The platforms come back as a quiet icon row so the page ends with a way to
+play it without scrolling back up to the header. The links' row gap is the social row's `1.75rem`, so
 the three lines run on one rhythm. Hiding is `display: none` on `.footer-brand`,
 `.footer-col--listen`, `.footer-col-title` and `.footer-link--social`; the two columns carry a `.footer-col`
 class for that one selector.

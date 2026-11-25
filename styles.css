@@ -1960,7 +1960,7 @@ body.is-locked { overflow: hidden; }
 .footer-bottom {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: var(--space-s);
   margin-top: var(--space-m);
@@ -1968,8 +1968,8 @@ body.is-locked { overflow: hidden; }
   border-top: 1px solid var(--rule);
 }
 
-/* Right aligned against the icon row, so the band reads as two anchored ends
-   rather than two things adrift in the middle. */
+/* Right aligned: on desktop the line holds the copyright alone, the icon rows
+   being phone only. */
 .footer-bottom p {
   margin: 0;
   text-align: right;
@@ -1979,10 +1979,16 @@ body.is-locked { overflow: hidden; }
    sentence is at its widest relative to the column; above 46rem there is room
    for it to run on one line or wrap on its own. */
 
-/* A step brighter than the copyright beside it: --muted-dim belongs to that
+/* Phones only. On desktop the LISTEN column and the LinkedIn and Instagram
+   text links in THE PODCAST column already carry them, so the icons would only
+   repeat what sits a few lines above. */
+.footer-platforms,
+.footer-social { display: none; }
+
+/* A step brighter than the copyright under it: --muted-dim belongs to that
    line alone, and these are links. */
+.footer-platforms,
 .footer-social {
-  display: flex;
   align-items: center;
   gap: 1rem;
   color: var(--muted);
@@ -1992,6 +1998,7 @@ body.is-locked { overflow: hidden; }
    to a 32px target without drawing it any larger. The 12px of facing padding
    comes back out of the gap, which is why that reads 1rem for a 1.75rem space
    between glyphs, the same figure the platform bar uses. */
+.footer-platforms a,
 .footer-social a {
   display: flex;
   align-items: center;
@@ -2021,12 +2028,21 @@ body.is-locked { overflow: hidden; }
 .social-icon--linkedin { -webkit-mask-image: url(/assets/social/linkedin.svg); mask-image: url(/assets/social/linkedin.svg); }
 .social-icon--instagram { -webkit-mask-image: url(/assets/social/instagram.svg); mask-image: url(/assets/social/instagram.svg); }
 
+/* The platform glyphs at the social glyphs' fixed square, so the two rows land
+   on the same lines, and the header bar's hover: gray lifts to its brand colour. */
+.footer-platforms .platform-icon { width: 1.25rem; height: 1.25rem; }
+.footer-platforms a:hover .platform-icon--spotify { background-color: #1ED760; }
+.footer-platforms a:hover .platform-icon--apple { background-color: #A945E3; }
+.footer-platforms a:hover .platform-icon--deezer { background-color: #A238FF; }
+.footer-platforms a:hover .platform-icon--youtube { background-color: #FF0000; }
+
 /* Below the breakpoint the footer is a different object: not a columned block
    but three centred lines, the site's quiet last word. A second wordmark and a
    LISTEN column that repeats the header's platform bar read as a wall of small
    type on a phone, where the page has already been signed off by the covers
-   above. What survives is what the header cannot reach: the two page links,
-   the social row, the copyright. */
+   above. What survives: the two page links, one icon row (LinkedIn and
+   Instagram, then the platforms: the LISTEN column reduced to its glyphs, so the
+   page ends with a way to play it without scrolling back up), the copyright. */
 @media (max-width: 46rem) {
   .site-footer {
     /* Less air above than the desktop footer needs: three centred lines are a
@@ -2048,9 +2064,13 @@ body.is-locked { overflow: hidden; }
 
   .footer-top,
   .footer-cols,
+  .footer-platforms,
   .footer-social {
     justify-content: center;
   }
+
+  .footer-platforms,
+  .footer-social { display: flex; }
 
   /* One line of two links, so the column becomes a row and the gap is the
      social row's own 1.75rem: the three lines then read on one rhythm.
@@ -2073,16 +2093,21 @@ body.is-locked { overflow: hidden; }
      the social row is a full --space-m; the social row and the sentence under
      it are one unit, so their own gap stays smaller than that, a step up from
      --space-s rather than a match for it. */
+  /* A wrapping row, not a column: the social and platform icons share one
+     line, at the icon rows' own 1rem gap so the six read as one row, and the
+     copyright takes a full line of its own under them. */
   .footer-bottom {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    gap: calc((var(--space-s) + var(--space-m)) / 2);
+    gap: calc((var(--space-s) + var(--space-m)) / 2) 1rem;
     margin-top: var(--space-m);
     padding-top: 0;
     border-top: 0;
   }
 
   .footer-bottom p {
+    flex-basis: 100%;
     text-align: center;
   }
 
