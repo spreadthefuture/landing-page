@@ -1,5 +1,5 @@
 {
-  "_comment": "Hand-maintained. scripts/build.py and scripts/episode_pages.py read this and never write it. Paste one URL per platform per episode; leave a URL empty to drop that link from the episode. 'description' is the one-line summary shown when an episode page is shared (meta and Open Graph); leave it empty and episode_pages.py falls back to 'A conversation with <guest>, on SPREAD THE FUTURE: a podcast about possible tomorrows.'. 'role' is the line under the episode's title in the homepage carousel, usually the guest's position; leave it empty for no line. 'title' is a label for you, the scripts ignore it.",
+  "_comment": "Hand-maintained. scripts/build.py and scripts/episode_pages.py read this and never write it. Paste one URL per platform per episode; leave a URL empty to drop that link from the episode. 'description' is the one-line summary shown when an episode page is shared (meta and Open Graph); leave it empty and episode_pages.py falls back to 'A conversation with <guest>, on SPREAD THE FUTURE: a podcast about possible tomorrows.'. 'role' is the line under the episode's title in the homepage carousel, usually the guest's position; leave it empty for no line. 'title' is a label for you, the scripts ignore it. 'quote' is the guest's line for the rotating quotes at the end of every episode page, plain text without quotation marks (the page adds them, the guest's name and the episode label); leave it empty for no quote.",
   "platforms": [
     {
       "key": "spotify",
@@ -30,7 +30,8 @@
       "deezer": "https://link.deezer.com/s/34QEkWSQ8v4Ignnyepyz5",
       "youtube": "https://youtu.be/VVeaQEmlAos",
       "description": "A conversation with Ferit Hoxha, Minister for Europe and Foreign Affairs of Albania, on SPREAD THE FUTURE: a podcast about possible tomorrows.",
-      "role": "Minister for Europe and Foreign Affairs of Albania"
+      "role": "Minister for Europe and Foreign Affairs of Albania",
+      "quote": "Today Albania does not want to be just one additional member of the EU. No, we want to be part of that security and prosperity project."
     },
     "961f5c9e-b1f3-4dfe-ba70-c91e76016a65": {
       "title": "S2E2: Alberto Alemanno on Lobbying for Good and Citizens' Empowerment",
@@ -39,7 +40,8 @@
       "deezer": "https://link.deezer.com/s/34FarWELCAd74jhTid23D",
       "youtube": "https://youtu.be/JIvoLfvpsGQ?si=crYYF4Ip40nQEKcS",
       "description": "A conversation with Alberto Alemanno, founder of The Good Lobby, on SPREAD THE FUTURE: a podcast about possible tomorrows.",
-      "role": "Founder of The Good Lobby"
+      "role": "Founder of The Good Lobby",
+      "quote": "We need more lobbying, and not less lobbying, provided that everybody will have a seat at the table, a same access to power."
     },
     "e0071d07-b933-46da-b15a-c902a466dd4b": {
       "title": "S2E1: Geneviève Pons on Fighting Global Warming and Protecting the Biosphere",
@@ -48,7 +50,8 @@
       "deezer": "https://link.deezer.com/s/34x8U6zqurGJmf0TL0BMv",
       "youtube": "https://youtu.be/uLKCWzoB6X4?si=fI_BMMDmGyQZ9G7a",
       "description": "A conversation with Geneviève Pons, President of Europe Jacques Delors and former Director of WWF Europe, on SPREAD THE FUTURE: a podcast about possible tomorrows.",
-      "role": "President of Europe Jacques Delors, former Director of WWF Europe"
+      "role": "President of Europe Jacques Delors, former Director of WWF Europe",
+      "quote": "When I was at WWF I was respected, I was received at the highest level, but my influence was not as strong as a think tanker."
     },
     "00ac3941-e736-4355-8961-4dafa4f41408": {
       "title": "S1E7: Sofia on our Relations with Others",
@@ -57,7 +60,8 @@
       "deezer": "https://link.deezer.com/s/349kRhBxUAVXVVtZ0iaqg",
       "youtube": "",
       "description": "",
-      "role": ""
+      "role": "",
+      "quote": ""
     },
     "18c191ca-8124-43a5-a993-5f6066e0ef7b": {
       "title": "S1E6: Fabio on our Relations with Objects",
@@ -66,7 +70,8 @@
       "deezer": "https://link.deezer.com/s/349kTGpmhTGNkYWcitw12",
       "youtube": "",
       "description": "",
-      "role": ""
+      "role": "",
+      "quote": ""
     },
     "184bd2fa-b9b2-4191-acad-51fdbc2dda23": {
       "title": "S1E5: Alexia on our Daily Impact",
@@ -75,7 +80,8 @@
       "deezer": "https://link.deezer.com/s/349kUlF8FX4dx3YsXqTvz",
       "youtube": "",
       "description": "",
-      "role": ""
+      "role": "",
+      "quote": ""
     },
     "669e3aee-b558-448f-baee-33bfec716d74": {
       "title": "S1E4: Philippine on our Production Models",
@@ -84,7 +90,8 @@
       "deezer": "https://link.deezer.com/s/349kUR8oWcnkKLDQYGN0p",
       "youtube": "",
       "description": "",
-      "role": ""
+      "role": "",
+      "quote": ""
     },
     "b771fa37-700d-466d-9fbc-e8caea5c7043": {
       "title": "S1E3: Ronald on our Economy",
@@ -93,7 +100,8 @@
       "deezer": "https://link.deezer.com/s/349kVuU3HAQzlE7thb62i",
       "youtube": "",
       "description": "",
-      "role": ""
+      "role": "",
+      "quote": ""
     },
     "59bc1a56-96d5-49d2-9f65-a20c6ecffe8e": {
       "title": "S1E2: Michael on our Resources",
@@ -102,7 +110,8 @@
       "deezer": "https://link.deezer.com/s/349kVZKOD5pt1cvE4x9CL",
       "youtube": "",
       "description": "",
-      "role": ""
+      "role": "",
+      "quote": ""
     },
     "253407a4-337f-4d65-9c40-4047ff90ab13": {
       "title": "S1E1: Nina on our Rhythms of Life",
@@ -111,7 +120,8 @@
       "deezer": "https://link.deezer.com/s/349kWDfdW9jbvgZ4xHTEB",
       "youtube": "",
       "description": "",
-      "role": ""
+      "role": "",
+      "quote": ""
     }
   }
 }

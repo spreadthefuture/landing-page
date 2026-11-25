@@ -19,7 +19,7 @@ at deploy time.
 ├── styles.css              # all styling, for every page
 ├── script.js               # optional enhancements: carousel, quote rotation, contact form
 ├── episodes.json           # generated episode data, do not hand edit
-├── episode-details.json    # hand maintained per-episode platform URLs, share descriptions and roles
+├── episode-details.json    # hand maintained per-episode platform URLs, share descriptions, roles and quotes
 ├── episode/                # generated share page per episode, e.g. /episode/s1e7/, do not hand edit
 ├── scripts/
 │   ├── build.py            # fetches the RSS feed and generates the homepage carousel

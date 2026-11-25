@@ -395,7 +395,7 @@ const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
   }
 })();
 
-// Quotes at the end of the homepage. Without this they stack; with it they share one
+// Quotes at the end of every episode page. Without this they stack; with it they share one
 // spot and rotate. Each bar's fill animation (styles.css) is the timer: when the
 // active one finishes, the next quote comes up, so hover, focus and reduced motion
 // pause or stop the rotation from CSS alone.

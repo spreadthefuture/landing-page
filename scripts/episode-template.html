@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- episode page template, last updated 2026-11-20 -->
+<!-- episode page template, last updated 2026-11-25 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -82,6 +82,19 @@ try {
         <a class="episode-page-back" href="/">Discover more episodes</a>
       </div>
     </article>
+    <!-- quotes:start -->
+    <!-- Without JS these simply stack. script.js adds .is-rotating, which lays them
+         in one grid cell and crossfades between them, and appends the row of
+         progress bars that both times and navigates the rotation. -->
+    <section class="quotes" aria-label="Quotes">
+      <!-- quote:start -->
+      <figure class="quote">
+        <blockquote class="quote-text"><p><a class="quote-link" href="/episode/{{slug}}/">&ldquo;<i>{{quote}}</i>&rdquo;</a></p></blockquote>
+        <figcaption class="quote-source">{{guest}}, {{label}}</figcaption>
+      </figure>
+      <!-- quote:end -->
+    </section>
+    <!-- quotes:end -->
   </main>
 
   <footer class="site-footer">

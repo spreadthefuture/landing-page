@@ -674,12 +674,12 @@ a { color: inherit; text-decoration: none; }
 /* ---- Institutions ---- */
 
 /* The logos of institutions the guests lead, between the carousel and the
-   quotes, --space-xl above like every block break. The heading is the quotes'
-   size, uppercase and centred, with a gray line under it; the logos sit --space-m
+   audience figures, --space-xl above like every block break. The heading is the
+   quotes' size, uppercase and centred, with a gray line under it; the logos sit --space-m
    below in a row that wraps. */
 .institutions {
   /* A block break plus an in-block gap on each side: the padding stacks on the
-     --space-xl margin here and on .quotes, so the logos sit apart from both. */
+     --space-xl margin here and on .audience, so the logos sit apart from both. */
   margin-top: var(--space-xl);
   padding-block: var(--space-m);
   text-align: center;
@@ -749,7 +749,7 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- Audience ---- */
 
-/* Three figures between the institutions and the quotes, spaced like the
+/* Three figures between the institutions and the about statement, spaced like the
    institutions block so it sits --space-xl + --space-m clear of both. The
    heading is the institutions heading; the figures sit --space-m below in three
    columns, stacked --space-m apart on a phone. */
@@ -831,9 +831,9 @@ a { color: inherit; text-decoration: none; }
 
 /* ---- Quotes ---- */
 
-/* The homepage's closing block, after the audience figures. --space-xl above is the
-   break between blocks, the same one under the tagline; the footer's own 6rem
-   carries the space below. */
+/* The closing block of every episode page, under the article. --space-xl +
+   --space-m above is the break between blocks; the footer's own 6rem carries the
+   space below. */
 .quotes {
   margin-top: calc(var(--space-xl) + var(--space-m));
   text-align: center;
@@ -891,7 +891,7 @@ a { color: inherit; text-decoration: none; }
 /* With script.js: every quote in one grid cell, so the block is as tall as the
    longest one and never jumps as they change. Each quote sits on the bottom of
    that cell, so the source line keeps one fixed distance to the bars below and
-   a shorter quote gives up space above it, where the gap from the institutions
+   a shorter quote gives up space above it, where the gap from the article
    is already large, rather than opening a hole between the quote and its
    controls. The hidden ones keep visibility until their fade out finishes, then
    drop out of the accessibility tree. */
@@ -1258,7 +1258,7 @@ a { color: inherit; text-decoration: none; }
 /* The one belief, as a poster, in the tagline's own type: sentence case
    at the same scale as the home page's opening line, pulled a step back in gray
    so only the words the podcast is about light up in --fg. --space-xl above, so
-   it stands apart from the quotes as a block; --space-xl + --space-m above and below. */
+   it stands apart from the audience figures as a block; --space-xl + --space-m above and below. */
 .about-statement {
   margin: calc(var(--space-xl) + var(--space-m)) 0 calc(var(--space-xl) + var(--space-m));
   color: var(--muted);

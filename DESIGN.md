@@ -440,9 +440,9 @@ so a written message is never lost to a network error. Closing the panel clears
 `.is-sent` and resets the form, so the next message starts clean.
 
 ### Institutions
-A `<section class="institutions">` between the carousel and the quotes,
+A `<section class="institutions">` between the carousel and the audience figures,
 `--space-xl` margin above plus `--space-m` padding above and below, so it sits
-`--space-xl` + `--space-m` clear of the carousel and the quotes. Centred heading "Executive-level speakers" at the heading size, bold uppercase,
+`--space-xl` + `--space-m` clear of the carousel and the audience figures. Centred heading "Executive-level speakers" at the heading size, bold uppercase,
 then a line at the prose size in `--prose` `--space-s` below, then `--space-m` down to a wrapping, centred flex row of white logos from
 `assets/institutions-logos/` (`<ul class="institutions-logos">`, one `<li><img>` each).
 Every logo shares a base height `--logo-h`, `clamp(3rem, 6vw, 5.5rem)`, and width cap
@@ -459,7 +459,7 @@ not look right. Currently, in order,
 Europe Jacques Delors, the Albanian ministry, IHP, WWF EPO and The Good Lobby.
 
 ### Audience
-A `<section class="audience">` between the institutions and the quotes, spaced like
+A `<section class="audience">` between the institutions and the about statement, spaced like
 the institutions but with more air above (`--space-xl` plus `--space-m` margin above, `--space-m` padding above and below).
 Centred heading "A sound that keeps you listening" at the heading size, bold uppercase with balanced wrapping, then
 `--space-m` down to three figures (`<ul class="audience-stats">`) in three equal columns,
@@ -476,7 +476,10 @@ and drift on each figure 150ms apart, and each number counts up from 0 over 1.8s
 ease-out quart, so it slows into its final value. Thousands are split by a no-break space (10 000). Without JS or under reduced motion the final values are simply there.
 
 ### Quotes
-The homepage's closing block, `--space-xl` plus `--space-m` below the audience figures. A `<section class="quotes">`
+The closing block of every episode page, `--space-xl` plus `--space-m` below the article
+(it left the homepage on 2026-11-25). Rendered by `scripts/episode_pages.py` from the
+`quote` fields in `episode-details.json`: every episode's quote, newest first, with the
+current page's own quote moved to the front. No quotes at all, no block. A `<section class="quotes">`
 of `<figure>`s (`<blockquote>` + `<figcaption>`). Quote at the heading scale, capped
 at 38ch, centered, in sentence case. The source sits `--space-s` below as a gray label.
 A quote from an episode is a link to that episode's page (`<a class="quote-link"
