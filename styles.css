@@ -894,7 +894,7 @@ a { color: inherit; text-decoration: none; }
    is already large, rather than opening a hole between the quote and its
    controls. The hidden ones keep visibility until their fade out finishes, then
    drop out of the accessibility tree. */
-.quotes.is-rotating { display: grid; }
+.quotes.is-rotating .quotes-track { display: grid; }
 
 .quotes.is-rotating .quote {
   grid-area: 1 / 1;
@@ -921,6 +921,33 @@ a { color: inherit; text-decoration: none; }
 }
 
 .quotes.is-starting .quote { transition: none; }
+
+/* On a phone the quotes sit side by side in a row that scrolls sideways, one
+   screen wide each, snapping to the nearest. Bottom aligned like the stack, so
+   the row is as tall as the longest quote. All of them stay visible so the next
+   one slides in under the finger; script.js keeps the bars in step. */
+@media (max-width: 46rem) {
+  .quotes.is-rotating .quotes-track {
+    display: flex;
+    align-items: flex-end;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .quotes.is-rotating .quotes-track::-webkit-scrollbar { display: none; }
+
+  .quotes.is-rotating .quote {
+    flex: 0 0 100%;
+    width: auto;
+    scroll-snap-align: center;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+  }
+}
 
 /* The block rises in the first time it scrolls into view, the homepage
    entrance's fade and drift, with the bars a beat behind the words. script.js
@@ -2015,10 +2042,12 @@ body.is-locked { overflow: hidden; }
   }
 
   /* The wordmark and the platform links the header already carries as icons
-     on every page. */
+     on every page, and the LinkedIn and Instagram text links the social row
+     below already carries as icons. */
   .footer-brand,
   .footer-col--listen,
-  .footer-col-title {
+  .footer-col-title,
+  .footer-link--social {
     display: none;
   }
 

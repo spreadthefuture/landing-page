@@ -3,7 +3,7 @@
 > Documents the site as built, not as imagined. Update it in the same commit as any
 > design change, along with `PROJECT-CONTEXT.md`.
 >
-> Last updated: 2026-11-20
+> Last updated: 2026-11-25
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
@@ -492,6 +492,12 @@ crossfade with a 0.5rem rise over 0.6s, the incoming one 0.2s behind. It also ap
 fill pauses on hover (real hover devices) or keyboard focus. Under reduced motion the
 fill is removed, so rotation stops and the bars are manual controls.
 
+**Phones (46rem and below):** the quotes sit in a `.quotes-track` (added by `script.js`)
+that becomes a sideways scroll row, one full width quote per stop, `scroll-snap-type:
+x mandatory`, no visible scrollbar. All quotes stay visible so a swipe slides the next
+one in. When a swipe settles, that quote becomes active and its bar restarts; the
+timer and the bars scroll the row to their quote.
+
 **Entrance:** `.is-waiting` hides the block until a quarter of it is in view, then
 `.is-entering` runs the fade and drift, bars 0.2s behind. The 9s timer starts there.
 
@@ -512,13 +518,13 @@ heading does. A bottom-aligned version was tried and read as hanging in the spac
 The mark is wrapped in `.footer-brand` (`max-width: 24rem`) so it stays a distinct
 item in the band and the columns stay against the right edge.
 Pushed to the right edge, `.footer-cols`, two columns `clamp(2.5rem, 7vw, 7rem)`
-apart: **LISTEN** (Spotify, Apple Podcasts, Deezer, YouTube) and **THE PODCAST** (Credits). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
+apart: **LISTEN** (Spotify, Apple Podcasts, Deezer, YouTube) and **THE PODCAST** (Credits, Contact, LinkedIn, Instagram). Headings are the label size, bold, uppercased in CSS, in `--fg`, `--space-s`
 above their list. The links are the same size and weight in `--muted`, `0.75rem`
 apart, lifting to `--fg` and then glowing like every other gray link. Both bands wrap
 to a stack when they no longer fit side by side.
 
 Two columns, not three or four. The site has about ten destinations, so a wider grid would need invented links. No contact
-column: the form is reached from the credits page's closing line (see **Contact
+column: Contact is a link in THE PODCAST, under Credits. It opens the form in place on the credits page and is `/credits/#contact` elsewhere (see **Contact
 overlay**). No episode links, which would mean new markup inside the generated block.
 
 **Bottom band (`.footer-bottom`).** A 1px `--rule` line, `--space-m` under the
@@ -541,16 +547,17 @@ There is no contact glyph here either: `assets/social/mail.svg` stays in the
 repo, unused.
 
 **Below 46rem the footer is a different object.** Not a columned block but three
-centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links side by
-side as one row at `1.25rem` (the platform row's mobile size), then the social row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
+centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links (Credits, Contact) side by
+side as one row at `1.25rem` (the platform row's mobile size), then the LinkedIn and Instagram icon row, then the credit and the copyright on two lines. `--space-s` between the rows but only `0.375rem` between the two sentences, so they read as one small block closing the page rather than two more steps widening it into a pyramid; and
 `--space-xl` above, since three lines of type do not need a block's worth of air to
-read as the end. The wordmark, the two column headings and the whole LISTEN column
+read as the end. The wordmark, the two column headings, the whole LISTEN column
+and the LinkedIn and Instagram text links (`.footer-link--social`, which the icon row repeats)
 are hidden, and the bottom band's rule with them: a second
 wordmark and a repeat of the header's platform bar read as a wall of small type on a
 phone. Nothing is lost that the page does not already carry, since the header's
 platform icons sit on every page. The links' row gap is the social row's `1.75rem`, so
 the three lines run on one rhythm. Hiding is `display: none` on `.footer-brand`,
-`.footer-col--listen` and `.footer-col-title`; the two columns carry a `.footer-col`
+`.footer-col--listen`, `.footer-col-title` and `.footer-link--social`; the two columns carry a `.footer-col`
 class for that one selector.
 
 The two links are `--fg` here rather than `--muted`, the one place they differ from

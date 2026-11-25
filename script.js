@@ -403,6 +403,13 @@ const quoteBlock = document.querySelector('.quotes');
 const quotes = quoteBlock ? quoteBlock.querySelectorAll('.quote') : [];
 
 if (quotes.length > 1) {
+  // The quotes go in a track. On desktop it stacks them in one grid cell; on a
+  // phone (styles.css) it is a row that scrolls sideways and snaps to each one.
+  const track = document.createElement('div');
+  track.className = 'quotes-track';
+  quotes[0].before(track);
+  track.append(...quotes);
+
   const nav = document.createElement('div');
   nav.className = 'quotes-nav';
 
@@ -417,13 +424,34 @@ if (quotes.length > 1) {
     return dot;
   });
 
-  const showQuote = (index) => {
+  let current = 0;
+
+  const markQuote = (index) => {
+    current = index;
     quotes.forEach((quote, i) => quote.classList.toggle('is-active', i === index));
     dots.forEach((dot, i) => {
       dot.classList.toggle('is-active', i === index);
       dot.setAttribute('aria-current', i === index);
     });
   };
+
+  // Where the track scrolls (phones), bring the quote into view too. On desktop
+  // the track does not scroll, so this does nothing.
+  const showQuote = (index) => {
+    markQuote(index);
+    track.scrollTo({ left: index * track.clientWidth, behavior: calm.matches ? 'auto' : 'smooth' });
+  };
+
+  // A swipe moves the bars: once the scroll settles, the quote in view becomes
+  // the active one and its bar starts over.
+  let settle;
+  track.addEventListener('scroll', () => {
+    clearTimeout(settle);
+    settle = setTimeout(() => {
+      const index = Math.round(track.scrollLeft / track.clientWidth);
+      if (index !== current) markQuote(index);
+    }, 120);
+  }, { passive: true });
 
   // .is-starting holds the transitions off for the first frame, so the quotes
   // that were stacked a moment ago drop out instantly instead of fading away.
