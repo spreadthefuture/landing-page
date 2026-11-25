@@ -3,23 +3,19 @@
   "platforms": [
     {
       "key": "spotify",
-      "name": "Spotify",
-      "icon": "/assets/platforms/spotify.svg"
+      "name": "Spotify"
     },
     {
       "key": "apple",
-      "name": "Apple Podcasts",
-      "icon": "/assets/platforms/apple-podcasts.svg"
+      "name": "Apple Podcasts"
     },
     {
       "key": "deezer",
-      "name": "Deezer",
-      "icon": "/assets/platforms/deezer.svg"
+      "name": "Deezer"
     },
     {
       "key": "youtube",
-      "name": "YouTube",
-      "icon": "/assets/platforms/youtube.svg"
+      "name": "YouTube"
     }
   ],
   "episodes": {

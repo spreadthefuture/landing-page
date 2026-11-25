@@ -167,15 +167,6 @@ body {
   white-space: nowrap;
 }
 
-/* General body text in soft white, for any page: the prose size and line
-   height, with no measure of its own, so it fills its container. Use it where
-   a paragraph should read at full strength rather than in --prose gray. */
-.body-text {
-  color: var(--fg);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
-  line-height: 1.6;
-}
-
 a { color: inherit; text-decoration: none; }
 
 /* The only hover state on the site: white things glow. Every link-like thing
@@ -441,7 +432,7 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
-/* Entrance, the about page's fade, drift and tempo: the tagline and its
+/* Entrance, the site's fade, drift and tempo: the tagline and its
    subline, then the carousel, 250ms apart. Both wait for the wordmark's
    entrance (.logo--intro): the tagline starts at 1.6s, as the letters finish
    landing, while the bar is still drawing, 0.2s behind the rest of the header
@@ -1056,9 +1047,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* The page's one line of type. Sized between the credit names below it and the
-   about page's headings, so it leads the grid without competing with the
+   homepage's headings, so it leads the grid without competing with the
    wordmark. --space-xl above: down from the platform links, as the homepage
-   tagline and the about statement are, and again from the grid to
+   tagline is, and again from the grid to
    "Videographers". */
 .credits-intro {
   margin: var(--space-xl) 0 0;
@@ -1217,9 +1208,8 @@ a { color: inherit; text-decoration: none; }
   text-underline-offset: 0.2em;
 }
 
-/* Entrance, the about page's two animations and curves, applied per block, but
-   quicker: 1.2s instead of 1.8s and 100ms between beats, since this page is
-   mostly faces to reach. The heading and the line under it at 0.1s, each row of
+/* Entrance, the site's fade and drift, applied per block, 1.2s with 100ms
+   between beats, since this page is mostly faces to reach. The heading and the line under it at 0.1s, each row of
    cards as one block at 0.2s and 0.3s, then the videographers, heading and
    names together, at 0.4s, the special thanks at 0.5s, and the contact line last at
    0.6s. The page is whole by about 1.8s. */
@@ -1243,7 +1233,7 @@ a { color: inherit; text-decoration: none; }
 .thanks-list ~ .thanks-list { animation-delay: 0.5s; }
 .contact-line { animation-delay: 0.6s; }
 
-/* Removed outright, as on the about page: the global rule shortens durations
+/* Removed outright, as elsewhere: the global rule shortens durations
    but not delays. */
 @media (prefers-reduced-motion: reduce) {
   .page-credits .credits-intro,
@@ -1360,7 +1350,7 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(1rem, 1.5vw, 1.125rem);
 }
 
-/* The row's number and title, stacked like an about heading, the title at the
+/* The row's number and title, stacked, the title at the
    sub-heading size ("Videographers"): the full heading scale was too loud in
    uppercase beside the cover. */
 .episode-page-title {
@@ -1453,7 +1443,7 @@ a { color: inherit; text-decoration: none; }
      alone makes them read as the page's buttons. Columns a third wide, so the
      logos stay evenly spaced whatever the names' lengths, and an episode with
      only one or two links sits centred rather than leaving an empty column;
-     each logo is 8vw, the mobile nav's type size, about 31px on a 390px phone:
+     each logo is 8vw, the phone tagline's size, about 31px on a 390px phone:
      clearly above the header's logos without shouting. */
   .episode-page-links {
     display: grid;
@@ -1611,7 +1601,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Entrance, the site's fade and drift: the sentence, then the link 250ms
-   behind, the about page's tempo. Settled by about 1.6s. */
+   behind, the site's tempo. Settled by about 1.6s. */
 .not-found-text,
 .not-found-back {
   animation:

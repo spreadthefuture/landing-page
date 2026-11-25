@@ -7,7 +7,7 @@
 
 A dark podcast site built as a single typographic stack. No chrome: no cards, no
 shadows (one faint text glow on hover aside), no borders except hairline rules, no
-chromatic color except three platform brand colors on hover. Hierarchy comes from
+chromatic color except four platform brand colors on hover. Hierarchy comes from
 scale and weight alone, on one family in two weights. Every size is a `clamp()`, so
 the page is fluid, and the one breakpoint is structural. The signature moves: the
 wordmark set wide, and the homepage's fan of episode covers, which springs from one
@@ -44,9 +44,6 @@ near-duplicate.
 | Rule | `--rule` | `#2A2A2A` | The 1px line across the footer, the contact panel's box and fields, the quote bars. The only border |
 | Surface | `--surface` | `#1A1A1A` | Behind cover artwork while it loads |
 | Footer gray | `--muted-dim` | `#5C5C5C` | The footer's own text: the credit and copyright line |
-
-For body text in soft white anywhere, use `.body-text`: `--fg`, the prose size
-(`clamp(1rem, 1.5vw, 1.125rem)`), line height 1.6, no max width.
 
 Brand colors appear on hover only, on platform icons: Spotify `#1ED760`, Apple
 Podcasts `#A945E3`, Deezer `#A238FF`, YouTube `#FF0000`.
@@ -156,9 +153,9 @@ height so the last element sits the same distance off the bottom on every page.
 **Page structure.** `body` is a flex column at `min-height: 100svh`, padded by
 `--gutter`. No max-width container, except credits, whose `main` is capped at 85rem
 and centered. Every page is standalone: the head block, wordmark SVG and footer are
-repeated in all five files (the three pages, `404.html` and
+repeated in all four files (the two pages, `404.html` and
 `scripts/episode-template.html`, which renders `episode/`), and since the footer carries
-the wordmark too, that SVG sits twice in each. Change one, change all ten.
+the wordmark too, that SVG sits twice in each. Change one, change all eight.
 
 **Border radius:** 6px on cover art, 50% on credit portraits, 0 everywhere else.
 
@@ -188,7 +185,7 @@ but starts left of the bar and ends past it, so the CSS curve,
 `cubic-bezier(0.31, 0.13, 0.1, 0.81)`, is the slice of it during which the bar
 actually fills; the bar is still moving when it lands, as in the original. Starts
 at 1s, after a deliberate beat with no mark in the header, settled by about 2.77s.
-It is the page's first beat: the tagline and the list wait for its letters to land
+It is the page's first beat: the tagline and the carousel wait for its letters to land
 (see **Tagline**). The
 Lottie's own exit and 12s loop are not used: they left the header without a logo
 for about 2.5s of every cycle. The selectors walk the SVG's structure (first six
@@ -201,7 +198,7 @@ stay still.
 **Only on arrival.** The head script on every page sets a `sessionStorage` flag
 (`stf-visited`) and, if it was already set, adds `.is-return` to `<html>` before
 first paint. On `.is-return` the homepage skips the wordmark and header entrance
-entirely (the header is simply there) and the tagline and list take the other
+entirely (the header is simply there) and the tagline and carousel take the other
 pages' timing, 0.15s and 0.4s. So the entrance plays when someone lands on the site
 in a tab, and not when they come back to the homepage from another page, go back,
 or reload. A new tab counts as a new arrival. If storage is blocked the entrance
@@ -313,10 +310,9 @@ column: one name alone sits in the left column, not centred.
 **Contact line.** `.contact-line` closes the page, `--space-xl` under the
 special thanks: centred gray prose at the prose size, "The future is a
 conversation." with only "Contact us." as a `--fg` underlined link that opens the
-contact overlay. It is the site's one way into the form.
+contact overlay. The footer's Contact link is the other way in.
 
-**Entrance:** `fade-in` and `drift-in` over 1.2s, 100ms apart: "Our Team" at 0.1s,
-"Our Team" and the line under it at 0.1s,
+**Entrance:** `fade-in` and `drift-in` over 1.2s, 100ms apart: "Our Team" and the line under it at 0.1s,
 each row of cards at 0.2s and 0.3s, the videographers at 0.4s, the special thanks at 0.5s,
 the contact line at 0.6s. Whole by about 1.8s. Removed under reduced motion.
 
@@ -353,7 +349,7 @@ at the bottom and centres the block vertically between masthead and footer.
 - **Below 46rem.** Back on the left edge, the sentence at the tagline's `8vw`, and the
   link pinned to it at `--space-s`, so the two lines read as one block.
 - **Own classes.** Not `.about-statement`, which `script.js` holds back until it
-  scrolls into view and which waits 1s behind the principles.
+  scrolls into view and which waits 1s on load.
 - **Head.** `noindex`, no canonical and no Open Graph: it is not a page to share.
 - **Analytics.** GoatCounter counts every hit as the path `/404`
   (`data-goatcounter-settings`), so broken addresses do not appear as pages of their
@@ -547,8 +543,7 @@ units and centers it, which holds it a hair inside Instagram's frame. Instagram'
 Each link is padded to a 32px tap target, with the padding taken back out of the row
 gap so glyphs still read 1.75rem apart.
 
-There is no contact glyph here either: `assets/social/mail.svg` stays in the
-repo, unused.
+There is no contact glyph here.
 
 **Below 46rem the footer is a different object.** Not a columned block but three
 centred lines, the type stepped down to `0.8rem`: the two THE PODCAST links (Credits, Contact) side by
@@ -608,16 +603,15 @@ footing, where a white thing only glows on hover instead of lifting first.
   `object-fit: cover`. `build.py` writes one into every carousel slide.
 - **Credit portraits:** 720x720, JPEG q68, from `assets/credits-photos/`, cropped to a
   circle.
-- **Icons:** only the three masked platform glyphs and the two masked social glyphs
+- **Icons:** only the four masked platform glyphs and the two masked social glyphs
   (`assets/social/`, single path, single color, in a 24x24 box; Instagram full-bleed,
   LinkedIn scaled to 21 units and centered).
-  No badges or containers. `mail.svg` sits beside them, no longer
-  used by any page. No illustration or decorative graphics.
+  No badges or containers. No illustration or decorative graphics.
 
 ## Do's and don'ts
 
 ### Do
-- Use only the six color tokens. New grays go in `:root`.
+- Use only the seven color tokens. New grays go in `:root`.
 - Size type with `clamp()` rather than adding a breakpoint.
 - Keep every gap on `--space-s` / `--space-m` / `--space-xl`.
 - Write uppercase copy in sentence case in the markup and uppercase it in CSS.
@@ -650,8 +644,8 @@ Left as is, each waiting on a design call:
   label gap `0.5rem`, error message pull-up `-0.25rem`, close control
   `2.75rem` / `0.9rem`, submit padding `0.75rem 1.75rem`, footer link list gap `0.75rem`, brand column `24rem`,
   column gap
-  `clamp(2.5rem, 7vw, 7rem)` and wordmark cap-height drop `0.25rem`, toggle transition `0.25s`
-  against the `0.2s` hover.
+  `clamp(2.5rem, 7vw, 7rem)` and wordmark cap-height drop `0.25rem`, the carousel press's `0.25s`
+  transform against the `0.2s` hover.
 - **The carousel's sizes in px** (`260px` / `520px` on `--s`), where the rest of the
   page sizes in rem.
 - **The footer wordmark's own size**, `clamp(150px, 16vw, 210px)`, which is not
