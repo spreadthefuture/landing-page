@@ -286,7 +286,7 @@ clipped sideways only (`overflow: clip visible`), so the side covers never widen
 ### Credit card
 The whole card links to that person's LinkedIn: circular portrait
 (`clamp(150px, 24vw, 360px)`, `object-fit: cover`), shown in black and white
-(`grayscale(1)`) and turning to full colour over 0.6s (`--ease-drift`) on hover or keyboard focus, bold uppercase name, role in
+(`grayscale(1)`) and turning to full colour over 0.6s (`--ease-drift`) on hover or keyboard focus (below 46rem, where there is no hover, while it crosses the middle 40% of the screen as you scroll, via `.is-lit` from `script.js`), bold uppercase name, role in
 `--fg` and country in `--muted`. Three across, one below 46rem.
 
 **Team line.** `.credits-lede` introduces the grid: "Meet the people behind the

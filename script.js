@@ -542,6 +542,20 @@ if (aboutBlocks.length && !calm.matches && 'IntersectionObserver' in window) {
   }
 }
 
+// Credit portraits on phones. There is no hover there, so the colour that hover
+// brings back on desktop would never be seen: instead each portrait turns to
+// colour while it crosses the middle of the screen and back to black and white
+// as it leaves. The class only has an effect below 46rem (styles.css).
+const portraits = document.querySelectorAll('.credit-portrait');
+
+if (portraits.length && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    for (const en of entries) en.target.classList.toggle('is-lit', en.isIntersecting);
+  }, { rootMargin: '-30% 0px -30% 0px' });
+
+  for (const img of portraits) observer.observe(img);
+}
+
 // Contact overlay. The links are plain anchors to #contact, so with JS off the
 // :target rules open it and the "close" links take it away again. With JS the
 // hash never changes: the class does the same job, the page keeps its scroll

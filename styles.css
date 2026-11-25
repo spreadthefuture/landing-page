@@ -1171,6 +1171,10 @@ a { color: inherit; text-decoration: none; }
 
   .credits { grid-template-columns: minmax(0, 1fr); }
 
+  /* No hover on a phone: script.js lights each portrait as it crosses the
+     middle of the screen instead, on the same 0.6s turn. */
+  .credit-portrait.is-lit { filter: none; }
+
   .credit-role,
   .credit-location { font-size: 1rem; }
 
